@@ -1,0 +1,101 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+
+<div class="row">
+	<div class="col-md-12">
+		<div wicket:id="feedback"></div>
+	</div>
+</div>	
+<div class="row">
+	<div class="col-md-12">
+		<form wicket:id="form" style="margin-bottom: 15px;">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<wicket:message key="price.additional.service">[Prices for additional services]</wicket:message>
+					</h4>
+				</div>
+				<div class="panel-body">		
+					<table class="table table-bordered table-striped table-condensed">
+						<tr>
+							<th><wicket:message key="price.additional.service.name">Please insert text here</wicket:message></th>
+							<th colspan="2"><wicket:message key="price.additional.service.price">Please insert text here</wicket:message></th>
+						</tr>
+						<tr>
+							<td><wicket:message key="touragents.reservation.guest.service.arrival">[Arrival]</wicket:message></td>
+							<td><input wicket:id="arrival" type="text" class="form-control"></td>
+							<td><wicket:message key="price.additional.service.per.car">[per]</wicket:message></td>
+						</tr>
+						<!--  tr>
+							<td><wicket:message key="touragents.reservation.guest.service.arrival.airport.green_channel">[Green Hall]</wicket:message></td>
+							<td><input wicket:id="arrival_air_green_hall" type="text" class="form-control"></td>
+							<td><wicket:message key="price.additional.service.per.person">[per]</wicket:message></td>
+						</tr-->
+						<tr>
+							<td><wicket:message key="touragents.reservation.guest.service.arrival.airport.vip_hall">[Vip Hall]</wicket:message></td>
+							<td><input wicket:id="arrival_air_vip_hall" type="text" class="form-control"></td>
+							<td><wicket:message key="price.additional.service.per.person">[per]</wicket:message></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="touragents.reservation.guest.service.departure">[Departure]</wicket:message></td>
+							<td><input wicket:id="departure" type="text" class="form-control"></td>
+							<td><wicket:message key="price.additional.service.per.car">[per]</wicket:message></td>
+						</tr>
+						<!-- tr>
+							<td><wicket:message key="touragents.reservation.guest.service.departure.airport.green_channel">[Green Hall]</wicket:message></td>
+							<td><input wicket:id="departure_air_green_hall" type="text" class="form-control"></td>
+							<td><wicket:message key="price.additional.service.per.person">[per]</wicket:message></td>
+						</tr-->
+						<tr>
+							<td><wicket:message key="touragents.reservation.guest.service.departure.airport.vip_hall">[Vip Hall]</wicket:message></td>
+							<td><input wicket:id="departure_air_vip_hall" type="text" class="form-control"></td>
+							<td><wicket:message key="price.additional.service.per.person">[per]</wicket:message></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.reservation.details.guests.insurance">[Insurance]</wicket:message></td>
+							<td><input wicket:id="insurance" type="text" class="form-control"></td>
+							<td><wicket:message key="price.additional.service.per.night.per.day">[per]</wicket:message></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<wicket:message key="price.additional.service.send.order">[Prices for additional services]</wicket:message>
+					</h4>
+				</div>
+				<div class="panel-body">
+					<table class="table table-bordered table-striped table-condensed">
+						<tr>
+							<td><wicket:message key="price.additional.service.send.request">Please insert text here</wicket:message></td>
+							<td><input wicket:id="email_send_request" type="email" class="form-control"></td>
+						</tr>
+						<!-- tr>
+							<td><wicket:message key="price.additional.service.send.request.green">Please insert text here</wicket:message></td>
+							<td><input wicket:id="email_send_request_green" type="email" class="form-control"></td>
+						</tr-->
+						<tr>
+							<td><wicket:message key="price.additional.service.send.request.vip">Please insert text here</wicket:message></td>
+							<td><input wicket:id="email_send_request_vip" type="email" class="form-control"></td>
+						</tr>
+						<tr>
+							<td><wicket:message key="price.additional.service.send.request.insurance">Please insert text here</wicket:message></td>
+							<td><input wicket:id="email_send_request_insurance" type="email" class="form-control"></td>
+						</tr>
+					</table>						
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="pull-right">
+						<button wicket:id="submit" class="btn btn-primary">
+							<wicket:message key="button.save">[Save]</wicket:message>	
+					    </button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</wicket:panel>

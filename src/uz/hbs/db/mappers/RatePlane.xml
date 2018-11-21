@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.RatePlanes">
+    <select id="selectRatePlaneRoomTypeId" parameterType="long" resultType="int">
+        SELECT roomtypes_id
+          FROM hotelsroomtypes
+         WHERE hotelsusers_id = #{value}
+    </select>
+    
+    <select id="selectRatePlaneRoomType" parameterType="long" resultType="IdAndName">
+        SELECT rt.id, rt.name
+          FROM roomtypes rt JOIN hotelsroomtypes hrt ON hrt.roomtypes_id = rt.id
+         WHERE hrt.hotelsusers_id = #{value}
+         ORDER BY rt.name
+    </select>
+    
+    <select id="selectMaxHoldingCapacity" parameterType="long" resultType="short">
+        SELECT COALESCE(MAX(holding_capacity),0)
+          FROM hotelsroomtypes r
+         WHERE hotelsusers_id = #{hotelsusers_id}
+    </select>
+    
+    <select id="selectHoldingCapacityRoomType" parameterType="int" resultType="short">
+        SELECT COALESCE(holding_capacity, 0) AS holding_capacity
+          FROM hotelsroomtypes r
+         WHERE roomtypes_id = #{roomtypes_id}
+    </select>
+    
+    <select id="selectMaxSeasonNumber" parameterType="long" resultType="short">
+        SELECT COALESCE(MAX(season_number), 0)
+          FROM rateplaneseasons rs, rateplanes r 
+         WHERE r.hotelsusers_id = #{hotelsusers_id}
+           AND rs.rateplanes_id = r.id
+    </select>
+    
+    <insert id="insertRatePlane" parameterType="RatePlane">
+        <selectKey order="BEFORE" resultType="int" keyProperty="id">
+            SELECT NEXTVAL('rateplanes_id_seq')
+        </selectKey>
+        INSERT INTO rateplanes(id, hotelsusers_id, name, description, internal, create_date, update_date, initiator_user_id)
+        VALUES (#{id}, #{hotelsusers_id}, #{name}, #{description}, #{internal}, now(), now(), #{initiator_user_id})
+    </insert>
+    
+    <update id="updateRatePlane" parameterType="RatePlane">
+        UPDATE rateplanes
+   		   SET name = #{name}, 
+   		       description = #{description}, 
+   		       internal = #{internal}, 
+               update_date = now(), 
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id} 
+    </update>
+    
+    <delete id="deleteRatePlane" parameterType="int">
+        DELETE FROM rateplanes WHERE id = #{id}
+    </delete>
+    
+    <select id="selectRatePlane" parameterType="int" resultType="RatePlane">
+        SELECT id, hotelsusers_id, name, description, internal, create_date, 
+               update_date, initiator_user_id
+          FROM rateplanes
+         <where>
+             <if test="value != null">
+               id = #{value}  
+             </if>
+         </where> 
+    </select>
+    
+    <select id="selectRatePlaneList" parameterType="map" resultType="RatePlane">
+        SELECT id, hotelsusers_id, name, description, internal, create_date, 
+               update_date, initiator_user_id
+          FROM rateplanes
+  		 WHERE hotelsusers_id = #{hotelsusers_id}
+  		 <if test="name != null">
+  		   AND LOWER(name) LIKE '%'||LOWER(#{name})||'%'
+  		 </if>  
+  		 <if test="description != null">
+  		   AND LOWER(description) LIKE '%'||LOWER(#{description})||'%'
+  		 </if>
+  		 <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}  
+    </select>
+    
+    <select id="selectRatePlaneListCount" parameterType="map" resultType="long">
+        SELECT COUNT(*)
+          FROM rateplanes
+  		 WHERE hotelsusers_id = #{hotelsusers_id}
+  		 <if test="name != null">
+  		   AND LOWER(name) LIKE '%'||LOWER(#{name})||'%'
+  		 </if>  
+  		 <if test="description != null">
+  		   AND LOWER(description) LIKE '%'||LOWER(#{description})||'%'
+  		 </if>
+  		 <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}  
+    </select>
+    
+    <select id="selectCheckRatePlanePeriod" parameterType="map" resultType="boolean">
+        SELECT CASE COUNT(*) WHEN 0 THEN true ELSE false END AS bool
+          FROM rateplanes rp, rateplaneseasons rps
+         WHERE rp.hotelsusers_id = #{hotelsusers_id}
+           AND rp.internal = #{internal}
+           AND rps.rateplanes_id = rp.id
+           AND ((rps.season_from, rps.season_to) OVERLAPS (#{season_from}::date, #{season_to}::date))
+         <if test="plane_id != null">
+           AND rp.id != #{plane_id}  
+         </if>   
+    </select>
+    
+    <insert id="insertRatePlaneSeason" parameterType="RateSeason">
+        <selectKey order="BEFORE" resultType="int" keyProperty="id">
+            SELECT NEXTVAL('rateplaneseasons_id_seq')
+        </selectKey>
+        INSERT INTO rateplaneseasons(id, rateplanes_id, season_number, season_from, season_to)
+        VALUES (#{id}, #{rateplanes_id}, #{season_number}, #{season_from}, #{season_to})
+    </insert>
+    
+    <update id="updateRatePlaneSeason" parameterType="RateSeason">
+        UPDATE rateplaneseasons 
+           SET season_from = #{season_from}, 
+               season_to = #{season_to}
+         WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteRatePlaneSeason" parameterType="int">
+        DELETE FROM rateplaneseasons WHERE id = #{value}
+    </delete>
+    
+    <delete id="deleteRatePlaneSeasonByPlane" parameterType="int">
+        DELETE FROM rateplaneseasons WHERE rateplanes_id = #{value}
+    </delete>
+    
+    <select id="selectRateSeasonByPlaneId" parameterType="int" resultType="RateSeason">
+        SELECT id, rateplanes_id, season_number, season_from, season_to
+          FROM rateplaneseasons
+         WHERE rateplanes_id = #{value}
+         ORDER BY season_number 
+    </select>
+    
+    <insert id="insertRateDetails" parameterType="RateDetails">
+        <selectKey order="BEFORE" resultType="int" keyProperty="id">
+            SELECT NEXTVAL('rateplanedetails_id_seq')
+        </selectKey>
+        INSERT INTO rateplanedetails(id, rateplaneseasons_id, season_number, person_number, rate, rate_uz, roomtypes_id, is_group)
+        VALUES (#{id}, #{rateplaneseasons_id}, #{season_number}, #{person_number}, #{rate}, #{rate_uz}, #{roomtypes_id}, #{is_group})
+    </insert>
+    
+    <update id="updateRateDetails" parameterType="RateDetails">
+        UPDATE rateplanedetails
+           SET rate = #{rate},
+               rate_uz = #{rate_uz}
+         WHERE id = #{id} 
+    </update>
+    
+    <update id="updateRateDetails2" parameterType="RateDetails">
+        UPDATE rateplanedetails
+           SET rate = #{rate},
+               rate_uz = #{rate_uz}
+         WHERE rateplaneseasons_id = #{rateplaneseasons_id} 
+           AND season_number = #{season_number} 
+           AND person_number = #{person_number} 
+           AND roomtypes_id = #{roomtypes_id} 
+           AND is_group = #{is_group} 
+    </update>
+    
+    <select id="selectRatePlaneDetails" parameterType="map" resultType="RateDetails">
+        SELECT id, rateplaneseasons_id, season_number, person_number, rate, rate_uz, roomtypes_id, is_group
+          FROM rateplanedetails
+         WHERE rateplaneseasons_id = #{rateplaneseasons_id}
+           AND roomtypes_id = #{roomtypes_id}
+           AND person_number <![CDATA[<=]]> #{holding_capacity}
+           ORDER BY season_number, person_number 
+    </select>
+    
+    <delete id="deleteRateDetails" parameterType="int">
+        DELETE FROM rateplanedetails WHERE id = #{id}
+    </delete>
+    
+    <delete id="deleteRateDetailsByPlane" parameterType="int">
+        DELETE FROM rateplanedetails WHERE rateplaneseasons_id IN (SELECT id FROM rateplaneseasons WHERE rateplanes_id = #{value})
+    </delete>
+    
+    <delete id="deleteRateDetailsBySeason" parameterType="int">
+        DELETE FROM rateplanedetails WHERE rateplaneseasons_id = #{rateplaneseasons_id}
+    </delete>
+</mapper>        

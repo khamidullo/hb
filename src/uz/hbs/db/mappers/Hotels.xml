@@ -1,0 +1,1083 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Hotels">
+	<select id="selectHotelsList" parameterType="map" resultType="Hotel">
+		SELECT h.users_id, 
+			   u.name, 
+			   ct.name AS city, 
+			   h.primary_phone, 
+			   h.corporate_email,
+		       h.manager, 
+		       h.manager_email, 
+		       h.secondary_phone, 
+       		   h.accountant,
+       		   h.accountant_phone,
+       		   h.reservation_dep,
+       		   h.reservation_dep_phone, 
+		       u.name AS legal_name, 
+		       h.floors, 
+		       h.rooms,
+		       u.status AS hotelstatus,
+		       COALESCE(hd.display_name_en, hd.display_name) AS display_name,
+		       h.self_payment_possibility,
+		       (SELECT COUNT(r.id) FROM reservations r WHERE r.hotelsusers_id = h.users_id) AS reservations_count
+		  FROM users u, 
+		       hotels h 
+		  LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+		  LEFT JOIN addresses a ON hd.addresses_id = a.id
+		  LEFT JOIN countries c ON a.countries_id = c.id
+		  LEFT JOIN cities ct ON a.cities_id = ct.id
+		 WHERE u.id = h.users_id
+		<if test="users_id != null">
+		   AND u.id = #{users_id} 
+		</if>
+		<if test="countries != null">
+		   AND c.code = #{countries.code} 
+		</if>
+		<if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		</if>
+		<if test="display_name != null">
+		   AND LOWER(hd.display_name_en) LIKE '%' || LOWER(#{display_name}) || '%' 
+		</if>
+		<if test="city != null">
+		   AND LOWER(ct.name) like '%' || LOWER(#{city}) || '%' 
+		</if>
+		<if test="primary_phone != null">
+		   AND h.primary_phone = #{primary_phone} 
+		</if>
+		<if test="corporate_email != null">
+		   AND h.corporate_email = #{corporate_email} 
+		</if>
+		<if test="status != null">
+		   AND u.status = #{status.id} 
+		</if>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectHotelsCount" parameterType="map" resultType="long">
+		SELECT COUNT(*) 
+		  FROM users u, hotels h 
+		  LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+		  LEFT JOIN addresses a ON hd.addresses_id = a.id
+		  LEFT JOIN countries c ON a.countries_id = c.id
+		  LEFT JOIN cities ct ON a.cities_id = ct.id
+		 WHERE u.id = h.users_id
+		<if test="users_id != null">
+		   AND u.id = #{users_id} 
+		</if>
+		<if test="countries != null">
+		   AND c.code = #{countries.code} 
+		</if>
+	    <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		</if>
+		<if test="display_name != null">
+		   AND LOWER(hd.display_name_en) LIKE '%' || LOWER(#{display_name}) || '%' 
+		</if>
+		<if test="city != null">
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{city}) || '%' 
+		</if>
+		<if test="primary_phone != null">
+		   AND h.primary_phone = #{primary_phone} 
+		</if>
+		<if test="corporate_email != null">
+		   AND h.corporate_email = #{corporate_email} 
+	 	</if>
+		<if test="status != null">
+		   AND u.status = #{status.id} 
+		</if>
+	</select>
+	
+	<select id="selectHotelByUserId" parameterType="long" resultType="Hotel">
+	    SELECT u.name, h.users_id
+	      FROM hotels h, users u
+	     WHERE h.users_id = #{users_id}
+	       AND u.id = h.users_id 
+	</select>
+	
+	<insert id="insertHotel" parameterType="Hotel">
+	    INSERT INTO hotels(users_id, manager, manager_email, corporate_email, primary_phone, secondary_phone, accountant, accountant_phone, reservation_dep, reservation_dep_phone, hotelscategories_id)
+        VALUES (#{users_id}, #{manager}, #{manager_email}, #{corporate_email}, #{primary_phone}, #{secondary_phone}, #{accountant}, #{accountant_phone}, #{reservation_dep}, #{reservation_dep_phone}, #{hotelscategories_id})
+	</insert>
+	
+	<update id="updateHotel" parameterType="Hotel">
+	    UPDATE hotels
+	    <set>
+	        <if test="manager != null">
+	          manager = #{manager},  
+	        </if>
+	        <if test="manager_email != null">
+	          manager_email = #{manager_email},
+	        </if>
+	        <if test="corporate_email != null">
+	            corporate_email = #{corporate_email},
+	        </if>
+	        <if test="primary_phone != null">
+	            primary_phone = #{primary_phone},
+	        </if>
+	        <if test="secondary_phone != null">
+	            secondary_phone = #{secondary_phone},
+	        </if>
+	        <if test="accountant != null">
+	            accountant = #{accountant},
+	        </if>
+	        <if test="accountant_phone != null">
+	            accountant_phone = #{accountant_phone},
+	        </if>
+	        <if test="reservation_dep != null">
+	            reservation_dep = #{reservation_dep},
+	        </if>
+	        <if test="reservation_dep_phone != null">
+	            reservation_dep_phone = #{reservation_dep_phone},
+	        </if>
+	        <if test="hotelscategories_id != null">
+	            hotelscategories_id = #{hotelscategories_id},
+	        </if>
+	        <if test="rooms != null">
+	            rooms = #{rooms},
+	        </if>
+	        <if test="self_payment_possibility != null">
+	            self_payment_possibility = #{self_payment_possibility},
+	        </if>
+	    </set>
+	    WHERE users_id = #{users_id}
+	</update>
+	
+	<select id="selectHotelFullyByUserId" parameterType="long" resultType="Hotel">
+	    SELECT h.users_id, 
+	    	   h.manager, 
+	    	   h.manager_email, 
+	    	   h.corporate_email, 
+	    	   h.primary_phone, 
+       		   h.secondary_phone,
+       		   h.accountant,
+       		   h.accountant_phone,
+       		   h.reservation_dep,
+       		   h.reservation_dep_phone, 
+       		   h.floors,
+       		   h.rooms,
+       		   u.name AS legal_name,
+       		   COALESCE(hd.display_name_en, hd.display_name) AS display_name
+          FROM hotels h LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id, users u
+         WHERE u.id = h.users_id
+           AND h.users_id = #{users_id} 
+	</select>
+	
+	<insert id="insertHotelDetails" parameterType="HotelDetail">
+		INSERT INTO hotelsdetails(hotelsusers_id,
+								  hotelstars_id,
+								  display_name,
+								  display_name_en,
+								  display_name_uz,
+								  addresses_id,
+								  contact_number,
+								  contact_email,
+								  contact_number2,
+								  contact_email2,
+								  fax,
+								  fax2,
+								  support_resident_rate,
+								  description,
+								  description_en,
+								  description_uz,
+								  recommended_sort)
+	    VALUES (#{hotelsusers_id},
+	    		#{hotelStars.id},
+	    		#{display_name},
+	    		#{display_name_en},
+	    		#{display_name_uz},
+	    		#{address.id},
+	    		#{contact_number},
+	    		#{contact_email},
+	    		#{contact_number2},
+	    		#{contact_email2},
+	    		#{fax},
+	    		#{fax2},
+	    		#{support_resident_rate},
+	    		#{description},
+	    		#{description_en},
+	    		#{description_uz},
+	    		#{hotelsusers_id})                          
+	</insert>
+	
+	<update id="updateHotelDetails" parameterType="HotelDetail">
+		UPDATE hotelsdetails
+		   SET hotelstars_id = #{hotelStars.id}, 
+		       display_name = #{display_name}, 
+		       display_name_en = #{display_name_en}, 
+		       display_name_uz = #{display_name_uz}, 
+		       contact_number = #{contact_number}, 
+	           contact_email = #{contact_email},
+		       contact_number2 = #{contact_number2}, 
+	           contact_email2 = #{contact_email2},
+		       fax = #{fax}, 
+	           fax2 = #{fax2},
+	           support_resident_rate = #{support_resident_rate},
+	           description = #{description},
+	           description_en = #{description_en},
+	           description_uz = #{description_uz}
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	</update>
+	
+	<update id="updateHotelDetailsRecommendedSort" parameterType="map">
+		UPDATE hotelsdetails
+		   SET recommended_sort = #{recommended_sort} 
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	</update>
+	
+	<select id="selectHotelDetailRecommendedSort" parameterType="int" resultType="HotelDetail">
+	    SELECT hd.hotelsusers_id, COALESCE(hd.display_name_en, hd.display_name) AS display_name
+	      FROM hotelsdetails hd, addresses a
+	     WHERE hd.addresses_id = a.id
+	       AND a.regions_id = #{regions_id}
+	     ORDER BY hd.recommended_sort
+	</select>
+	
+	<select id="selectSupportResidentRate" parameterType="long" resultType="boolean">
+	    SELECT support_resident_rate FROM hotelsdetails WHERE hotelsusers_id = #{value}  
+	</select>
+	
+	<select id="selectHotelDetailsByHotelId" parameterType="long" resultType="HotelDetail">
+	    SELECT hd.hotelsusers_id, 
+	    	   hd.hotelstars_id AS "hotelStars.id", 
+	    	   hd.display_name, 
+	    	   hd.display_name_en, 
+	    	   hd.display_name_uz, 
+	    	   hd.addresses_id, 
+	    	   hd.contact_number, 
+       		   hd.contact_email,
+	    	   hd.contact_number2, 
+       		   hd.contact_email2,
+       		   hd.fax,
+       		   hd.fax2,
+       		   hd.support_resident_rate,
+       		   hd.description,
+       		   hd.description_en,
+       		   hd.description_uz,
+       		   hc.id AS "hotelCategory.id",
+       		   hc.name AS "hotelCategory.name"
+          FROM hotels h, hotelscategories hc, hotelsdetails hd
+	     WHERE h.hotelscategories_id = hc.id
+	       AND h.users_id = hd.hotelsusers_id
+	       AND hd.hotelsusers_id = #{hotelsusers_id}
+	</select>
+	
+	<insert id="insertHotelFacilities" parameterType="Facility">
+		INSERT INTO hotelsfacilities(hotelsusers_id, facilities_id, paid)
+	    VALUES (#{hotelsusers_id}, #{id}, #{paid})                          
+	</insert>
+	
+	<delete id="deleteHotelFacilities" parameterType="long">
+	    DELETE FROM hotelsfacilities WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+	
+	<select id="selectHotelFacilities" parameterType="long" resultType="Facility">
+	    SELECT facilities_id AS id, 
+	    	   paid
+          FROM hotelsfacilities
+         WHERE hotelsusers_id = #{hotelsusers_id} 
+	</select>
+	
+	<insert id="insertRoomType" parameterType="RoomType">
+	    <selectKey order="BEFORE" keyProperty="id" resultType="int">
+	        SELECT NEXTVAL('roomtypes_id_seq')
+	    </selectKey>
+	    INSERT INTO roomtypes(id, name, status, create_date, update_date, initiator_user_id)
+        VALUES (#{id}, #{name}, #{status}, now()::timestamp(0), now()::timestamp(0), #{initiator_user_id})
+	</insert>
+	
+	<update id="updateRoomTypeName" parameterType="RoomType">
+	    UPDATE roomtypes
+	       SET name = #{name},
+	           update_date = now(),
+	           initiator_user_id = #{initiator_user_id}
+	     WHERE id = #{id}      
+	</update>
+	
+	<select id="selectRoomTypesName" parameterType="string" resultType="string">
+	    SELECT DISTINCT name
+	      FROM roomtypes
+	     WHERE LOWER(name) LIKE LOWER(#{name})||'%' 
+	</select>
+	
+	<insert id="insertHotelsNearByPlaces" parameterType="HotelNearByPlace">
+	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
+	        SELECT NEXTVAL('hotelsnearbyplaces_id_seq')
+	    </selectKey>
+	    INSERT INTO hotelsnearbyplaces (id, name, type, value, hotelsusers_id, initiator_user_id)
+        VALUES (#{id}, #{name}, #{type}, #{value}, #{hotelsusers_id}, #{initiator_user_id})
+	</insert>
+	
+	<delete id="deleteHotelsNearByPlaces" parameterType="long">
+	    DELETE FROM hotelsnearbyplaces WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+	
+	<update id="updateHotelsNearByPlaces" parameterType="HotelNearByPlace">
+	    UPDATE hotelsnearbyplaces
+	       SET name = #{name},
+	           type = #{type},
+	           value = #{value},
+	           initiator_user_id = #{initiator_user_id}
+	     WHERE id = #{id}  
+	</update>
+	
+	<select id="selectHotelNearByPlacesName" parameterType="string" resultType="string">
+	    SELECT DISTINCT name
+	      FROM hotelsnearbyplaces
+	     WHERE LOWER(name) LIKE '%'||LOWER(#{value})||'%' 
+	</select>
+	
+	<select id="selectEquipmentListByRoomTypeHotel" parameterType="map" resultType="Equipment">
+	    SELECT e.id, e.name
+          FROM equipments e, roomsequipments re 
+         WHERE e.id = re.equipments_id 
+           AND re.roomtypes_id = #{roomtypes_id}
+           AND re.hotelsusers_id = #{hotelsusers_id}
+         <if test="filter != null">
+           AND e.filter_flag = TRUE
+         </if>
+         GROUP BY e.id, e.name 
+         ORDER BY LENGTH(e.name)
+	</select>
+	
+	<select id="selectConditionsListByRoomTypeHotel" parameterType="map" resultType="Condition">
+	    SELECT c.id, 
+	    	   c.name
+          FROM conditions c JOIN hotelsroomsconditions rc ON c.id = rc.conditions_id
+         WHERE rc.roomtypes_id = #{roomtypes_id}
+           AND rc.hotelsusers_id = #{hotelsusers_id} 
+	</select>
+	
+	<insert id="insertReservationRules" parameterType="ReservationRuleType">
+	    INSERT INTO hotelsreservationrules(
+            hotelsusers_id,
+            check_in_from_time,
+            check_in_to_time,
+            check_in_half_charge_from_time,
+            check_in_half_charge_to_time,
+            check_in_half_charge_service_charge,
+            check_in_half_charge_service_charge_type, 
+            check_in_full_charge_from_time, 
+            check_in_full_charge_to_time, 
+            check_in_full_charge_service_charge, 
+            check_in_full_charge_service_charge_type, 
+            check_out_from_time,
+            check_out_to_time,
+            check_out_half_charge_from_time,
+            check_out_half_charge_to_time,
+            check_out_half_charge_service_charge,
+            check_out_half_charge_service_charge_type,
+            check_out_full_charge_from_time,
+            check_out_full_charge_to_time,
+            check_out_full_charge_service_charge,
+            check_out_full_charge_service_charge_type,
+            reservationcancellationpolicy_id, minimum_free_age, extra_bed_price_type_value, extra_bed_price_type,
+            system_commission, city_tax, is_group, maximum_discount_age, maximum_discount_age_value, maximum_discount_age_type,
+            exceed_type, exceed_type_value, guide_escort, guide_escort_type, guide_escort_type_value, guide_escort_price_type, guide_escort_price_type_value)
+    VALUES (#{hotelsusers_id},  
+            #{check_in_from_time}||':00', 
+            #{check_in_to_time}||':59',
+            #{check_in_half_charge_from_time}||':00', 
+            #{check_in_half_charge_to_time}||':59',
+            #{check_in_half_charge_service_charge}, 
+            #{check_in_half_charge_service_charge_type}, 
+            #{check_in_full_charge_from_time}||':00',
+            #{check_in_full_charge_to_time}||':59',
+            #{check_in_full_charge_service_charge}, 
+            #{check_in_full_charge_service_charge_type}, 
+            #{check_out_from_time}||':00',
+            #{check_out_to_time}||':59',
+            #{check_out_half_charge_from_time}||':00', 
+            #{check_out_half_charge_to_time}||':59',
+            #{check_out_half_charge_service_charge}, 
+            #{check_out_half_charge_service_charge_type}, 
+            #{check_out_full_charge_from_time}||':00',
+            #{check_out_full_charge_to_time}||':59',
+            #{check_out_full_charge_service_charge}, 
+            #{check_out_full_charge_service_charge_type}, 
+            #{reservationcancellationpolicy.id}, COALESCE(#{minimum_free_age}, 0), 
+            COALESCE(#{extra_bed_price_type_value}, 0), COALESCE(#{extra_bed_price_type}, 1),
+            #{system_commission}, #{city_tax}, #{is_group}, #{maximum_discount_age}, 
+            #{maximum_discount_age_value}, #{maximum_discount_age_type},
+            #{exceed_type}, #{exceed_type_value}, #{guide_escort}, #{guide_escort_type}, #{guide_escort_type_value}, #{guide_escort_price_type}, #{guide_escort_price_type_value})
+	</insert>
+	
+	<select id="selectReservationRulesByHotelsId" parameterType="map" resultType="ReservationRuleType">
+	    SELECT hotelsusers_id, 
+	    	   check_in_from_time, 
+	    	   check_in_to_time, 
+		       check_in_half_charge_from_time, 
+		       check_in_half_charge_to_time, 
+		       check_in_half_charge_service_charge, 
+		       check_in_half_charge_service_charge_type, 
+		       check_in_full_charge_from_time, 
+		       check_in_full_charge_to_time, 
+		       check_in_full_charge_service_charge, 
+		       check_in_full_charge_service_charge_type, 
+		       check_out_from_time, 
+		       check_out_to_time, 
+		       check_out_half_charge_from_time, 
+		       check_out_half_charge_to_time, 
+		       check_out_half_charge_service_charge, 
+		       check_out_half_charge_service_charge_type, 
+		       check_out_full_charge_from_time, 
+		       check_out_full_charge_to_time, 
+		       check_out_full_charge_service_charge, 
+		       check_out_full_charge_service_charge_type, 
+		       minimum_free_age, 
+		       extra_bed_price_type_value,
+		       extra_bed_price_type, 
+		       system_commission, 
+		       city_tax, 
+		       is_group, exceed_type,
+		       exceed_type_value, 
+		       maximum_discount_age, 
+		       maximum_discount_age_value, 
+		       maximum_discount_age_type,
+		       reservationcancellationpolicy_id AS "reservationcancellationpolicy.id",
+		       guide_escort, guide_escort_type, guide_escort_type_value, 
+		       guide_escort_price_type, 
+		       guide_escort_price_type_value
+ 		  FROM hotelsreservationrules
+ 		 WHERE hotelsusers_id = #{hotelsusers_id}
+ 		   AND is_group = #{is_group} 
+	</select>
+	
+	<update id="updateReservationRules" parameterType="ReservationRuleType">
+	    UPDATE hotelsreservationrules
+ 		   SET check_in_from_time = #{check_in_from_time}||':00',
+	           check_in_to_time = #{check_in_to_time}||':59',
+	           check_in_half_charge_from_time = #{check_in_half_charge_from_time}||':00',
+	           check_in_half_charge_to_time = #{check_in_half_charge_to_time}||':59',
+	           check_in_half_charge_service_charge = #{check_in_half_charge_service_charge},
+	           check_in_half_charge_service_charge_type = #{check_in_half_charge_service_charge_type},
+	           check_in_full_charge_from_time = #{check_in_full_charge_from_time}||':00',
+	           check_in_full_charge_to_time = #{check_in_full_charge_to_time}||':59',
+	           check_in_full_charge_service_charge = #{check_in_full_charge_service_charge}, 
+	           check_in_full_charge_service_charge_type = #{check_in_full_charge_service_charge_type},
+	           check_out_from_time = #{check_out_from_time}||':00',
+	           check_out_to_time = #{check_out_to_time}||':59',
+	           check_out_half_charge_from_time = #{check_out_half_charge_from_time}||':00',
+	           check_out_half_charge_to_time = #{check_out_half_charge_to_time}||':59',
+	           check_out_half_charge_service_charge = #{check_out_half_charge_service_charge},
+	           check_out_half_charge_service_charge_type = #{check_out_half_charge_service_charge_type},
+	           check_out_full_charge_from_time = #{check_out_full_charge_from_time}||':00',
+	           check_out_full_charge_to_time = #{check_out_full_charge_to_time}||':59',
+	           check_out_full_charge_service_charge = #{check_out_full_charge_service_charge},
+	           check_out_full_charge_service_charge_type = #{check_out_full_charge_service_charge_type},
+		       minimum_free_age = COALESCE(#{minimum_free_age}, 0), 
+		       extra_bed_price_type_value = COALESCE(#{extra_bed_price_type_value}, 0),
+		       extra_bed_price_type = COALESCE(#{extra_bed_price_type}, 1), 
+		       system_commission = #{system_commission}, 
+		       city_tax = #{city_tax}, 
+		       exceed_type = #{exceed_type},
+		       exceed_type_value = #{exceed_type_value}, 
+		       maximum_discount_age = #{maximum_discount_age}, 
+		       maximum_discount_age_value = #{maximum_discount_age_value},
+		       maximum_discount_age_type = #{maximum_discount_age_type},
+		       guide_escort = #{guide_escort}, 
+		       guide_escort_type = #{guide_escort_type}, 
+		       guide_escort_type_value = #{guide_escort_type_value}, 
+		       guide_escort_price_type = #{guide_escort_price_type}, 
+		       guide_escort_price_type_value = #{guide_escort_price_type_value}
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND is_group = #{is_group} 
+	</update>
+	
+	<select id="selectReservationCancellationPolicyById" parameterType="long" resultType="ReservationCancellationPolicy">
+	    SELECT id, 
+	    	   no_penalty_before_days AS "no_penalty_before_days.id", 
+	           late_cancel_penalty AS "late_cancel_penalty.id", 
+	           no_show_penalty AS "no_show_penalty.id", 
+               support_tentative_reservation, 
+               notify_ta_before_days AS "notify_ta_before_days.id",
+               no_show_penalty_first_night,
+               late_cancel_penalty_first_night
+          FROM reservationcancellationpolicy
+         WHERE id = #{id} 
+	</select>
+	
+	<insert id="insertReservationCancellationPolicy" parameterType="ReservationCancellationPolicy">
+	    <selectKey order="BEFORE" keyProperty="id" resultType="int">
+	        SELECT NEXTVAL('reservationcancellationpolicy_id_seq')
+	    </selectKey>
+	    INSERT INTO reservationcancellationpolicy(id, no_penalty_before_days, late_cancel_penalty, no_show_penalty, notify_ta_before_days, late_cancel_penalty_first_night, no_show_penalty_first_night)
+        VALUES (#{id}, #{no_penalty_before_days.id}, #{late_cancel_penalty.id}, #{no_show_penalty}, #{notify_ta_before_days.id}, #{late_cancel_penalty_first_night}, #{no_show_penalty_first_night})
+	</insert>
+	
+	<update id="updateReservationCancellationPolicy" parameterType="ReservationCancellationPolicy">
+	    UPDATE reservationcancellationpolicy
+   		   SET no_penalty_before_days = #{no_penalty_before_days}, 
+   		       late_cancel_penalty = #{late_cancel_penalty}, 
+   		       no_show_penalty = #{no_show_penalty}, 
+       		   support_tentative_reservation = #{support_tentative_reservation}, 
+       		   notify_ta_before_days = #{notify_ta_before_days},
+       		   no_show_penalty_first_night = #{no_show_penalty_first_night},
+       		   late_cancel_penalty_first_night = #{late_cancel_penalty_first_night}
+         WHERE id = #{id}
+	</update>
+	
+	<insert id="insertHotelServices" parameterType="Service">
+	    INSERT INTO hotelsservicesinrooms (hotelsusers_id, servicesinrooms_id)
+        VALUES (#{hotelsusers_id}, #{id})
+	</insert>
+	
+	<delete id="deleteHotelsServices" parameterType="long">
+	    DELETE FROM hotelsservicesinrooms WHERE hotelsusers_id = #{hotelsusers_id} 
+	</delete>
+	
+	<select id="selectHotelRoomService" parameterType="long" resultType="Service">
+	    SELECT s.id, s.name
+          FROM servicesinrooms s JOIN hotelsservicesinrooms hs ON s.id = servicesinrooms_id
+         WHERE hs.hotelsusers_id = #{hotelsusers_id}
+         ORDER BY LENGTH(s.name)
+	</select>
+	
+	<select id="selectHotelNearByPlacesByHotelId" parameterType="long" resultType="HotelNearByPlace">
+	    SELECT h.id, h.name, h.type, h.value
+          FROM hotelsnearbyplaces h
+         WHERE hotelsusers_id = #{hotelsusers_id} 
+         ORDER BY type ASC
+	</select>
+	
+	<select id="selectSearchHotelNearByPlacesByHotelId" parameterType="long" resultType="HotelNearByPlace">
+	    SELECT h.id, h.name, h.type, h.value
+          FROM hotelsnearbyplaces h
+         WHERE h.hotelsusers_id = #{hotelsusers_id}
+           AND h.type IN (1,2,3) 
+         ORDER BY type ASC
+	</select>
+	
+	<insert id="insertMealOptions" parameterType="MealOption">
+	    INSERT INTO mealoptions(hotelsusers_id, meal_type, included_to_room_rate, cost_per_person_per_night)
+        VALUES (#{hotelsusers_id}, #{meal_type}, #{included_to_room_rate}, CASE WHEN #{included_to_room_rate} = FALSE THEN #{cost_per_person_per_night}::NUMERIC ELSE NULL::NUMERIC END)
+	</insert>
+	
+	<update id="updateMealOptions" parameterType="MealOption">
+	    UPDATE mealoptions
+	       SET included_to_room_rate = #{included_to_room_rate},
+	       	   cost_per_person_per_night = CASE WHEN #{included_to_room_rate} = FALSE THEN #{cost_per_person_per_night}::NUMERIC ELSE NULL::NUMERIC END
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	       AND meal_type = #{meal_type}  	   	
+	</update>
+	
+	<delete id="deleteMealOptions" parameterType="MealOption">
+	    DELETE FROM mealoptions WHERE hotelsusers_id = #{hotelsusers_id} AND meal_type = #{meal_type}
+	</delete>
+	
+	<select id="selectMealOptions" parameterType="MealOption" resultType="MealOption">
+	    SELECT *
+	      FROM mealoptions
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	       AND meal_type = #{meal_type} 
+	</select>
+	
+	<update id="updateHotelsFloorsAndRooms" parameterType="Hotel">
+	    UPDATE hotels
+	       SET floors = #{floors},
+	           rooms = #{rooms}
+	     WHERE users_id = #{users_id}  
+	</update>
+	
+	<insert id="insertConditions" parameterType="Condition">
+	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
+	        SELECT NEXTVAL('conditions_id_seq')
+	    </selectKey>
+	    INSERT INTO conditions(id, name, hotelsusers_id)
+        VALUES (#{id}, #{name}, #{hotelsusers_id})
+	</insert>
+	
+	<update id="updateConditions" parameterType="Condition">
+	    UPDATE conditions
+	       SET name = #{name}
+	     WHERE id = #{id}  
+	</update>
+	
+	<select id="selectConditionsByHotelId" parameterType="long" resultType="Condition">
+	    SELECT id, name
+	      FROM conditions
+	     WHERE hotelsusers_id = #{hotelsusers_id} 
+	</select>
+	
+	<insert id="insertHotelRoomTypes" parameterType="RoomType">
+	    INSERT INTO hotelsroomtypes(hotelsusers_id, roomtypes_id, number_of_rooms, additional_bed, holding_capacity, room_area)
+        VALUES (#{hotelsusers_id}, #{id}, #{number_of_rooms}, #{additional_bed.id}, #{holding_capacity.id}, #{room_area})
+	</insert>
+	
+	<select id="selectExtraBedNeed" parameterType="int" resultType="boolean">
+	    SELECT h.additional_bed
+	      FROM hotelsroomtypes h
+	     WHERE h.roomtypes_id = #{value} 
+	</select>
+	
+	<update id="updateHotelRoomTypes" parameterType="RoomType">
+	    UPDATE hotelsroomtypes
+	       SET number_of_rooms = #{number_of_rooms}, 
+	           additional_bed = #{additional_bed.id}, 
+	           holding_capacity = #{holding_capacity.id}, 
+	           room_area = #{room_area}
+	     WHERE roomtypes_id = #{id}  
+	</update>
+	
+	<update id="updateRoomTypesDescription" parameterType="RoomType">
+	    UPDATE roomtypes
+	       SET description = #{description},
+	           update_date = now(),
+	           initiator_user_id = #{initiator_user_id}
+	     WHERE id = #{id}  
+	</update>
+	
+	<insert id="insertHotelsRoomsConditions" parameterType="Condition">
+	    INSERT INTO hotelsroomsconditions(hotelsusers_id, conditions_id, roomtypes_id)
+        VALUES (#{hotelsusers_id}, #{id}, #{roomtypes_id})
+	</insert>
+	
+	<delete id="deleteHotelsRoomsConditions" parameterType="RoomType">
+	    DELETE FROM hotelsroomsconditions
+	    WHERE hotelsusers_id = #{hotelsusers_id} 
+	      AND roomtypes_id = #{id}
+	</delete>
+	
+	<insert id="insertHotelRoomsEquipments" parameterType="Equipment">
+	    INSERT INTO roomsequipments(hotelsusers_id, roomtypes_id, equipments_id)
+        VALUES (#{hotelsusers_id}, #{roomtypes_id}, #{id})
+	</insert>
+	
+	<delete id="deleteHotelRoomsEquipments" parameterType="RoomType">
+	    DELETE FROM roomsequipments
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	       AND roomtypes_id = #{id}
+	</delete>
+	
+	<select id="selectHotelRoomTypesRoomsByHotels" parameterType="map" resultType="Room">
+	    SELECT id, 
+	    	   initiator_user_id, 
+	    	   hotelsusers_id, 
+	    	   roomtypes_id, 
+	    	   room_number, 
+               room_floor AS "room_floor", 
+               bed_type AS "bed_type.id"
+          FROM rooms
+         WHERE hotelsusers_id = #{hotelsusers_id} 
+           AND roomtypes_id = #{roomtypes_id}
+           ORDER BY room_number ASC
+	</select>
+	
+	<select id="selectConditionsByHotel" parameterType="long" resultType="Condition">
+	    SELECT id, name
+          FROM conditions
+         WHERE hotelsusers_id = #{hotelsusers_id} 
+	</select>
+	
+	<select id="selectNumberOfRoomsByHotel" parameterType="map" resultType="int">
+	    SELECT number_of_rooms
+  		  FROM hotelsroomtypes
+  		 WHERE hotelsusers_id = #{hotelsusers_id}
+  		   AND roomtypes_id  = #{roomtypes_id}  
+	</select>
+	
+	<select id="selectRoomTypesByHotel" parameterType="long" resultType="RoomType">
+	    SELECT rt.id, 
+	    	   rt.name, 
+	    	   hrt.number_of_rooms,
+	    	   rt.description,
+	    	   hrt.additional_bed AS "additional_bed.id",
+	    	   hrt.holding_capacity AS "holding_capacity.id",
+	    	   hrt.room_area
+	      FROM roomtypes rt 
+	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
+	     WHERE hrt.hotelsusers_id = #{hotelsusers_id}
+	     ORDER BY hrt.holding_capacity ASC 
+	</select>
+	
+	<select id="selectHotelRoomTypeById" parameterType="int" resultType="RoomType">
+	    SELECT rt.id, 
+	    	   rt.name, 
+	    	   hrt.number_of_rooms,
+	    	   rt.description,
+	    	   hrt.additional_bed AS "additional_bed.id",
+	    	   hrt.holding_capacity AS "holding_capacity.id",
+	    	   hrt.room_area
+	      FROM roomtypes rt 
+	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
+	     WHERE hrt.roomtypes_id = #{roomtypes_id}
+	     ORDER BY hrt.holding_capacity ASC 
+	</select>
+	
+	<select id="selectRoomsListByRoomType" parameterType="map" resultType="Room">
+	    SELECT id, 
+	    	   room_number, 
+	    	   holding_capacity AS "holding_capacity.id", 
+	    	   additional_bed AS "additional_bed.id"
+	      FROM rooms
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	       AND roomtypes_id = #{roomtypes_id}   
+	</select>
+	
+	<select id="selectMaxPersonRoomTypesByHotel" parameterType="map" resultType="short">
+	    SELECT MAX(holding_capacity) AS persons
+          FROM hotelsroomtypes
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND roomtypes_id = #{roomtypes_id}   
+	</select>
+	
+	<select id="selectHotelsByRegion" parameterType="map" resultType="Hotel">
+	    SELECT h.users_id, 
+	    	   COALESCE(hd.display_name_en, hd.display_name) AS name
+	      FROM users u, hotels h, hotelsdetails hd, addresses ad
+	     WHERE u.id = h.users_id
+	       AND h.users_id = hd.hotelsusers_id
+	       AND hd.addresses_id = ad.id
+	       AND ad.regions_id = #{regions_id}
+	       AND u.status = 1
+	</select>
+	
+	<insert id="insertUploadFileDetail" parameterType="UploadedFile">
+	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
+	        SELECT NEXTVAL('uploadedfiles_id_seq')
+	    </selectKey>
+	    INSERT INTO uploadedfiles(id, link, create_date, mime_type)
+        VALUES (#{id}, #{link}, now()::timestamp(0), #{mime_type})
+	</insert>
+		
+	<update id="updateUploadedFileComment" parameterType="UploadedFile">
+	    UPDATE uploadedfiles
+	       SET comment = #{comment}
+	     WHERE id = #{id}  
+	</update>
+	
+	<select id="selectHotelFacilitiesList" parameterType="long" resultType="Facility">
+	    SELECT hf.facilities_id AS id, hf.paid, f.name
+          FROM hotelsfacilities hf, facilities f
+         WHERE hf.hotelsusers_id = #{hotelsusers_id}
+           AND hf.facilities_id = f.id
+         ORDER BY LENGTH(f.name)
+	</select>
+	
+	<select id="selectReservationCancellationPolicyByHotelId" parameterType="map" resultType="ReservationCancellationPolicy">
+		SELECT rp.id, 
+			   rp.no_penalty_before_days AS "no_penalty_before_days.id", 
+	           rp.late_cancel_penalty AS "late_cancel_penalty.id", 
+	           rp.no_show_penalty AS "no_show_penalty.id", 
+               rp.support_tentative_reservation, 
+               rp.notify_ta_before_days AS "notify_ta_before_days.id",
+               rp.no_show_penalty_first_night,
+               rp.late_cancel_penalty_first_night
+          FROM reservationcancellationpolicy rp, hotelsreservationrules hr
+         WHERE rp.id = hr.reservationcancellationpolicy_id
+		   AND hr.hotelsusers_id = #{hotelsusers_id}
+		   AND hr.is_group = #{is_group}
+	</select>
+	
+	<select id="selectHotelInfo" parameterType="long" resultType="Hotel">
+	    SELECT h.users_id,
+	    	   c.name AS country_name,
+	    	   r.name AS region_name,
+	    	   a.address,
+	    	   ct.name AS city,
+	    	   hd.contact_number AS "hotelsDetails.contact_number",
+	    	   hd.contact_email AS "hotelsDetails.contact_email",
+	    	   COALESCE(hd.display_name_en, hd.display_name) AS display_name,
+	    	   hs.id AS hotelstars_id,
+	    	   hd.description AS "hotelsDetails.description"
+	      FROM users u, hotels h
+			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+			   LEFT JOIN hotelstars hs ON hd.hotelstars_id = hs.id
+			   LEFT JOIN addresses a ON hd.addresses_id = a.id
+			   LEFT JOIN regions r ON a.regions_id = r.id
+			   LEFT JOIN countries c ON a.countries_id = c.id
+			   LEFT JOIN cities ct ON a.cities_id = ct.id
+		 WHERE u.id = h.users_id
+		   AND h.users_id = #{users_id}
+	</select>
+	
+	<insert id="insertHotelImages" parameterType="map">
+	    INSERT INTO hotelsuploadedfiles(hotelsusers_id, uploadedfiles_id)
+        VALUES (#{identify}, #{uploadedfiles_id})
+	</insert>
+	
+	<insert id="insertHotelRoomTypeImages" parameterType="map">
+	    INSERT INTO roomtypesuploadedfiles(roomtypes_id, uploadedfiles_id)
+        VALUES (#{identify}, #{uploadedfiles_id})
+	</insert>
+	
+	<select id="selectHotelImages" parameterType="map" resultType="UploadedFile">
+	    SELECT uf.*
+	      FROM uploadedfiles uf <if test="type == 0"> JOIN hotelsuploadedfiles huf    ON uf.id = huf.uploadedfiles_id AND huf.hotelsusers_id = #{id} </if>
+	                            <if test="type == 1"> JOIN roomtypesuploadedfiles ruf ON uf.id = ruf.uploadedfiles_id AND ruf.roomtypes_id = #{id} </if>  
+	</select>
+	
+	<delete id="deleteHotelImages" parameterType="map">
+	    <if test="type == 0">
+	        DELETE FROM hotelsuploadedfiles huf WHERE huf.uploadedfiles_id = #{id}
+	    </if>
+	    <if test="type == 1">
+	        DELETE FROM roomtypesuploadedfiles ruf WHERE ruf.uploadedfiles_id = #{id}
+	    </if>
+	</delete>
+	
+	<update id="updatePullOffAllDefaultImages" parameterType="map">
+		UPDATE uploadedfiles 
+		   SET is_default = false
+		<if test="id != null">
+		 WHERE id IN (  
+		    <if test="type == 0">
+		        SELECT uploadedfiles_id FROM hotelsuploadedfiles huf WHERE huf.hotelsusers_id = #{id}
+		    </if>
+		    <if test="type == 1">
+		    	SELECT uploadedfiles_id FROM roomtypesuploadedfiles huf WHERE huf.roomtypes_id = #{id}
+		    </if>
+		    )
+		</if>   
+	</update>
+	
+	<update id="updateSetDefaultImage" parameterType="long">
+		UPDATE uploadedfiles 
+		   SET is_default = true
+		 WHERE id = #{id}  
+	</update>
+	
+	<delete id="deleteHotelUploadFile" parameterType="long">
+	    DELETE FROM uploadedfiles WHERE id = #{id}
+	</delete>
+	
+	<select id="selectRoomTypeImages" parameterType="map" resultType="KeyAndValue">
+	    SELECT link AS key,
+	    	   mime_type AS value
+	      FROM roomtypesuploadedfiles ru, 
+	           uploadedfiles uf
+	     WHERE ru.uploadedfiles_id = uf.id
+	       AND ru.roomtypes_id = #{roomtypes_id}
+	     ORDER BY uf.create_date
+	    <if test="limit != null">
+	     LIMIT 1
+	    </if>
+	</select>
+	
+	<update id="updateRoomOnSaleState" parameterType="map">
+	    UPDATE rooms
+	       SET onsale_state = #{new_state}
+	     WHERE onsale_state = #{old_state}
+	       AND id = #{id}  
+	</update>
+	
+	<update id="updateRoomState" parameterType="map">
+	    UPDATE rooms
+	       SET room_state = #{new_state},
+           	   update_date = now()::timestamp(0),
+               initiator_user_id = #{initiator_user_id}
+	     WHERE room_state = #{old_state}
+	       AND id = #{id}  
+	</update>
+	
+	<select id="selectRoomCountByRoomType" resultType="short" parameterType="int">
+	    SELECT COUNT(*)
+	      FROM rooms
+	     WHERE roomtypes_id = #{value} 
+	</select>
+	
+	<select id="selectRoomTypeById" parameterType="int" resultType="RoomType">
+       SELECT id, name, status, create_date, update_date, initiator_user_id
+         FROM roomtypes
+        WHERE id = #{id} 
+    </select>
+    
+    <select id="selectRoomTypeNameById" parameterType="int" resultType="string">
+       SELECT name
+         FROM roomtypes
+        WHERE id = #{id} 
+    </select>
+    
+    <select id="selectTAAvailableRoomCount" parameterType="map" resultType="short">
+        SELECT COALESCE(MAX(get_calc_busy_rooms_daily_ta(rt.roomtypes_id, ta.available_date)), 0) as cnt
+          FROM hotelsroomtypes rt LEFT JOIN touragentavailablerooms ta ON ta.roomtypes_id = rt.roomtypes_id AND ta.available_date BETWEEN #{date_from}::date AND #{date_to}::date
+         WHERE rt.roomtypes_id = #{roomtypes_id}
+         GROUP BY rt.number_of_rooms, rt.roomtypes_id
+    </select>
+    
+    <select id="selectNumberOfRooms" parameterType="int" resultType="short">
+        SELECT number_of_rooms
+          FROM hotelsroomtypes
+         WHERE roomtypes_id = #{roomtypes_id} 
+    </select>
+    
+    <select id="selectHotelDisplayName" parameterType="long" resultType="string">
+        SELECT COALESCE(hd.display_name_en, hd.display_name)
+          FROM hotelsdetails hd
+         WHERE hd.hotelsusers_id = #{value} 
+    </select>
+    
+    <select id="selectHotelCityName" parameterType="long" resultType="string">
+        SELECT c.name
+          FROM hotelsdetails hd, addresses ad, cities c
+         WHERE hd.hotelsusers_id = #{value}
+           AND ad.id = hd.addresses_id
+           AND c.id = ad.cities_id 
+    </select>
+    
+    <select id="selectHotelAndCityName" parameterType="long" resultType="string">
+        SELECT COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name
+          FROM hotelsdetails hd, addresses ad, cities c
+         WHERE hd.hotelsusers_id = #{value}
+           AND ad.id = hd.addresses_id
+           AND c.id = ad.cities_id 
+    </select>
+    
+    <select id="selectAdditionalServiceTashkent" parameterType="long" resultType="boolean">
+        SELECT COUNT(*)
+          FROM hotelsdetails hd, addresses ad, cities c
+         WHERE hd.hotelsusers_id = #{value}
+           AND ad.id = hd.addresses_id
+           AND c.id = ad.cities_id
+           AND ad.cities_id = 90 
+    </select>
+    
+    <select id="selectSearchResultView" resultType="Hotel" parameterType="long">
+	    SELECT h.users_id, 
+	    	   h.manager, 
+	    	   h.manager_email, 
+	    	   h.corporate_email, 
+	    	   h.primary_phone, 
+       		   h.secondary_phone, 
+       		   h.floors,
+       		   h.rooms,
+       		   u.name AS legal_name,
+       		   COALESCE(hd.display_name_en, hd.display_name) AS display_name,
+       		   hd.hotelstars_id,
+       		   ad.address,
+       		   c.name AS country_name,
+       		   r.name AS region_name,
+       		   hd.contact_number AS "hotelsDetails.contact_number",
+       		   hd.description AS "hotelsDetails.description"
+          FROM hotels h LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+                             JOIN addresses ad ON hd.addresses_id = ad.id
+                             JOIN countries c ON ad.countries_id = c.id
+                             JOIN regions r ON ad.regions_id = r.id,
+                             users u
+         WHERE u.id = h.users_id
+           AND h.users_id = #{users_id} 
+    </select>
+    
+    <select id="selectSearchResultViewCheckIn" parameterType="long" resultType="java.util.Date">
+    	SELECT TO_TIMESTAMP(CURRENT_DATE||' '||r.check_in_from_time,'yyyy/mm/dd hh24:mi:ss')
+    	  FROM hotelsreservationrules r
+         WHERE r.hotelsusers_id = #{hotelsusers_id}
+           AND r.is_group = false 
+    </select>
+    
+    <select id="selectSearchResultViewCheckOut" parameterType="long" resultType="java.util.Date">
+    	SELECT TO_TIMESTAMP((CURRENT_DATE + '1 day'::INTERVAL)::DATE||' '||r.check_out_to_time,'yyyy/mm/dd hh24:mi:ss')
+    	  FROM hotelsreservationrules r
+         WHERE r.hotelsusers_id = #{hotelsusers_id}
+           AND r.is_group = false 
+    </select>
+
+	<select id="selectHotelsB2CList" parameterType="map" resultType="Hotel">
+		SELECT h.users_id, 
+			   u.name, 
+		       COALESCE(hd.display_name_en, hd.display_name) AS display_name,
+			   ct.name AS city, 
+		       u.status AS hotelstatus,
+		       COALESCE(hp.individual_price, 0) AS b2c_individual_price,
+		       COALESCE(hp.group_price, 0) AS b2c_group_price,
+		       COALESCE(hp.is_enabled, false) AS b2c_is_enabled
+		  FROM users u, hotels h 
+			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+			   LEFT JOIN addresses a ON hd.addresses_id = a.id
+			   LEFT JOIN cities ct ON a.cities_id = ct.id
+			   LEFT JOIN hotelsb2cprices hp ON h.users_id = hp.hotelsusers_id
+		 WHERE u.id = h.users_id
+		<if test="users_id != null">
+		   AND u.id = #{users_id} 
+		</if>
+		 <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		 </if>
+		 <if test="display_name != null">
+		   AND LOWER(hd.display_name_en) LIKE '%' || LOWER(#{display_name}) || '%' 
+		 </if>
+		<if test="city != null">
+		   AND LOWER(ct.name) like '%' || LOWER(#{city}) || '%' 
+		</if>
+		<if test="status != null">
+		   AND u.status = #{status.id} 
+		</if>
+		<if test="individual_price != null">
+		   AND hp.individual_price = #{individual_price} 
+		</if>
+		<if test="group_price != null">
+		   AND hp.group_price = #{group_price} 
+		</if>
+		<if test="is_enabled != null">
+		   AND hp.is_enabled = TRUE
+		</if>
+		<if test="is_disabled != null">
+		   AND (hp.is_enabled = FALSE OR hp.is_enabled IS NULL)
+		</if>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectHotelsB2CCount" parameterType="map" resultType="long">
+		SELECT COUNT(*) 
+		  FROM users u, hotels h 
+			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+			   LEFT JOIN addresses a ON hd.addresses_id = a.id
+			   LEFT JOIN cities ct ON a.cities_id = ct.id
+			   LEFT JOIN hotelsb2cprices hp ON h.users_id = hp.hotelsusers_id
+		 WHERE u.id = h.users_id
+		<if test="users_id != null">
+		   AND u.id = #{users_id} 
+		</if>
+	    <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		</if>
+		<if test="display_name != null">
+		   AND LOWER(hd.display_name_en) LIKE '%' || LOWER(#{display_name}) || '%' 
+		</if>
+		<if test="city != null">
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{city}) || '%' 
+		</if>
+		<if test="status != null">
+		   AND u.status = #{status.id} 
+		</if>
+		<if test="individual_price != null">
+		   AND hp.individual_price = #{individual_price} 
+		</if>
+		<if test="group_price != null">
+		   AND hp.group_price = #{group_price} 
+		</if>
+		<if test="is_enabled != null">
+		   AND hp.is_enabled = TRUE
+		</if>
+		<if test="is_disabled != null">
+		   AND (hp.is_enabled = FALSE OR hp.is_enabled IS NULL)
+		</if>
+	</select>
+    
+    <select id="selectHotelSelfPaymentPossibility" parameterType="long" resultType="boolean">
+    	SELECT h.self_payment_possibility
+    	  FROM hotels h
+    	 WHERE h.users_id = #{users_id}
+    </select>
+    
+    <select id="selectCountriesHasHotels" parameterType="map" resultType="Country">
+    	SELECT c.id, c.code, <choose><when test="locale == 'en'">c.name_en</when><when test="locale == 'uz'">c.name_uz</when><otherwise>c.name</otherwise></choose> AS name
+    	  FROM countries c, addresses ad, hotelsdetails hd
+    	 WHERE c.id = ad.countries_id
+    	   AND ad.id = hd.addresses_id
+    	 GROUP BY c.id, c.code, <choose><when test="locale == 'en'">c.name_en</when><when test="locale == 'uz'">c.name_uz</when><otherwise>c.name</otherwise></choose>
+    	 ORDER BY <choose><when test="locale == 'en'">c.name_en</when><when test="locale == 'uz'">c.name_uz</when><otherwise>c.name</otherwise></choose>
+    </select>
+</mapper>

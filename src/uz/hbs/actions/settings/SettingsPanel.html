@@ -1,0 +1,35 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<form wicket:id="form" role="form">
+				<div class="row">
+					<div class="col-md-3">
+						<strong><wicket:message key="users.settings.table_rows" />:</strong>
+					</div>
+					<div class="col-md-3">
+						<input wicket:id="table_rows" type="number" class="form-control">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+							<input wicket:id="submit" wicket:message="value:button.confirm" type="submit" class="btn btn-success">
+						</div>
+					</div>
+				</div>
+				<hr>
+				<nav>
+					<ul class="pager" style="margin:20px 0 0 0">
+						<li class="previous" style="margin-right: 5px;">
+							<a wicket:id="changePasswordLink"><wicket:message key="users.change.password.link">[Change password]</wicket:message></a>
+						</li>
+					</ul>
+				</nav>
+				<div wicket:id="feedback"></div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">&nbsp;</div>
+	</div>
+</wicket:panel>

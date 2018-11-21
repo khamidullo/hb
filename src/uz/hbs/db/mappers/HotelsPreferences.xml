@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.HotelsPreferences">
+	<select id="selectFacilitiesList" parameterType="map" resultType="Facility">
+		SELECT f.id, f.name, filter_flag
+		  FROM facilities f
+		<where>
+		 <if test="id != null">
+		   AND f.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND f.name = #{name} 
+		 </if>
+		 <if test="filter_flag != null">
+		   AND f.filter_flag = #{filter_flag} 
+		 </if>
+		</where>
+	</select>
+	
+	<insert id="insertFacility" parameterType="Facility">
+	    <selectKey order="BEFORE" keyProperty="id" resultType="int">
+	        SELECT NEXTVAL('facilities_id_seq')
+	    </selectKey>
+	    INSERT INTO facilities(id, name, filter_flag)
+	    VALUES (#{id}, #{name}, false)
+	</insert>
+	
+	<select id="selectHotelStarsList" parameterType="map" resultType="HotelStar">
+		SELECT hs.id, hs.name 
+		  FROM hotelstars hs
+		<where>
+		 <if test="id != null">
+		   AND hs.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND hs.name = #{name} 
+		 </if>
+		</where>
+		ORDER BY hs.id <if test="sortOrder != null">${sortOrder}</if>
+	</select>
+
+	<select id="selectRoomTypesList" parameterType="map" resultType="RoomType">
+		SELECT r.id, r.name 
+		  FROM roomtypes r
+		<where>
+		 <if test="id != null">
+		   AND r.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND r.name = #{name} 
+		 </if>
+		 <if test="status != null">
+		   AND r.status = #{status} 
+		 </if>
+		</where>
+	</select>
+	
+	<select id="selectConditionNameByName" parameterType="string" resultType="string">
+	    SELECT DISTINCT name
+          FROM conditions
+         WHERE LOWER(name) LIKE LOWER(#{value})||'%'
+	</select>
+	
+	<delete id="deleteConditions" parameterType="int">
+	    DELETE FROM conditions WHERE id = #{id}
+	</delete>
+	
+	<select id="selectHotelNearByPlaceNameByName" parameterType="string" resultType="string">
+	    SELECT DISTINCT name
+          FROM hotelsnearbyplaces
+         WHERE LOWER(name) LIKE LOWER(#{value})||'%'
+	</select>
+	
+	<select id="selectPricesRange" resultType="PricesRange">
+		SELECT MIN(start_price) AS start_price, 
+			   MAX(end_price) AS end_price
+		  FROM pricesrange
+	</select>
+	
+	<insert id="insertCurrencies" parameterType="Currencies">
+	    <selectKey order="BEFORE" keyProperty="id" resultType="int">
+	        SELECT NEXTVAL('currencies_id_seq')
+	    </selectKey>
+	    INSERT INTO currencies (id, name, value, is_default)
+	    VALUES (#{id}, #{name}, #{value}, #{is_default})
+	</insert>
+
+	<select id="selectCurrencies" resultType="Currencies" parameterType="map">
+	    SELECT c.id, 
+	    	   c.name,
+	    	   c.value,
+	    	   c.is_default,
+	    	   c.status,
+	    	   c.create_date,
+	    	   c.update_date
+		  FROM currencies c
+		<where>
+		  <if test="id != null">
+		   AND c.id = #{id}
+		  </if>    
+		  <if test="status != null">
+		   AND c.status = #{status}
+		  </if>    
+		  <if test="is_default != null">
+		   AND c.is_default = #{is_default}
+		  </if>    
+		</where>
+	</select>
+
+	<update id="updateCurrencies" parameterType="Currencies">
+	    UPDATE currencies 
+	    <set>
+	           update_date = CURRENT_TIMESTAMP,
+	        <if test="is_default != null">
+	           is_default = #{is_default},
+	        </if>
+	        <if test="status != null">
+	           status = #{status},
+	        </if>
+	        <if test="value != null">
+	           value = #{value},
+	        </if>
+	        <if test="name != null">
+	           name = #{name},
+	        </if>
+	    </set>
+	     WHERE id = #{id}
+	</update>
+	
+	<insert id="insertCurrenciesHistory" parameterType="Currencies">
+	    INSERT INTO currencieshistory (currencies_id, name, value, is_default, status, create_date, update_date)
+	    VALUES (#{id}, #{name}, #{value}, #{is_default}, #{status}, #{create_date}, #{update_date})
+	</insert>
+
+	<select id="selectCurrenciesHistoryList" resultType="Currencies">
+	    SELECT c.currencies_id AS id, 
+	    	   c.name,
+	    	   c.value,
+	    	   c.is_default,
+	    	   c.status,
+	    	   c.create_date,
+	    	   c.update_date,
+	    	   c.history_date
+		  FROM currencieshistory c
+		<where>
+		  <if test="id != null">
+		   AND c.id = #{id}
+		  </if>    
+		</where>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectCurrenciesHistoryCount" resultType="long">
+	    SELECT COUNT(*)
+		  FROM currencieshistory c
+		<where>
+		  <if test="id != null">
+		   AND c.id = #{id}
+		  </if>    
+		</where>
+	</select>
+	
+	<insert id="insertHotelsCategories" parameterType="HotelCategory">
+	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
+	        SELECT NEXTVAL('hotelscategories_id_seq')
+	    </selectKey>
+	    INSERT INTO hotelscategories (id, name, create_date, update_date, initiator_user_id)
+        VALUES (#{id}, #{name}, now(), now(), #{initiator_user_id})
+	</insert>
+	
+	<update id="updateHotelsCategories" parameterType="HotelCategory">
+	    UPDATE hotelscategories
+	       SET name = #{name},
+	           initiator_user_id = #{initiator_user_id},
+	           update_date = now()
+	     WHERE id= #{id}      
+	</update>
+	
+	<select id="selectHotelsCategories" resultType="HotelCategory">
+	    SELECT id, 
+	           name, 
+	           create_date, 
+	           update_date, 
+	           initiator_user_id
+	      FROM hotelscategories
+	     ORDER BY name
+	</select>
+	
+	<select id="selectHotelsEquipments" parameterType="long" resultType="Equipment">
+	    SELECT e.id, 
+			   e.name, 
+			   he.hotelsusers_id
+	      FROM equipments e, hotelsequipments he
+	     WHERE e.id = he.equipments_id
+	       AND he.hotelsusers_id = #{hotelsusers_id} 
+	</select>
+	
+	<insert id="insertHotelsEquipments" parameterType="Equipment">
+	    INSERT INTO hotelsequipments (equipments_id, hotelsusers_id) 
+	    VALUES (#{id}, #{hotelsusers_id})
+	</insert>
+	
+	<delete id="deleteHotelsEquipments" parameterType="long">
+	    DELETE FROM hotelsequipments WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+	
+	<insert id="insertHotelsB2CPrices" parameterType="Hotel">
+		INSERT INTO hotelsb2cprices (hotelsusers_id, individual_price, group_price, is_enabled)
+		VALUES (#{users_id}, #{b2c_individual_price}, #{b2c_group_price}, #{b2c_is_enabled})
+	</insert>
+
+	<update id="updateHotelsB2CPrices" parameterType="Hotel">
+		UPDATE hotelsb2cprices
+		<set>
+		 	<if test="b2c_individual_price != null">
+		       individual_price = #{b2c_individual_price},
+		 	</if>	
+		 	<if test="b2c_group_price != null">
+		       group_price = #{b2c_group_price},
+		 	</if>	
+		 	<if test="b2c_is_enabled != null">
+		       is_enabled = #{b2c_is_enabled},
+		 	</if>	
+		</set>
+		 WHERE hotelsusers_id = #{users_id}
+	</update>
+</mapper>

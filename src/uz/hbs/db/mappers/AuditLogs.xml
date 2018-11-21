@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.AuditLogs">
+	<insert id="insertAuditLogs" parameterType="AuditLog">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+		    SELECT NEXTVAL('auditlogs_id_seq')
+		</selectKey>
+	    INSERT INTO auditlogs (id, log_level, actions_id, initiator_user_id, usersessions_id, description)
+	    VALUES (#{id}, #{log_level}, #{actions_id}, #{initiator_user_id}, #{usersessions_id}, #{description})
+	</insert>
+</mapper>

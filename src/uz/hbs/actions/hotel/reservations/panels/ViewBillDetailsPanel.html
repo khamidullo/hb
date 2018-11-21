@@ -1,0 +1,163 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<span wicket:id="feedback">[feedback]</span>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="pull-left">
+			<wicket:message key="hotels.reservation.details.bill.details.add_additional_service">[Add additional service]</wicket:message>
+		</div>
+	</div>
+</div>
+<form wicket:id="form" class="well">
+	<div class="row">
+			<div class="col-md-2">
+				<wicket:message key="hotels.reservation.details.bill.details.date">[Date]</wicket:message>:
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" wicket:id="bill_date" wicket:message="placeholder:hotels.reservation.details.bill.details.date"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<wicket:message key="hotels.reservation.details.bill.details.description">[Description]</wicket:message>:
+				<select wicket:id="service" class="form-control">
+					<option>choice one</option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<wicket:message key="hotels.reservation.details.bill.details.charge">[Charge]</wicket:message>
+				<input wicket:id="charge" type="text" class="form-control" wicket:message="placeholder:hotels.reservation.details.bill.details.charge">
+			</div>
+			<div class="col-md-2">
+				<wicket:message key="hotels.reservation.details.bill.details.room">[room]</wicket:message>
+				<select wicket:id="reserveroom" class="form-control">
+					<option>choice one</option>
+				</select>
+			</div>
+			<div class="col-md-5">
+				<wicket:message key="hotels.reservation.details.bill.details.receptionists.note">[Receptionist`s Note]</wicket:message>:
+				<textarea rows="10" cols="40" wicket:id="note" class="form-control"></textarea>
+			</div>
+	</div>
+	<div class="row" wicket:id="other_container">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-3">
+				<wicket:message key="other">[Other]</wicket:message>:
+				<input wicket:id="description" type="text" class="form-control">
+			</div>
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-7"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-11"></div>
+		<div class="col-md-1">
+			<button wicket:id="add" class="btn btn-xs btn-primary">
+				<i class="fa fa-save"></i>
+				<wicket:message key="add">[add]</wicket:message>
+			</button>
+		</div>
+	</div>
+</form>
+<hr/>
+<div class="row" wicket:id="container">
+	<div class="col-md-12">
+		<form wicket:id="confirmform">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover table-condensed table-striped">
+							<thead>
+								<tr>
+									<th><wicket:message key="hotels.reservation.details.bill.details.date">[Date]</wicket:message></th>
+									<th><wicket:message key="hotels.reservation.details.bill.details.description">[Description]</wicket:message></th>
+									<th><wicket:message key="hotels.reservation.details.bill.details.charges">[Charges]</wicket:message></th>
+									<th><wicket:message key="hotels.reservation.details.bill.details.debit">[Debit]</wicket:message></th>
+									<th><wicket:message key="hotels.reservation.details.bill.details.credit">[Credit]</wicket:message></th>
+									<th><wicket:message key="hotels.reservation.details.bill.details.receptionists.notes">[Receptionist`s Notes]</wicket:message></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr wicket:id="billlist">
+									<td>
+										<span wicket:id="bill_date"></span>
+										<a wicket:id="delete">
+											<i class="fa fa-trash-o"></i>
+										</a>
+									</td>
+									<td wicket:id="description"/>
+									<td wicket:id="charge"/>
+									<td wicket:id="debit"/>
+									<td wicket:id="credit"/>
+									<td wicket:id="note"/>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<br/>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							<wicket:message key="hotels.reservation.details.bill.details.notes">[Note]</wicket:message>:
+							<textarea rows="10" cols="40" wicket:id="note" class="form-control"></textarea>
+						</div>
+						<div class="col-md-6">
+							<table class="table">
+								<tr>
+									<td><wicket:message key="hotels.reservation.details.bill.details.total.sub">[SubTotal]</wicket:message>:</td>
+									<td wicket:id="subtotal"/>
+								</tr>
+								<tr>
+									<td><wicket:message key="hotels.reservation.details.bill.details.service_charge">[Service charge]</wicket:message>:</td>
+									<td wicket:id="service_charge"/>
+								</tr>
+								<tr>
+									<td><wicket:message key="hotels.reservation.details.bill.details.city_tax">[City tax]</wicket:message>:</td>
+									<td wicket:id="city_tax"/>
+								</tr>
+								<tr>
+									<td><wicket:message key="hotels.reservation.details.bill.details.total">[Total]</wicket:message>:</td>
+									<td wicket:id="total"/>
+								</tr>
+								<tr>
+									<td><wicket:message key="hotels.reservation.details.bill.details.paid">[Paid]</wicket:message>:</td>
+									<td wicket:id="paid"/>
+								</tr>
+								<tr>
+									<td><wicket:message key="hotels.reservation.details.bill.details.total.due">[Total Due]</wicket:message>:</td>
+									<td wicket:id="total_due"/>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+								<a class="btn btn-xs btn-warning" wicket:id="print">
+									<i class="fa fa-print"></i>
+									<wicket:message key="print">[Print]</wicket:message>
+								</a>
+								<button class="btn btn-xs btn-primary" wicket:id="confirm">
+									<i class="fa fa-check-circle-o"></i>
+									<wicket:message key="hotels.reservation.details.bill.details.confirm">[Confirm]</wicket:message>
+								</button>
+								<button class="btn btn-xs btn-primary" wicket:id="check_out">
+									<i class="fa fa-share-square-o"></i>
+									<wicket:message key="hotels.reservation.details.bill.details.check_out">[Check Out]</wicket:message>
+								</button>
+						</div>
+						<div class="col-md-6"></div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div wicket:id="dialog"></div>
+</wicket:panel>

@@ -1,0 +1,140 @@
+
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style type="text/css">
+body.dragging, body.dragging * {
+	cursor: move !important;
+}
+
+.dragged {
+	position: absolute;
+	opacity: 0.5;
+	z-index: 2000;
+}
+
+ol.hotel-sortable {
+	margin: 0 0 9px 0;
+	min-height: 10px;
+	padding: 0;
+}
+
+ol.hotel-sortable li {
+	display: block;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #CCC;
+	background-color: #F2F2F2;
+}
+
+ol.hotel-sortable li.placeholder {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+ol.hotel-sortable li.placeholder:before {
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 0;
+	margin-top: -5px;
+	left: -5px;
+	top: -4px;
+	border: 5px solid transparent;
+}
+</style>
+	<script src='js/jquery-sortable.js'></script>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<script type="text/javascript">
+		function hotelSortable() {
+			var adjustment;
+
+			$("ol.hotel-sortable").sortable({
+				group : 'hotel-sortable',
+				pullPlaceholder : false,
+				// animation on drop
+				onDrop : function($item, container, _super) {
+					var $clonedItem = $('<li/>').css({
+						height : 0
+					});
+					$item.before($clonedItem);
+					$clonedItem.animate({
+						'height' : $item.height()
+					});
+
+					$item.animate($clonedItem.position(), function() {
+						$clonedItem.detach();
+						_super($item, container);
+					});
+				},
+
+				// set $item relative to cursor position
+				onDragStart : function($item, container, _super) {
+					var offset = $item.offset(), pointer = container.rootGroup.pointer;
+
+					adjustment = {
+						left : pointer.left - offset.left,
+						top : pointer.top - offset.top
+					};
+
+					_super($item, container);
+				},
+				onDrag : function($item, position) {
+					$item.css({
+						left : position.left - adjustment.left,
+						top : position.top - adjustment.top
+					});
+				}
+			});
+		}
+
+		function genSortList() {
+			var st = "";
+			$('ol.hotel-sortable').children('li').each(function() {
+				st = st + (st.length == 0 ? "" : ",") + $(this).attr('data-item');
+			});
+			$('input#sortlist').val(st);
+		}
+	</script>
+	<div class="row">
+		<div class="col-md-12">
+			<div wicket:id="feedback">[feedback]</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.details.region">Region</wicket:message>
+								<select wicket:id="region" class="form-control">
+									<option>[Hotel]</option>
+								</select>
+							</div>
+							<div class="col-md-6">
+								<br>
+								<button wicket:id="submit" class="btn btn-primary btn-sm">
+									<i class="fa fa-save"></i>
+									<wicket:message key="button.save">[Save]</wicket:message>
+								</button>
+							</div>
+						</div>
+						<div class="row" wicket:id="container">
+							<div class="col-md-6">
+								<ol class='hotel-sortable'>
+									<li wicket:id="hotellist">
+										<i class="fa fa-sort"></i> <span wicket:id="name">[Name]</span>
+									</li>
+								</ol>
+							</div>
+						</div>
+						<input wicket:id="sortlist" type="hidden">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</wicket:panel>

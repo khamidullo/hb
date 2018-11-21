@@ -1,0 +1,46 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12" wicket:id="feedback"></div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<wicket:message key="users.data">[User data]</wicket:message>
+			</h3>
+		</div>
+		<div class="panel-body" wicket:id="container">
+			<div class="row">
+				<div class="col-md-4">
+					<strong><wicket:message key="users.login" />:</strong> <span wicket:id="login"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="users.name" />:</strong> <span wicket:id="name"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="users.email" />:</strong> <span wicket:id="email"></span>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-4">
+					<strong><wicket:message key="users.status" />:</strong> <span wicket:id="status"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="users.type" />:</strong> <span wicket:id="type"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="hotels.phone" />:</strong> <span wicket:id="phone_number"></span>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<strong><wicket:message key="users.password" />:</strong> <span wicket:id="password"></span>
+				</div>
+				<div class="col-md-6">
+					<strong><wicket:message key="users.access_key" />:</strong> <span wicket:id="access_key"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

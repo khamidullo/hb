@@ -1,0 +1,177 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-1">
+		<wicket:message key="hotels.reservation.details.bill">[Bill #]</wicket:message>
+		<span wicket:id="bill_number"></span>
+	</div>
+	<div class="col-md-11"></div>
+</div>
+<br/>
+<div class="row">
+	<div class="col-md-5" wicket:id="guest_detail">
+		<wicket:message key="hotels.reservation.details.bill.to">[Bill To]</wicket:message>
+		<table class="table table-bordered table-hover table-condensed table-striped">
+			<tr>
+				<td><wicket:message key="hotels.guest.details.guest.main">[Main Guest]</wicket:message>:</td>
+				<td wicket:id="guest_name"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.guest.details.address">[Address]</wicket:message>:</td>
+				<td wicket:id="address"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.guest.details.country">[Country]</wicket:message>:</td>
+				<td wicket:id="country"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.guest.details.city">[City]</wicket:message>:</td>
+				<td wicket:id="city"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.guest.details.passport.number">[Passport]</wicket:message>:</td>
+				<td wicket:id="passport"/>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-2"></div>
+	<div class="col-md-5" wicket:id="hotel_detail">
+		<span wicket:id="hotel_name">[Hotel]</span>
+		<table class="table table-bordered table-hover table-condensed table-striped">
+			<tr>
+				<td><wicket:message key="hotels.guest.details.address">[Address]</wicket:message>:</td>
+				<td wicket:id="address"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.guest.details.country">[Country]</wicket:message>:</td>
+				<td wicket:id="country"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.guest.details.city">[City]</wicket:message>:</td>
+				<td wicket:id="city"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.phone">[Phone]</wicket:message>:</td>
+				<td wicket:id="phone"/>
+			</tr>
+		</table>
+	</div>
+</div>
+<br/>
+<hr/>
+<br/>
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover table-condensed table-striped">
+				<tr>
+					<th><wicket:message key="hotels.reservation.details.check_in.actual">[Actual Check In]</wicket:message></th>
+					<th><wicket:message key="hotels.reservation.details.check_out">[Check Out]</wicket:message></th>
+					<th><wicket:message key="hotels.reservation.details.number_of_nights">[# of nights]</wicket:message></th>
+					<th><wicket:message key="hotels.reservation.details.number_of_adults">[# of adults]</wicket:message></th>
+					<th><wicket:message key="hotels.reservation.details.number_of_children">[# of children]</wicket:message></th>
+					<th><wicket:message key="hotels.reservation.details.additional_bed">[Additional Bed]</wicket:message></th>
+				</tr>
+				<tr>
+					<td wicket:id="actual_check_in"/>
+					<td wicket:id="check_out"/>
+					<td wicket:id="nights"/>
+					<td wicket:id="adults"/>
+					<td wicket:id="children"/>
+					<!-- <td wicket:id="extra_bed"/> -->
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<br/>
+<hr/>
+<br/>
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover table-condensed table-striped">
+				<thead>
+					<tr>
+						<th><wicket:message key="hotels.reservation.details.bill.details.date">[Date]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.details.bill.details.description">[Description]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.details.bill.details.charges">[Charges]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.details.bill.details.debit">[Debit]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.details.bill.details.credit">[Credit]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.details.bill.details.receptionists.notes">[Receptionist`s Notes]</wicket:message></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr wicket:id="billlist">
+						<td wicket:id="bill_date"/>
+						<td wicket:id="description"/>
+						<td wicket:id="charge"/>
+						<td wicket:id="debit"/>
+						<td wicket:id="credit"/>
+						<td wicket:id="note"/>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td><wicket:message key="hotels.reservation.details.bill.details.total.sub">[SubTotal]</wicket:message>:</td>
+						<td wicket:id="subtotal"/>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td><wicket:message key="hotels.reservation.details.bill.details.service_charge">[Service charge]</wicket:message>:</td>
+						<td wicket:id="service_charge"/>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td><wicket:message key="hotels.reservation.details.bill.details.city_tax">[City tax]</wicket:message>:</td>
+						<td wicket:id="city_tax"/>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td><wicket:message key="hotels.reservation.details.bill.details.total">[Total]</wicket:message>:</td>
+						<td wicket:id="total"/>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td><wicket:message key="hotels.reservation.details.bill.details.paid">[Paid]</wicket:message>:</td>
+						<td wicket:id="paid"/>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td><wicket:message key="hotels.reservation.details.bill.details.total.due">[Total Due]</wicket:message>:</td>
+						<td wicket:id="total_due"/>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td colspan="2">
+							<button class="btn btn-xs btn-primary">
+								<i class="fa fa-print"></i>
+								<wicket:message key="print">[Print]</wicket:message>
+							</button>
+						</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>	
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</wicket:panel>

@@ -1,0 +1,55 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">&nbsp;</div>
+	</div>
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<span wicket:id="feedback">[feedback]</span>
+			<form wicket:id="form" class="well">
+				<div class="row">
+					<div class="col-md-4">
+						<wicket:message key="hotels.details.nearbyplaces.type">[Type]</wicket:message>:
+					</div>
+					<div class="col-md-8">
+						<select class="form-control" wicket:id="type">
+							<option></option>
+						</select>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-4">
+						<wicket:message key="hotels.details.nearbyplaces.name">[Name]</wicket:message>:
+					</div>
+					<div class="col-md-8">
+						<input wicket:id="name" type="text" class="form-control">
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-4">
+						<wicket:message key="hotels.details.nearbyplaces.value">[Value]</wicket:message>:
+					</div>
+					<div class="col-md-6">
+						<select wicket:id="value" class="form-control">
+							<option>0</option>
+						</select>
+					</div>
+					<div class="col-md-2">
+						<wicket:message key="touragents.newbooking.near_by_places.unit">(km.)</wicket:message>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<button class="btn btn-primary" wicket:id="save">
+							<i class="fa fa-save"></i>
+							<wicket:message key="button.save">[Save]</wicket:message>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+</wicket:panel>

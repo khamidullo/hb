@@ -1,0 +1,127 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="pull-right" style="margin-bottom: 10px;">
+				<a class="btn btn-primary" wicket:id="next">
+					<wicket:message key="tabbed.next">[continue]</wicket:message>
+					<i class="fa fa-forward"></i>
+				</a>
+				<a class="btn btn-success" wicket:id="save">
+					<wicket:message key="button.exit">[Exit]</wicket:message>
+					<i class="fa fa-close"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+	<ul class="nav nav-tabs" role="tablist" id="myTab3">
+		<li wicket:id="tab_header">
+			<a role="tab" data-toggle="tab" wicket:id="tablink"> <span wicket:id="name"></span>
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content show-tab-border">
+		<div class="tab-pane" wicket:id="tab_body">
+			<br>
+			<wicket:container wicket:id="container"/>
+		</div>
+	</div>
+	<a id="toTop" href="#">
+		<i class="fa fa-chevron-left fa-rotate-90" style="margin: 8px 15px 10px 16px; color: #888888"></i>
+	</a>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			moveTop();
+		});	
+	</script>
+	<script type="text/javascript">
+			// file input style changer
+			$(document)
+					.on(
+							'change',
+							'.btn-file :file',
+							function() {
+								var $input = $(this);
+								var numFiles = $input.get(0).files ? $input
+										.get(0).files.length : 1;
+								var label = $input.val().replace(/\\/g, '/')
+										.replace(/.*\//, '');
+								$input.trigger('fileselect',
+										[ numFiles, label ]);
+							});
+
+			$(document).ready(
+					function() {
+						$('.btn-file :file').on(
+								'fileselect',
+								function(event, numFiles, label) {
+									var input = $(this).parents('.input-group')
+											.find(':text');
+									var log = numFiles > 1 ? numFiles
+											+ ' files selected' : label;
+									if (input.length) {
+										input.val(log);
+									}
+								});
+					});
+	</script>
+	<script type="text/javascript">
+		$('#myTab3 a').click(function(e) {
+			e.preventDefault();
+			$(this).tab('show');
+		})
+
+		function isfullInput(parent) {
+			var $parent = $(parent);
+			var required = 0
+			$(':required', $parent).each(function(index, element) {
+				var $element = $(element);
+				if ($element.val() == '') {
+					console.log('markupId: ' + $element.attr('id') + ", val = " + $element.val());
+					required ++;
+				}
+			});
+			if (required > 0) return false;
+			return true;
+		}
+
+		function checkFullInput(obj) {
+			var result = true;
+			var $tab = $('a[href="#' + $(obj).attr('id') + '"]');
+			if (!isfullInput($(obj))) {
+				$tab.css('color', 'red');
+				if (result) result = false;
+			} else {
+				$tab.css('color', 'black');
+			}
+			return result;
+		}
+
+		$(document).ready(function() {
+			$('div.tab-pane').each(function(index) {
+				checkFullInput($(this));
+			});
+			
+			$(':required').each(function(index) {
+				$(this).on('change', function() {
+					checkFullInput($(this).parents('div.tab-pane'));
+				})
+			});
+		})
+		
+		function isCheckNextBtn(){
+			var count = 1;
+			$('input:hidden.rooms').each(function(index) {
+				count *= $(this).val();
+			});
+			return count > 0;
+		}
+	</script>
+</wicket:panel>

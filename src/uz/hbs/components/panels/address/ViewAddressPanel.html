@@ -1,0 +1,47 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-5">
+			<strong><wicket:message key="hotels.details.country">[Country]</wicket:message>: </strong> <span
+				wicket:id="countries">[Country name]</span>
+		</div>
+		<div class="col-md-1"></div>
+		<div class="col-md-5">
+			<strong><wicket:message key="hotels.details.region">[Region]</wicket:message>: </strong> <span wicket:id="regions">[Region name]</span>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	<div style="height: 10px;"></div>
+	<div class="row">
+		<div class="col-md-5">
+			<strong><wicket:message key="hotels.details.city">[City]</wicket:message>: </strong> <span wicket:id="cities">[City
+				name]</span>
+		</div>
+		<div class="col-md-1"></div>
+		<div class="col-md-5">
+			<strong><wicket:message key="hotels.details.address">[Address]</wicket:message>: </strong>
+			<span wicket:id="address">[Address text]</span>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	<wicket:container wicket:id="mapContainer">
+		<div style="height: 10px;"></div>
+		<div class="row">
+			<div class="col-md-5">
+				<strong><wicket:message key="latitude">[Latitude]</wicket:message>: </strong>
+				<span wicket:id="latitude">[Latitude value]</span>
+			</div>
+			<div class="col-md-1"></div>
+			<div class="col-md-5">
+				<strong><wicket:message key="longitude">[Longitude]</wicket:message>: </strong>
+				<span wicket:id="longitude">[Longitude value]</span>
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="well" style="width: 100%; height: 600px;" id="map-canvas"></div>
+			</div>
+		</div>
+	</wicket:container>
+</wicket:panel>

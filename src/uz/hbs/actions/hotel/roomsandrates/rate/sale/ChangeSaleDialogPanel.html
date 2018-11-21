@@ -1,0 +1,90 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">
+					<span wicket:id="feedback">[Feedback]</span>
+				</div>
+			</div>
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table class="table table-bordered table-condensed">
+								<tr>
+									<th rowspan="2" style="text-align: center;" wicket:id="roomtype" />
+									<th colspan="3" style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.season.person.individual">[Individual]</wicket:message>
+									</th>
+									<th colspan="3" style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.season.person.group">[Group]</wicket:message>
+									</th>
+								</tr>
+								<tr>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident.no">[No Resident]</wicket:message>
+									</th>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident">[Resident]</wicket:message>
+									</th>
+									<th style="text-align: center; width: 30px;">
+										<wicket:message key="hotels.rate.plane.sale.status">[status]</wicket:message>
+									</th>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident.no">[No Resident]</wicket:message>
+									</th>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident">[Resident]</wicket:message>
+									</th>
+									<th style="text-align: center; width: 30px;">
+										<wicket:message key="hotels.rate.plane.sale.status">[status]</wicket:message>
+									</th>
+								</tr>
+								<tr wicket:id="personlist">
+									<td wicket:id="person_number" />
+									<wicket:container wicket:id="salelist">
+										<td style="padding: 0">
+											<input wicket:id="sale" type="text" required="required" wicket:message="placeholder:hotels.rate.plane.sale"
+												class="form-control sale">
+										</td>
+										<td style="padding: 0">
+											<input wicket:id="sale_uz" type="text" wicket:message="placeholder:hotels.rate.plane.sale"
+												class="form-control sale">
+										</td>
+										<td align="center" valign="middle" style="padding: 0px; margin: 0px; position: relative; left: -10px;">
+											<label wicket:for="status">
+												<input wicket:id="status" type="checkbox" class="status">
+												<span></span>
+											</label>
+										</td>
+									</wicket:container>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+							<button class="btn btn-sm btn-primary" wicket:id="save">
+								<i class="fa fa-save"></i>
+								<wicket:message key="button.save">[Save]</wicket:message>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('input.sale').on("keypress", function (e) {
+		    if (e.which != 8 && e.which != 0 && ((e.which < 48 || e.which > 57) && e.which != 46)) {
+		        e.preventDefault();
+		    } else if (e.which == 46 && $(this).val().indexOf('.') > -1){
+		    	e.preventDefault();
+		    }
+	   });	
+	})
+</script>
+</wicket:panel>

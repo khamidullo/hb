@@ -1,0 +1,44 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<form wicket:id="form">
+		<div class="table-responsive">
+			<table>
+				<tr>
+					<td>
+						<wicket:message key="from">[From]</wicket:message>
+					</td>
+					<td>&nbsp;</td>
+					<td>
+						<wicket:message key="to">[To]</wicket:message>
+					</td>
+					<td>&nbsp;</td>
+					<td>
+						<wicket:message key="touragents.reservation.hotel_name">[Hotel]</wicket:message>
+					</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td nowrap="nowrap">
+						<div class="input-group">
+							<input wicket:id="fromDate" type="text" class="form-control">
+						</div>
+					</td>
+					<td width="15px;">&nbsp;</td>
+					<td nowrap="nowrap">
+						<div class="input-group">
+							<input wicket:id="toDate" type="text" class="form-control">
+						</div>
+					</td>
+					<td width="15px;">&nbsp;</td>
+					<td nowrap="nowrap">
+						<input wicket:id="hotel_name" type="text" class="form-control">
+					</td>
+					<td width="15px;">&nbsp;</td>
+					<td>
+						<input wicket:id="submit" type="button" class="btn btn-primary btn-outline" wicket:message="value:search">
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</wicket:panel>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Email">
+	<select id="selectInsuranceListForEmail" parameterType="long" resultType="Insurance">
+		SELECT id, 
+			   create_date, 
+			   update_date, 
+			   status, 
+			   creator_user_id, 
+			   reservations_id, 
+			   additionalserviceorders_id,
+			   first_name,
+			   last_name,
+			   birth_date,
+			   nationality,
+			   passport_number,
+			   passport_issue_date,
+			   period_from_date,
+			   period_to_date,
+			   initiator_user_id,
+			   with_hotel,
+			   email_sequence
+		  FROM insurances
+		 WHERE additionalserviceorders_id = #{additionalserviceorders_id}
+	</select>
+
+	<select id="selectInsuranceListForEmailByDay" resultType="Insurance">
+		SELECT i.first_name,
+			   i.last_name,
+			   i.birth_date,
+			   c.name AS "nationality.name",
+			   i.passport_number,
+			   i.period_from_date,
+			   i.period_to_date,
+			   i.email_sequence
+		  FROM insurances i LEFT JOIN countries c ON i.nationality = c.code
+		 WHERE i.period_from_date = CURRENT_DATE
+	</select>
+
+	<select id="selectGreenHallEmailSequance" resultType="integer">
+		SELECT NEXTVAL('green_hall_email_seq')
+	</select>
+
+	<select id="selectGreenHallEmail" parameterType="long" resultType="TourAgent">
+		SELECT ta.*, 
+			   u.email, 
+			   u2.name, 
+			   u.name AS touragentname, 
+			   UPPER(u.login) AS license_id, 
+			   ad.address AS "addresses.address"
+		  FROM additionalserviceorders o, users u, touragents ta, users u2, addresses ad
+		 WHERE o.id = #{id}
+		   AND u.id = o.creator_user_id
+		   AND ta.users_id = u.workusers_id
+		   AND u2.id = ta.users_id
+		   AND ad.id = ta.addresses_id
+	</select>
+
+	<select id="selectIsExistsServiceType" parameterType="map" resultType="boolean">
+		SELECT COUNT(*)
+		  FROM additionalservicedetails d
+		 WHERE d.additionalserviceorders_id = #{additionalserviceorders_id}
+		   AND d.service_type = #{service_type}
+		   AND d.air_service_type = #{air_service_type}
+		   AND d.transport_type = 0
+	</select>
+
+	<select id="selectGreenHallGuests" parameterType="map" resultType="AdditionalServiceDetail">
+		SELECT (SELECT COUNT(*) FROM guests g WHERE additionalservicedetails_id = d.id) AS guest_count,
+			   (SELECT STRING_AGG(g.first_name || ' ' || g.last_name, <![CDATA['<br>']]>) FROM guests g WHERE additionalservicedetails_id = d.id) AS guest_name,
+			   d.air_numb,
+			   TO_CHAR(
+			   <choose>
+			   		<when test="service_type == 0">
+			   			ao.arrival_date
+			   		</when>
+			   		<when test="service_type == 1">
+			   			ao.departure_date
+			   		</when>
+			   		<otherwise>
+			   			ao.arrival_date
+			   		</otherwise>
+			   </choose>, 'dd/mm/yyyy') || ' ' ||d.air_time AS air_time,
+			   d.destination,
+			   d.guest
+		  FROM additionalservicedetails d LEFT JOIN additionalserviceorders ao ON d.additionalserviceorders_id = ao.id
+		 WHERE d.additionalserviceorders_id = #{additionalserviceorders_id}
+		   AND d.service_type = #{service_type}
+		   AND d.transport_type = 0
+		   AND d.air_service_type = 0
+	</select>
+
+	<select id="selectVIPHallGuests" parameterType="map" resultType="AdditionalServiceDetail">
+		SELECT (SELECT COUNT(*) FROM guests g WHERE additionalservicedetails_id = d.id) AS guest_count,
+			   (SELECT STRING_AGG(g.first_name || ' ' || g.last_name, <![CDATA[ '<br>' ]]>) FROM guests g WHERE additionalservicedetails_id = d.id) AS guest_name,
+			   d.air_numb,
+			   TO_CHAR(
+			   <choose>
+			   		<when test="service_type == 0">
+			   			ao.arrival_date
+			   		</when>
+			   		<when test="service_type == 1">
+			   			ao.departure_date
+			   		</when>
+			   		<otherwise>
+			   			ao.arrival_date
+			   		</otherwise>
+			   </choose>, 'dd/mm/yyyy') || ' ' ||d.air_time AS air_time,
+			   d.destination,
+			   d.guest
+		  FROM additionalservicedetails d LEFT JOIN additionalserviceorders ao ON d.additionalserviceorders_id = ao.id
+		 WHERE d.additionalserviceorders_id = #{additionalserviceorders_id}
+		   AND d.service_type = #{service_type}
+		   AND d.transport_type = 0
+		   AND d.air_service_type = 1
+	</select>
+
+	<select id="selectAdditionalServiceDetailsByOrderId" parameterType="long" resultType="AdditionalServiceDetail">
+		SELECT d.*
+		  FROM additionalservicedetails d
+		 WHERE d.additionalserviceorders_id = #{additionalserviceorders_id}
+	</select>
+
+	<select id="selectHotelNameByReserveId" parameterType="long" resultType="string">
+		SELECT COALESCE(hd.display_name_en, hd.display_name) AS display_name
+		  FROM hotelsdetails hd, reservations r
+		 WHERE r.id = #{id}
+		   AND hd.hotelsusers_id = r.hotelsusers_id
+	</select>
+	
+	<insert id="insertReservationEmails" parameterType="ReservationEmail">
+		<selectKey keyProperty="id" keyColumn="id" resultType="long" order="BEFORE">
+			SELECT NEXTVAL('reservationemails_id_seq')
+	    </selectKey>
+		INSERT INTO reservationemails (id, reservations_id, messages_id, type, status)
+		VALUES (#{id}, #{reservations_id}, #{messages_id}, #{type}::reservationemails_type, #{status}::reservationemails_status)
+	</insert>
+	
+	<update id="updateReservationEmails" parameterType="ReservationEmail">
+		UPDATE reservationemails
+		   SET messages_id = #{messages_id},
+		       status = #{status}::reservationemails_status,
+		       update_date = CURRENT_TIMESTAMP
+		 WHERE id = #{id}
+	</update>
+	
+	<select id="selectReservationEmails" parameterType="long" resultType="ReservationEmail">
+		SELECT id,
+			   reservations_id,
+			   messages_id,
+			   type,
+			   status,
+			   create_date,
+			   update_date
+		  FROM reservationemails re
+		 WHERE re.reservations_id = #{reservations_id}
+		 ORDER BY re.update_date DESC
+	</select>
+</mapper>

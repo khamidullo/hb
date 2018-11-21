@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.System">
+    <insert id="insertSystemFeedback" parameterType="SystemFeedback">
+        <selectKey order="BEFORE" keyProperty="id" resultType="long">
+            SELECT NEXTVAL('systemfeedbacks_id_seq')
+        </selectKey>
+        INSERT INTO systemfeedbacks(id, subject, comment, create_date, create_user_id, page_info, update_date, status, initiator_user_id)
+        VALUES (#{id}, #{subject}, #{comment}, now(), #{create_user_id}, #{page_info}, now(), 0, #{create_user_id})
+    </insert>
+    
+    <select id="selectSystemFeedback" parameterType="map" resultType="SystemFeedback">
+    	SELECT sf.id, 
+			   sf.subject, 
+			   sf.comment, 
+			   sf.create_date, 
+			   sf.create_user_id, 
+			   sf.page_info, 
+			   sf.update_date, 
+			   sf.status, 
+			   sf.initiator_user_id,
+			   u.login
+    	  FROM systemfeedbacks sf, users u
+    	 WHERE u.id = sf.create_user_id
+    	  <if test="status != null">
+    	   AND sf.status = #{status}
+    	  </if>
+    	 ORDER BY sf.status ASC, sf.create_date DESC
+    </select>
+    
+    <update id="updateSystemFeedback" parameterType="SystemFeedback">
+    	UPDATE systemfeedbacks
+    	   SET status = #{status},
+    	       initiator_user_id = #{initiator_user_id},
+    	       update_date = CURRENT_TIMESTAMP
+    	 WHERE id = #{id}
+    </update>
+
+    <select id="selectSystemFeedbackById" parameterType="long" resultType="SystemFeedback">
+    	SELECT sf.id, 
+			   sf.subject, 
+			   sf.comment, 
+			   sf.create_date, 
+			   sf.create_user_id, 
+			   sf.page_info, 
+			   sf.update_date, 
+			   sf.status, 
+			   sf.initiator_user_id,
+			   u.login,
+			   u.name AS user_name
+    	  FROM systemfeedbacks sf, users u
+    	 WHERE u.id = sf.create_user_id
+    	   AND sf.id = #{id}
+    </select>
+</mapper>

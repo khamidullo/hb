@@ -1,0 +1,83 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<input type="text" id="search" class="form-control" />
+				<span class="input-group-addon"><i class="fa fa-search"></i></span>
+			</div>	
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div wicket:id="container" style="padding: 15px; height: 300px; overflow: auto; border: 1px solid #ccc;">
+				<div class="row">
+					<div class="col-md-12">
+						<table class="table table-hover" id="facilite_data">
+							<thead>
+								<tr>
+									<th width="300px;">
+										<wicket:message key="facility.name"> Facilities</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="facility.paid"> Paid</wicket:message>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr wicket:id="selectedlist">
+									<td>
+										<div>
+											<label class="checkbox-inline" wicket:for="checkbox">
+												<input type="checkbox" wicket:id="checkbox">
+												<span wicket:id="name"></span>
+											</label>
+										</div>
+									</td>
+									<td>
+										<input type="checkbox" wicket:id="paid">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div style="font-weight: bold;">
+				<a wicket:id="add"><i class="fa fa-plus"></i> <wicket:message key="add_another"></wicket:message></a>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document)
+				.ready(
+						function() {
+							var $search = $("#search");
+							$search
+									.keyup(function(eventObject) {
+										var value = $(this).val();
+
+										$("table#facilite_data tr")
+												.each(
+														function(index) {
+															if (index != 0) {
+																$row = $(this);
+																var $text = $row
+																		.children(
+																				$('td tbody label span'))
+																		.text()
+																		.toLowerCase()
+																		.trim();
+																if ($text
+																		.indexOf(value
+																				.toLowerCase()) != 0) {
+																	$row.hide();
+																} else {
+																	$row.show();
+																}
+															}
+														});
+									});
+						})
+	</script>
+</wicket:panel>

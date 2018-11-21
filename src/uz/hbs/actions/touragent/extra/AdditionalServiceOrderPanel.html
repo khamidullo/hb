@@ -1,0 +1,619 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style type="text/css">
+		.cost {
+			border: 1px solid #cccccc; 
+			backgroud-color:#eeeeee; 
+			border-radius: 5px;
+		}
+	</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<span wicket:id="feedback">[Feedback]</span>
+	</div>
+</div>
+<form wicket:id="form">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<wicket:message key="hotels.reservation.details.guests.person">[Person Count]</wicket:message>
+					</h4>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-2">
+									<wicket:message key="touragents.reservation.guest.count.indicate">[Person Count]</wicket:message>:
+									<select class="form-control" wicket:id="person">
+										<option></option>
+									</select>
+								</div>
+								<div class="col-md-3">
+									<wicket:message key="touragents.reservation.guest.service.arrival.time.indicate">[Indicate Arrival Date]</wicket:message>:
+									<div class="input-group">
+										<input wicket:id="arrival_date" type="text" class="form-control" size="15">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<wicket:message key="touragents.reservation.guest.service.departure.time.indicate">[Indicate Departure Date]</wicket:message>:
+									<div class="input-group">
+										<input wicket:id="departure_date" type="text" class="form-control" size="15">
+									</div>
+								</div>
+								<div class="col-md-4">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>				
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<wicket:message key="hotels.reservation.details.guests.insurance">[Insurance]</wicket:message>
+					</h4>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-9">
+							<input wicket:id="insurance" type="checkbox">
+							<label wicket:for="insurance" class="checkbox-inline">
+								<wicket:message key="touragents.reservation.guest.service.insurance.law">[insurance]</wicket:message>
+								<a wicket:id="insurance_info" class="btn btn-link" style="margin-left: -10px;"><i class="fa fa-question"></i></a>
+							</label>
+						</div>
+						<div class="col-md-3">
+							<span wicket:id="insurance_label"></span>
+						</div>
+					</div>
+					<br>
+					<div class="row" wicket:id="insurance_container">
+						<div class="col-md-1"></div>
+						<div class="col-md-9">
+							<div class="table-responsive">
+								<table class="table2" data-item="insurance-details">
+									<wicket:container wicket:id="list">
+										<tr>
+											<td rowspan="2">
+												<wicket:message key="touragents.reservation.guest">[Guest #]</wicket:message>&nbsp;#&nbsp;<span wicket:id="order"></span>
+											</td>
+											<td style="width: 300px;"><input wicket:id="first_name" data-item="first-name" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.guest.name.first"></td>
+											<td style="width: 300px;"><input wicket:id="last_name" data-item="last-name" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.guest.name.last"></td>
+											<td style="width: 200px;">
+												<div class="input-group">
+													<input wicket:id="birth_date" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.birth_date">
+												</div>	
+											</td>
+											<td rowspan="2">
+												<a wicket:id="delete" class="btn btn-sm btn-danger btn-outline"> <i class="fa fa-user-times"></i></a>
+											</td>
+										</tr>
+										<tr>	
+											<td style="width: 200px;"><select wicket:id="nationality" data-item="nationality" class="form-control"><option>[uz]</option></select></td>						
+											<td><input wicket:id="passport_number" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.passport.number"></td>
+											<td>
+												<div class="input-group">
+													<input wicket:id="passport_issue_date" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.passport.date_of_issue">
+												</div>	
+											</td>
+										</tr>
+									</wicket:container>
+								</table>
+							</div>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</div>
+			</div>				
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<wicket:message key="touragents.reservation.guest.service.arrive">[Service of Arrival]</wicket:message>
+					</h4>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12" wicket:id="arrival.transport_type">
+							<div class="row">
+								<div class="col-md-3">
+								<wicket:enclosure child="transport_type_without">
+									<label wicket:for="transport_type_without" class="radio-inline">
+										<input wicket:id="transport_type_without" type="radio">
+										<wicket:message key="touragents.reservation.guest.service.arrive.without">[Without Service]</wicket:message>
+									</label>
+								</wicket:enclosure>									
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<label wicket:for="transport_type_airport" class="radio-inline">
+										<input wicket:id="transport_type_airport" type="radio">
+										<wicket:message key="touragents.reservation.guest.service.arrive.airport">[Airport]</wicket:message>
+									</label>
+								</div>
+								<div class="col-md-9">
+									<div class="table-responsive">
+										<table data-item="airport-service" class="table2" wicket:id="container_service_type_airport">
+											<tr>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.terminal">[Terminal]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.flight">[Flight]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.flight.arrival.time">[Arrival Time]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.class">[Class]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.destination.arrival">[From City]</wicket:message></th>
+											</tr>
+											<tr>
+												<td>
+													<select class="form-control" wicket:id="arrival.air_terminal">
+														<option>Choice One</option>
+													</select>
+												</td>
+												<td>
+													<input wicket:id="arrival.air_numb" data-item="flight" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.airport.flight">
+												</td>
+												<td style="width: 100px;">
+													<input wicket:id="arrival.air_time" data-item="flight-time" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.airport.flight.arrival.time">
+												</td>
+												<td>
+													<select class="form-control" wicket:id="arrival.air_class">
+														<option>Choice One</option>
+													</select>
+												</td>
+												<td>
+													<input wicket:id="arrival.destination" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.airport.destination.arrival">
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="row" wicket:id="container_air_service_type">
+								<div class="col-md-12" data-parent-item="air-service-type">
+									<table class="table2 jstable">
+								    	<!-- tr>
+								    		<td>
+												<label for="green_hall">
+													<input id="green_hall" type="checkbox" class="checkbox-inline" data-service-type="green-hall" value="0">
+													<wicket:message key="touragents.reservation.guest.service.airport.green_corridor.arrival">[Green Corridor]</wicket:message>
+												</label>
+								    		</td>
+								    		<td style="width: 750px;">&nbsp;</td>
+											<td class="form-control" style="width: 100px;">
+												<span wicket:id="air_service_green_hall_cost" data-value="air-action-value">[1000]</span> UZS
+											</td>
+								    	</tr-->
+								    	<tr>
+								    		<td>
+												<label for="vip_hall">
+													<input id="vip_hall" type="checkbox" class="checkbox-inline" data-service-type="vip-hall" value="1">
+													<wicket:message key="touragents.reservation.guest.service.airport.vip_hall.arrival">[VIP Hall]</wicket:message>
+												</label>
+								    		</td>
+								    		<td style="width: 750px;">&nbsp;</td>
+								    		<td class="form-control" style="width: 100px;">
+								    			<span wicket:id="air_service_vip_hall_cost">[1000]</span> UZS
+								    		</td>
+								    	</tr>
+								    </table>
+								    <input wicket:id="arrival.air_service_type" type="hidden" data-item="air-service-type">
+									<input wicket:id="arrival.air_service_value" type="hidden" data-item="air-service-value">
+								</div>
+							</div>
+							<div class="row" wicket:id="container_guests">
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-2">
+											<input type="hidden" wicket:id="arrival.person">
+										</div>
+										<div class="col-md-10">
+											<table class="table2">
+												<tr data-item="guest-details" wicket:id="guestlist">
+													<td style="padding: 0 5px 5px 0;">
+														<input type="text" wicket:id="first_name" wicket:message="placeholder:hotels.guest.details.guest.name.first" class="form-control" style="margin: 0px;" data-item="first-name">
+													</td>
+													<td style="padding: 0 5px 5px 0;">
+														<input type="text" wicket:id="last_name" wicket:message="placeholder:hotels.guest.details.guest.name.last" class="form-control" style="margin: 0px;" data-item="last-name">
+													</td>
+													<td style="padding: 0 5px 5px 0;">
+														<select wicket:id="nationality" class="form-control" style="margin: 0px; width: 160px;" data-item="nationality">
+															<option>Mrs</option>
+														</select>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<label wicket:for="transport_type_train" class="radio-inline">
+										<input wicket:id="transport_type_train" type="radio">
+										<wicket:message key="touragents.reservation.guest.service.arrive.train_station">[Airport]</wicket:message>
+									</label>
+								</div>
+								<div class="col-md-9">
+									<table data-item="train-service" class="table2" wicket:id="container_service_type_train">
+										<tr>
+											<th><wicket:message key="touragents.reservation.guest.service.train.number">[Flight]</wicket:message></th>
+											<th><wicket:message key="touragents.reservation.guest.service.train.arrival.time">[Arrival Time]</wicket:message></th>
+										</tr>
+										<tr>
+											<td>
+												<input wicket:id="arrival.train_numb" data-item="flight" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.train.number">
+											</td>
+											<td>
+												<input wicket:id="arrival.train_time" data-item="flight-time" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.train.arrival.time">
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="row" wicket:id="container_taxi_order">
+								<div class="col-md-12">
+									<div class="table-responsive">
+										<table class="table2" data-parent-item="taxi-order">
+											<tr>
+												<td style="width: 350px;">
+													<label wicket:for="arrival.taxi_order">
+														<input wicket:id="arrival.taxi_order" type="checkbox" data-item="taxi-order-check">
+														<wicket:message key="touragents.reservation.guest.service.taxi_order">[Taxi Order]</wicket:message>
+													</label>
+												</td>
+												<td style="width: 150px;">
+													<wicket:message key="touragents.reservation.guest.service.cars">[Cars]</wicket:message><br>
+													<select class="form-control" wicket:id="arrival.taxi_order_car" onchange="javascript: carsperson(this);" data-item="cars">
+														<option>Choice One</option>
+													</select>
+												</td>
+												<td style="white-space: nowrap; padding-top: 15px; padding-left: 5px; padding-right: 5px;">
+													<wicket:message key="touragents.reservation.guest.service.person">[Person]</wicket:message>
+												</td>
+												<td style="width: 100px;">
+													<wicket:message key="price.additional.service.price">[Price]</wicket:message><br>
+													<input wicket:id="arrival.taxi_price" type="hidden" data-item="taxi-price">
+													<div class="input-group">
+														<input wicket:id="arrival.taxi_order_cost" type="text" data-item="taxi-cost" class="form-control" readonly="readonly">
+													</div>	
+												</td>
+												<td>
+													<wicket:message key="touragents.reservation.guest.service.train.arrival.guest">[Guest]</wicket:message><br>
+													<input wicket:id="arrival.guest" data-item="flight-time" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.train.arrival.guest">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<wicket:message key="touragents.reservation.guest.service.taxi_order.deliver.location_type.address">[Without Service]</wicket:message>:
+												</td>
+												<td colspan="4">
+													<input wicket:id="arrival.location_value" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.taxi_order.deliver.location_type.address">
+													<input wicket:id="arrival.location_type" type="hidden" value="1">
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- departure -->	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<wicket:message key="touragents.reservation.guest.service.depart">[Service of Arrival]</wicket:message>
+					</h4>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12" wicket:id="departure.transport_type">
+							<div class="row">
+								<div class="col-md-3">
+								<wicket:enclosure child="transport_type_without2">
+									<label wicket:for="transport_type_without2" class="radio-inline">
+										<input wicket:id="transport_type_without2" type="radio">
+										<wicket:message key="touragents.reservation.guest.service.depart.without">[Without Service]</wicket:message>
+									</label>
+								</wicket:enclosure>									
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<label wicket:for="transport_type_airport2" class="radio-inline">
+										<input wicket:id="transport_type_airport2" type="radio">
+										<wicket:message key="touragents.reservation.guest.service.depart.airport">[Airport]</wicket:message>
+									</label>
+								</div>
+								<div class="col-md-9">
+									<div class="table-responsive">
+										<table data-item="airport-service" class="table2" wicket:id="container_service_type_airport">
+											<tr>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.terminal">[Terminal]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.flight">[Flight]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.flight.departure.time">[Arrival Time]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.class">[Class]</wicket:message></th>
+												<th><wicket:message key="touragents.reservation.guest.service.airport.destination.departure">[Arrival Time]</wicket:message></th>
+											</tr>
+											<tr>
+												<td>
+													<select class="form-control" wicket:id="departure.air_terminal">
+														<option>Choice One</option>
+													</select>
+												</td>
+												<td>
+													<input wicket:id="departure.air_numb" data-item="flight" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.airport.flight">
+												</td>
+												<td style="width: 100px;">
+													<input wicket:id="departure.air_time" data-item="flight-time" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.airport.flight.departure.time">
+												</td>
+												<td>
+													<select class="form-control" wicket:id="departure.air_class">
+														<option>Choice One</option>
+													</select>
+												</td>
+												<td>
+													<input wicket:id="departure.destination" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.airport.destination.departure">
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="row" wicket:id="container_air_service_type">
+								<div class="col-md-12" data-parent-item="air-service-type">
+									<table class="table2 jstable">
+								    	<!-- tr>
+								    		<td>
+												<label for="green_hall2">
+													<input id="green_hall2" type="checkbox" class="checkbox-inline" data-service-type="green-hall" value="0">
+													<wicket:message key="touragents.reservation.guest.service.airport.green_corridor.departure">[Green Corridor]</wicket:message>
+												</label>
+								    		</td>
+								    		<td style="width: 750px;">&nbsp;</td>
+											<td class="form-control" style="width: 100px;">
+												<span wicket:id="air_service_green_hall_cost" data-value="air-action-value">[1000]</span> UZS
+											</td>
+								    	</tr-->
+								    	<tr>
+								    		<td>
+												<label for="vip_hall2">
+													<input id="vip_hall2" type="checkbox" class="checkbox-inline" data-service-type="vip-hall" value="1">
+													<wicket:message key="touragents.reservation.guest.service.airport.vip_hall.departure">[VIP Hall]</wicket:message>
+												</label>
+								    		</td>
+								    		<td style="width: 750px;">&nbsp;</td>
+								    		<td class="form-control" style="width: 100px;">
+								    			<span wicket:id="air_service_vip_hall_cost" data-value="air-action-value">[1000]</span> UZS
+								    		</td>
+								    	</tr>
+								    </table>
+								    <input wicket:id="departure.air_service_type" type="hidden" data-item="air-service-type">
+									<input wicket:id="departure.air_service_value" type="hidden" data-item="air-service-value">
+								</div>
+							</div>
+							<div class="row" wicket:id="container_guests">
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-2">
+											<select class="form-control" wicket:id="departure.person">
+												<option>[0]</option>
+											</select>
+										</div>
+										<div class="col-md-10">
+											<table class="table2">
+												<tr data-item="guest-details" wicket:id="guestlist">
+													<td style="padding: 0 5px 5px 0;">
+														<input type="text" wicket:id="first_name" wicket:message="placeholder:hotels.guest.details.guest.name.first" class="form-control" style="margin: 0px;" data-item="first-name">
+													</td>
+													<td style="padding: 0 5px 5px 0;">
+														<input type="text" wicket:id="last_name" wicket:message="placeholder:hotels.guest.details.guest.name.last" class="form-control" style="margin: 0px;" data-item="last-name">
+													</td>
+													<td style="padding: 0 5px 5px 0;">
+														<select wicket:id="nationality" class="form-control" style="margin: 0px; width: 160px;" data-item="nationality">
+															<option>Mrs</option>
+														</select>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<label wicket:for="transport_type_train2" class="radio-inline">
+										<input wicket:id="transport_type_train2" type="radio">
+										<wicket:message key="touragents.reservation.guest.service.depart.train_station">[Airport]</wicket:message>
+									</label>
+								</div>
+								<div class="col-md-9">
+									<table data-item="train-service" class="table2" wicket:id="container_service_type_train">
+										<tr>
+											<th><wicket:message key="touragents.reservation.guest.service.train.number">[Flight]</wicket:message></th>
+											<th><wicket:message key="touragents.reservation.guest.service.train.departure.time">[Arrival Time]</wicket:message></th>
+										</tr>
+										<tr>
+											<td>
+												<input wicket:id="departure.train_numb" data-item="flight" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.train.number">
+											</td>
+											<td>
+												<input wicket:id="departure.train_time" data-item="flight-time" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.train.departure.time">
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="row" wicket:id="container_taxi_order">
+								<div class="col-md-12">
+									<div class="table-responsive">
+										<table class="table2" data-parent-item="taxi-order">
+											<tr>
+												<td style="width: 350px;">
+													<label wicket:for="departure.taxi_order">
+														<input wicket:id="departure.taxi_order" type="checkbox" data-item="taxi-order-check">
+														<wicket:message key="touragents.reservation.guest.service.taxi_order">[Taxi Order]</wicket:message>
+													</label>
+												</td>
+												<td style="width: 150px;">
+													<wicket:message key="touragents.reservation.guest.service.cars">[Cars]</wicket:message><br>
+													<select class="form-control" wicket:id="departure.taxi_order_car">
+														<option>Choice One</option>
+													</select>
+												</td>
+												<td style="white-space: nowrap; padding-top: 15px; padding-left: 5px; padding-right: 5px;">
+													<wicket:message key="touragents.reservation.guest.service.person">[Person]</wicket:message>
+												</td>
+												<td style="width: 150px;">
+													<wicket:message key="price.additional.service.price">[Price]</wicket:message><br>
+													<input wicket:id="departure.taxi_price" type="hidden" data-item="taxi-price">
+													<div class="input-group">
+														<input wicket:id="departure.taxi_order_cost" type="text" data-item="taxi-cost" class="form-control" readonly="readonly">
+													</div>	
+												</td>
+												<td>
+													<wicket:message key="touragents.reservation.guest.service.train.departure.guest">[Arrival Time]</wicket:message><br>
+													<input wicket:id="departure.guest" data-item="flight-time" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.train.departure.guest">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<wicket:message key="touragents.reservation.guest.service.taxi_order.pickup.location_type.address">[Without Service]</wicket:message>:
+												</td>
+												<td colspan="4">
+													<input wicket:id="departure.location_value" type="text" class="form-control" wicket:message="placeholder:touragents.reservation.guest.service.taxi_order.pickup.location_type.address">
+													<input wicket:id="departure.location_type" type="hidden">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<wicket:message key="touragents.reservation.guest.service.taxi_order.time">[Time]</wicket:message>:
+												</td>
+												<td>
+													<input wicket:id="departure.taxi_order_time" class="form-control">
+												</td>
+												<td style="text-align:right;">
+													<wicket:message key="touragents.reservation.guest.service.taxi_order.phone">[Time]</wicket:message>:
+												</td>
+												<td>
+													<input wicket:id="departure.phone_number" class="form-control">
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10"></div>
+		<div class="col-md-2">
+			<button wicket:id="submit" class="btn btn-primary">
+				<wicket:message key="button.ready">[Send]</wicket:message>
+			</button>
+		</div>
+	</div>
+	<br>
+	<script wicket:id="jscript"></script>
+</form>
+<script type="text/javascript">
+function myInit(){
+	$('input:checkbox[data-service-type]').off("change");
+	$('input:checkbox[data-service-type]').on("change", function(){
+		$this = $(this);
+		var $parent = $this.parents('div[data-parent-item=air-service-type]');
+		if ($parent.length) {
+			var $air_service_type = $('input:hidden[data-item=air-service-type]', $parent);
+			var $air_service_value = $('input:hidden[data-item=air-service-value]', $parent);
+			$air_service_type.val(-1);
+			$air_service_value.val(0);
+			if ($this.prop('checked')) {
+				$air_service_type.val($this.val());
+				if ($this.val() == 0) $air_service_value.val(parseFloat($air_service_type.attr('data-green-hall-cost'))); 
+				else if ($this.val() == 1) $air_service_value.val(parseFloat($air_service_type.attr('data-vip-hall-cost'))); 
+			}
+			console.log('len = ' + $air_service_type.length + ', len2 = ' + $air_service_value.length);
+			airServiceTypeCallback($air_service_type.attr('name'), $air_service_type.val(), $air_service_value.attr('name'), $air_service_value.val());
+			$('input:checkbox[data-service-type]', $parent).not($this).prop('checked', false);
+		}
+	});
+	$('input:hidden[data-item=air-service-type]').each(function(){
+		checkedAirServiceType($(this));
+	});
+	doneDuplicate();
+}
+
+function recalcTaxiOrderCost(id) {
+	var $this = $('#' + id);
+	if ($this.length) {
+		var $parent = $this.parents('table[data-parent-item=taxi-order]');
+		if ($parent) {
+			var $taxi_cost = $('input:text[data-item=taxi-cost]', $parent);
+			var $taxi_price = $('input:hidden[data-item=taxi-price]', $parent).val();
+			var $taxi_car = $this.find('option:selected').val();
+			var $taxi_order_check = $('input:checkbox[data-item=taxi-order-check]', $parent);
+			if ($taxi_car != '' && $taxi_order_check.prop('checked')) $taxi_cost.val(parseInt($taxi_car) * parseFloat($taxi_price));
+			else $taxi_cost.val('');
+		}
+	}
+}
+
+function checkedAirServiceType(obj) {
+	$this = $(obj);
+	if ($this.length) {
+		var $parent = $this.parents('div[data-parent-item=air-service-type]');
+		$('input:checkbox[data-service-type]', $parent).filter(function(){
+			if ($(this).val() == $this.val()) $(this).prop('checked', true);
+		});
+	}
+}
+
+function doneDuplicate(){
+	var $to = $('table tr[data-item=guest-details]');
+	var $from = $('table[data-item=insurance-details]');
+	if ($from.length) {
+		$('input:text[data-item=first-name],input:text[data-item=last-name]', $from).each(function(index,element){
+			var $element = $(element);
+			$to.each(function(index){
+				var $element_to = $('input:text[data-item=' + $element.attr('data-item') + '][data-item-index=' + $element.attr('data-item-index') + ']', $(this));
+				$element_to.val($element.val());
+				$element.on('blur', function(){
+					$element_to.val($element.val());
+				});
+			});
+		});
+		$('select[data-item=nationality]', $from).each(function(index,element){
+			var $element = $(element);
+			$to.each(function(){
+				var $element_to = $('select[data-item=nationality][data-item-index=' + $element.attr('data-item-index') + ']', $(this));
+				$element_to.val($element.val());
+				$element.on('change', function(){
+					$element_to.val($element.val());
+				});
+			});
+		});
+	}
+}
+myInit();
+</script>
+<div wicket:id="dialog"></div>	
+</wicket:panel>

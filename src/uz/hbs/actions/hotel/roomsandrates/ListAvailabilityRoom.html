@@ -1,0 +1,306 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style>
+input[type=checkbox].status {
+	display: none;
+}
+
+input[type=checkbox].status+span {
+	position: absolute;
+	display: block;
+	background: radial-gradient(45%, circle, rgb(152, 152, 152) 0%,
+		rgba(176, 176, 176, 0.6) 100%);
+	background: -webkit-radial-gradient(45%, circle, rgb(152, 152, 152) 0%,
+		rgba(176, 176, 176, 0.6) 100%);
+	width: 21px;
+	height: 21px;
+	vertical-align: middle;
+	border: 1px solid #004562;
+	border-radius: 100%;
+	padding: 0px;
+}
+
+input[type=checkbox].status+span::after {
+	position: absolute;
+	display: block;
+	background: radial-gradient(45%, circle, rgb(255, 0, 0) 0%,
+		rgb(88, 0, 0) 100%);
+	background: -webkit-radial-gradient(45%, circle, rgb(255, 0, 0) 0%,
+		rgb(88, 0, 0) 100%);
+	width: 15px;
+	height: 15px;
+	content: "";
+	vertical-align: middle;
+	border: 1px solid #004562;
+	border-radius: 100%;
+	z-index: 12;
+	left: 2px;
+	top: 2px;
+	margin: 0px;
+	box-sizing: padding-box;
+}
+
+input[type=checkbox].status:checked+span::after {
+	position: absolute;
+	display: block;
+	background: radial-gradient(45%, circle, rgb(0, 255, 0) 0%,
+		rgb(0, 88, 0) 100%);
+	background: -webkit-radial-gradient(45%, circle, rgb(0, 255, 0) 0%,
+		rgb(0, 88, 0) 100%);
+	width: 15px;
+	height: 15px;
+	content: "";
+	vertical-align: middle;
+	border: 1px solid #004562;
+	border-radius: 100%;
+	z-index: 12;
+	left: 2px;
+	top: 2px;
+	margin: 0px;
+	box-sizing: padding-box;
+}
+</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">
+					<span wicket:id="feedback"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form wicket:id="form">
+						<table>
+							<tr>
+								<td>
+									<wicket:message key="from">[From]</wicket:message>
+								</td>
+								<td>&nbsp;</td>
+								<td>
+									<wicket:message key="to">[To]</wicket:message>
+								</td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td nowrap="nowrap">
+									<div class="input-group">
+										<input wicket:id="date_from" type="text" class="form-control">
+
+									</div>
+								</td>
+								<td width="15px;">&nbsp;</td>
+								<td nowrap="nowrap">
+									<div class="input-group">
+										<input wicket:id="date_to" type="text" class="form-control">
+
+									</div>
+								</td>
+								<td width="15px;">&nbsp;</td>
+								<td>
+									<button class="btn btn-primary btn-outline" wicket:id="submit">
+										<i class="fa fa-search"></i>
+										<wicket:message key="search">[Search]</wicket:message>
+									</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+			<hr>
+			<div class="row" wicket:id="container">
+				<div class="col-md-12">
+					<div style="overflow: auto; padding-bottom: 10px;">
+						<table class="table-bordered table-condensed">
+							<tr>
+								<td colspan="2" rowspan="2">&nbsp;</td>
+								<wicket:container wicket:id="months">
+									<td wicket:id="month" align="center">
+										<strong wicket:id="monthLabel"></strong>
+									</td>
+								</wicket:container>
+							</tr>
+							<tr>
+								<wicket:container wicket:id="dates">
+									<th wicket:id="date" align="center" style="white-space: nowrap;"></th>
+								</wicket:container>
+							</tr>
+							<!-- 							<tr>
+								<th colspan="2" style="text-align: right" wicket:id="totalRoomsLabel">[Total rooms]</th>
+								<wicket:container wicket:id="totalRooms">
+									<td wicket:id="totalRoom" align="center"></td>
+								</wicket:container>
+							</tr>
+ -->
+							<wicket:container wicket:id="roomTypes">
+								<tr>
+									<th wicket:id="roomTypeName" rowspan="3">[Room type name]</th>
+									<td style="padding: 0" nowrap="nowrap">
+										<a wicket:id="roomSaleLink" class="btn btn-sm btn-info btn-full-2"><wicket:message key="hotels.for_sale">[For sale]</wicket:message></a>
+									</td>
+									<td wicket:id="roomSaleCount" style="padding: 0px; text-align: center;">
+										<a wicket:id="roomSaleCountLink" class="btn btn-sm btn-info btn-full-2 btn-outline" style=""><span
+											wicket:id="roomTypeInfoLinkLabel">[0]</span></a>
+									</td>
+								</tr>
+								<tr>
+									<td wicket:id="soldBookedRoomsName" style="text-align: right" nowrap="nowrap"></td>
+									<td wicket:id="soldBookedRooms" style="text-align: center">
+										<span wicket:id="soldBookedRoomsLabel"></span>
+										<wicket:enclosure child="soldCheckedOutRoomsLink">
+											/<a wicket:id="soldCheckedOutRoomsLink">
+												<span wicket:id="soldCheckedOutRoomsLabel" style="color:red;font-weight: bold;"></span>
+											</a>
+										</wicket:enclosure>
+									</td>
+								</tr>
+								<tr>
+									<td style="text-align: right" nowrap="nowrap" wicket:id="availableRoomsName"></td>
+									<td wicket:id="availableRooms" style="text-align: center">
+										<span wicket:id="availableRoomsLabel"></span>
+									</td>
+								</tr>
+								<tr>
+									<th wicket:id="totalRooms" style="white-space: nowrap;">[Total - 10]</th>
+									<th style="padding: 0px; text-align: center;">
+										<a href="#" class="btn btn-sm btn-success btn-full-2" wicket:id="addSaleLink"><span
+											wicket:id="addSaleLabel"></span></a>
+									</th>
+									<td wicket:id="saleList" style="padding: 0; text-align: center;">
+										<a wicket:id="saleLink" class="btn btn-sm btn-success btn-full-2 btn-outline"><i class="fa fa-info-circle fa-fw"></i></a>
+									</td>
+								</tr>
+								<tr>
+									<td wicket:id="splitter"></td>
+								</tr>
+							</wicket:container>
+						</table>
+					</div>
+				</div>
+			</div>
+			<br>
+			<!--			<div class="row">
+				<div class="col-md-12">
+					<h4><wicket:message key="hotels.room.legend">[Legend]</wicket:message></h4>
+				</div>
+			</div>
+ 			<div class="row">
+				<div class="col-md-3">
+					<a class="btn btn-sm btn-success" style="min-width: 40px;"><span>&nbsp;</span></a> - <wicket:message key="hotels.room.legend.available_for_booking">[Available_for_booking]</wicket:message>
+				</div>
+				<div class="col-md-3">
+					<a class="btn btn-sm btn-warning" style="min-width: 40px;"><span>!</span></a> - <wicket:message key="hotels.room.legend.soldout">[SoldOut]</wicket:message>
+				</div>
+				<div class="col-md-3">
+					<a class="btn btn-sm btn-danger" style="min-width: 40px;"><span>!</span></a> - <wicket:message key="hotels.room.legend.closed">[Closed]</wicket:message>
+				</div>
+			</div>
+ -->
+			<hr>
+			<!-- 			<div class="row" wicket:id="container2">
+				<div class="col-md-12">
+					<h4><wicket:message key="hotels.room.summary">[Summary]</wicket:message></h4>
+					<div style="overflow: auto;">
+						<table class="table-bordered table-condensed table-striped table-hover">
+							<tr>
+								<td rowspan="2">&nbsp;</td>
+								<wicket:container wicket:id="months">
+									<td wicket:id="month" align="center">
+										<strong wicket:id="monthLabel"></strong>
+									</td>
+								</wicket:container>
+							</tr>
+							<tr>
+								<wicket:container wicket:id="dates">
+									<td wicket:id="date" align="center"></td>
+								</wicket:container>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.max">[Max Rooms]</wicket:message>
+								</td>
+								<td wicket:id="maxRooms"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.status.onsale.under_repair">[Under Repair]</wicket:message>
+								</td>
+								<td wicket:id="underRepair"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.status.onsale.closed">[Closed]</wicket:message>
+								</td>
+								<td wicket:id="closed"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.status.onsale.available">[On Sale Available]</wicket:message>
+								</td>
+								<td wicket:id="onSaleAvailable"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.reservations">[Reservations]</wicket:message>
+								</td>
+								<td wicket:id="reservations"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.reservations.definitive">[Reservations Definitive]</wicket:message>
+								</td>
+								<td wicket:id="definitive"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.reservations.tentative">[Reservations Tentative]</wicket:message>
+								</td>
+								<td wicket:id="tentative"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.availability">[Availability]</wicket:message>
+								</td>
+								<td wicket:id="availability"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.load">[Load]</wicket:message>
+								</td>
+								<td wicket:id="load"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.staying.adults">[Adults Staying]</wicket:message>
+								</td>
+								<td wicket:id="adultsStaying"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.staying.childs">[Childs Staying]</wicket:message>
+								</td>
+								<td wicket:id="childsStaying"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.guests.leave">[Guests to leave]</wicket:message>
+								</td>
+								<td wicket:id="guestsToLeave"></td>
+							</tr>
+							<tr>
+								<td style="text-align: right">
+									<wicket:message key="hotels.room.guests.arrive">[Guests to arrive]</wicket:message>
+								</td>
+								<td wicket:id="guestsToArrive"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+ -->
+			<div wicket:id="dialog"></div>
+		</div>
+	</div>
+</wicket:panel>

@@ -1,0 +1,56 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<table>
+							<tr>
+								<th>
+									<wicket:message key="from2">[From]</wicket:message>
+								</th>
+								<td>&nbsp;</td>
+								<th>
+									<wicket:message key="to">[To]</wicket:message>
+								</th>
+							</tr>
+							<tr>
+								<td nowrap="nowrap">
+									<div class="input-group">
+										<input wicket:id="date_from" type="text" class="form-control">
+									</div>
+								</td>
+								<td width="15px;">&nbsp;</td>
+								<td nowrap="nowrap">
+									<div class="input-group">
+										<input wicket:id="date_to" type="text" class="form-control">
+									</div>
+								</td>
+							</tr>
+							<tr><td colspan="3">&nbsp;</td></tr>
+							<tr>
+								<th><wicket:message key="hotels.room_type.number_of_rooms">[Number of rooms]</wicket:message>:</th>
+								<td>&nbsp;</td>
+								<td wicket:id="max_number_of_rooms" class="badge">[0]</td>
+							</tr>
+							<tr><td colspan="3">&nbsp;</td></tr>
+							<tr>
+								<th><wicket:message key="hotels.for_sale2">[For sale]</wicket:message>:</th>
+								<td>&nbsp;</td>
+								<td><select wicket:id="number_of_rooms" class="form-control">
+										<option>1</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<hr>
+				<div class="pull-right">
+					<button wicket:id="submit" class="btn btn-sm btn-primary"><wicket:message key="button.save">[Save]</wicket:message></button>
+					<button wicket:id="cancel" class="btn btn-sm btn-default-2"><wicket:message key="button.cancel">[Cancel]</wicket:message></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</wicket:panel>

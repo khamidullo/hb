@@ -1,0 +1,36 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div wicket:id="feedback"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12" wicket:id="searchFilterForm"></div>
+	</div>
+	<div wicket:id="wrapper">
+		<hr>
+		<div class="row">
+			<div class="col-md-12">
+				<h5 wicket:id="resultLabel"></h5>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<form wicket:id="filterForm">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover table-condensed table-striped" wicket:id="table"></table>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-1">
+				<a wicket:id="export" class="btn btn-success btn-outline">
+					<i class="fa fa-file-excel-o"></i>
+					<wicket:message key="export">Export</wicket:message>
+				</a>
+			</div>
+			<div class="col-md-11"></div>
+		</div>
+	</div>
+</wicket:panel>

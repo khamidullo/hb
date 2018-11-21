@@ -1,0 +1,32 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover table-condensed table-striped">
+				<thead>
+					<tr>
+						<th><wicket:message key="hotels.reservation.details.reservation.roomtype">[RoomType]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.details.room">[Room Number]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.details.guest.name">[Guests]</wicket:message></th>
+						<th><wicket:message key="hotels.reservation.group.guests">[Guests]</wicket:message></th>
+						<th><wicket:message key="users.operation">[Operations]</wicket:message></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr wicket:id="list">
+						<td wicket:id="roomtype"/>
+						<td wicket:id="room_number"/>
+						<td wicket:id="guests"/>
+						<td wicket:id="guest_count"/>
+						<td>
+							<a wicket:id="changeroom" class="btn btn-link">
+								<i class="fa fa-exchange" wicket:message="title:hotels.reservation.room.change"></i>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</wicket:panel>

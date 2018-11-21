@@ -1,0 +1,104 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="language" content="ru-Ru" />
+<title>ДЕТАЛИ ЗАЯВКИ</title>
+</head>
+<body>
+<div style="font-family: Verdana, sans-serif; font-size: 14px; border: 1px solid #000000; padding: 4px; width: 750px;">
+	<table style="width: 750px; border-spacing: 0; border-collapse: 0">
+		<tr style="font-size: 16px">
+			<td style="width: 50%;">
+				<strong>Куда: $taxi_name$</strong><br />
+				<strong>От: ООО Booking System</strong><br />
+				Договор: CT-10A ID042<br />
+				$cancel_info$
+				<br />
+				<strong>ЗАЯВКА № $order$</strong><br />
+				<span style="font-size: 12px;">на транспортное обслуживание в Ташкенте</span><br />
+				<br />
+				<span style="font-size: 12px;">Дата и время создания: $order_date_time$</span><br />
+				<span style="color: #ff0000; font-size: 12px;">Заказчик получил автоматическое подтверждение</span>
+			</td>
+			<td style="width: 50%; text-align: right; border-left: 1px solid #000000; padding-left: 10px; vertical-align: top">
+				<strong>Заказчик: $tour_agency$</strong><br />
+				<br />
+				Тел.: $tour_agency_phone$, Факс: $tour_agency_fax$<br />
+				Адрес: $tour_agency_address$<br />
+				Сотрудник: $ta_name$<br />
+				e-mail: <a href="mailto:$tour_agency_email$">$tour_agency_email$</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding: 15px; font-size: 20px; font-weight: bold; text-align: center;">
+				<br />ДЕТАЛИ ЗАЯВКИ
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding: 8px;">
+				<table style="border-collapse: collapse; border-spacing: 0; border: 1px solid #000000; width: 100%; font-size: 12px;">
+					<tr>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000;">Кол-во<br />машин</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000;">Место<br />встречи</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000;">Дата и<br />время<br />прибытия</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000;">№ рейса</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000;">Пункт назначения</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000;">Имена туристов<br />для таблички</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000;">Номер телефона<br />гостя</th>
+					</tr>
+					<tr>
+						<td style=" border: 1px solid #000000;">$cars_count$</td>
+						<td style=" border: 1px solid #000000;">$from$</td>
+						<td style=" border: 1px solid #000000;">$time$</td>
+						<td style=" border: 1px solid #000000;">$numb$</td>
+						<td style=" border: 1px solid #000000;">$to$</td>
+						<td style=" border: 1px solid #000000;">$tourist_name$</td>
+						<td style=" border: 1px solid #000000;">$guest_phone$</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		$if(additional_info)$
+		<tr>
+			<td colspan="2" style="padding: 8px;">
+				<table style="width: 100%">
+					<tr>
+						<td style="font-weight: bold;">Дополнительные сведения:</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #000000; text-align: center;">
+							$additional_info$
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		$endif$
+		<tr>
+			<td colspan="2">
+				<div style="height: 25px;">&nbsp;</div>
+				<hr/>
+				<table style="width: 100%">
+					<tr>
+						<td style="width: 220px; vertical-align: top; text-align: center;">
+							<div>заявка оформлена через</div>
+							<img
+								src="cid:logoimg"
+								name="Hotelios.uz" align="bottom" border="0" height="36" width="186"/>
+							<div>B2B online booking system</div>
+							<div>Тел: (+998 71) 200-25-00</div>
+							<div style="font-size: 11px;"><a href="mailto:info@hotelios.uz">info@hotelios.uz</a> <a href="www.hotelios.uz">www.hotelios.uz</a></div>
+							<div style="font-size: 12px;">ежедневно с 09:00 до 18:00</div>
+						</td>
+						<td style="border-left: 1px solid #000000; padding-left: 10px; vertical-align: top">
+							<div style="font-weight: bold; font-size: 22px; text-align: center;">ВНИМАНИЕ!</div>
+							<div style="font-weight: bold; font-size: 18px;">- По всем вопросам, связанным с туристами, просьба обращаться напрямую к Заказчику</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-9">
+			<div class="table-responsive">
+				<table class="table" wicket:id="container_insurance" data-item="insurance-details">
+					<wicket:container wicket:id="list">
+						<tr>
+							<td rowspan="2">
+								<wicket:message key="touragents.reservation.guest">[Guest #]</wicket:message>&nbsp;#&nbsp;<span wicket:id="order"></span>
+							</td>
+							<td style="width: 300px;"><input wicket:id="first_name" data-item="first-name" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.guest.name.first"></td>
+							<td style="width: 300px;"><input wicket:id="last_name" data-item="last-name" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.guest.name.last"></td>
+							<td style="width: 200px;">
+								<div class="input-group">
+									<input wicket:id="birth_date" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.birth_date">
+								</div>	
+							</td>
+							<td rowspan="2">
+								<a wicket:id="delete" class="btn btn-sm btn-danger btn-outline"> <i class="fa fa-user-times"></i></a>
+							</td>
+						</tr>
+						<tr>	
+							<td style="width: 200px;"><select wicket:id="nationality" data-item="nationality" class="form-control"><option>[uz]</option></select></td>						
+							<td><input wicket:id="passport_number" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.passport.number"></td>
+							<td>
+								<div class="input-group">
+									<input wicket:id="passport_issue_date" type="text" class="form-control" wicket:message="placeholder:hotels.guest.details.passport.date_of_issue">
+								</div>	
+							</td>
+						</tr>
+					</wicket:container>
+				</table>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+</wicket:panel>

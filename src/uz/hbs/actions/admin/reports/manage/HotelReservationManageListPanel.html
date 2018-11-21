@@ -1,0 +1,99 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<span wicket:id="feedback">[Feedback]</span>
+	</div>
+</div>	
+<div class="row">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table" wicket:id="container_info">
+				 	<tr>
+				 		<td>
+				 			<wicket:message key="admin.manage.reserved">[Reserved]</wicket:message> - <span wicket:id="reserved"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="admin.manage.registred">[Registred]</wicket:message> - <span wicket:id="registred"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="admin.manage.no_show">[NoSHow]</wicket:message> - <span wicket:id="no_show"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="admin.manage.cancelled">[Cancelled]</wicket:message> - <span wicket:id="cancelled"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="admin.manage.reserved.type.definite">[Definite]</wicket:message> - <span wicket:id="definite"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="admin.manage.reserved.type.tentative">[Tentative]</wicket:message> - <span wicket:id="tentative"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="admin.manage.total">[Total]</wicket:message> - <span wicket:id="total"></span>
+				 		</td>
+				 	</tr>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-8">
+						<form wicket:id="form">
+							<table class="table">
+								<tr>
+									<td>
+										<wicket:message key="admin.manage.show.from">[From]</wicket:message>
+									</td>
+									<td>
+										<div class="input-group">
+											<input wicket:id="datefrom" type="text" class="form-control" required="required">
+										</div>	
+									</td>
+									<td>
+										-
+									</td>
+									<td>
+										<wicket:message key="admin.manage.show.to">[To]</wicket:message>
+									</td>
+									<td>
+										<div class="input-group">
+											<input wicket:id="dateto" type="text" class="form-control" required="required">
+										</div>	
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<wicket:message key="admin.manage.show.fullname">[FullName]</wicket:message>
+									</td>
+									<td colspan="3">
+										<input wicket:id="fullname" type="text" class="form-control">
+									</td>
+									<td>
+										<button class="btn btn-primary" wicket:id="show">
+											<i class="fa fa-search"></i>
+											<wicket:message key="admin.manage.show">[Show]</wicket:message>
+										</button>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>			
+	</div>
+</div>
+<div style="margin-bottom: 20px;">
+	<div class="row" wicket:id="container">
+		<div class="col-md-12">
+			<form wicket:id="filterForm">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover table-condensed table-striped" wicket:id="table"></table>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div wicket:id="dialog"></div>
+</wicket:panel>

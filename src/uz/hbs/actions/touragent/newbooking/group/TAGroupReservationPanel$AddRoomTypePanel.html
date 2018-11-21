@@ -1,0 +1,35 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-4">
+					<form wicket:id="form">
+						<table>
+							<tr>
+								<td>
+									<select wicket:id="roomtype">
+										<option>[RoomType]</option>
+									</select>
+								</td>
+								<td>
+									<button class="btn btn-xs btn-primary" wicket:id="select">
+										<i class="fa fa-check"></i>
+										<wicket:message key="btn.select">[Select]</wicket:message>
+									</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div class="col-md-7"></div>
+			</div>	
+		</div>
+	</div>
+</wicket:panel>

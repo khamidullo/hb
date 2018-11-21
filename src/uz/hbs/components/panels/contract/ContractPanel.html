@@ -1,0 +1,35 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<wicket:message key="touragents.contract">[Contract]</wicket:message>
+			</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<wicket:message key="touragents.contract.type">[Type]</wicket:message>:
+					<select wicket:id="contract_type" class="form-control">
+						<option>Direct</option>
+					</select>
+				</div>
+				<div class="col-md-6">
+					<wicket:message key="touragents.contract.commission">[Commission]</wicket:message>
+					<input wicket:id="commission_value" type="number" class="form-control" wicket:message="placeholder:touragents.contract.commission">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<wicket:message key="touragents.contract.number">[Number]</wicket:message>
+					<input wicket:id="contract_number" type="text" class="form-control" wicket:message="placeholder:touragents.contract.number">
+				</div>
+				<div class="col-md-6">
+					<wicket:message key="touragents.contract.date">[Date]</wicket:message>
+					<div class="input-group">
+						<input wicket:id="contract_date" type="text" class="form-control" wicket:message="placeholder:touragents.contract.date">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

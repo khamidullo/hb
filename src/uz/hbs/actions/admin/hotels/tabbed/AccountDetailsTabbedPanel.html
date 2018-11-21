@@ -1,0 +1,123 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<form wicket:id="form">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-right">
+					<button class="btn btn-primary" wicket:id="next">
+						<wicket:message key="tabbed.save_and_next">[Save and continue]</wicket:message>
+						<i class="fa fa-forward"></i>
+					</button>
+					<button class="btn btn-success" wicket:id="save">
+						<wicket:message key="button.save">[Save]</wicket:message>
+						<i class="fa fa-save"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.organization.details">[Organization Details]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.legal.name">[Hotel/organization legal name]</wicket:message>:
+								<br>
+								<input type="text" class="form-control" wicket:id="legal_name" wicket:message="placeholder:hotels.legal.name">
+							</div>
+							<div class="col-md-6">
+								<wicket:message key="hotels.corporate.email">[Corporate email address]</wicket:message>:
+								<br>
+								<input type="email" class="form-control" wicket:id="corporate_email" wicket:message="placeholder:hotels.corporate.email">
+							</div>
+						</div>
+						<div class="row">	
+							<div class="col-md-6">
+								<wicket:message key="hotels.primary.contact">[Primary contact number]</wicket:message>
+								<br>
+								<input type="text" class="form-control" wicket:id="primary_phone" wicket:message="placeholder:hotels.primary.contact">
+							</div>
+							<div class="col-md-6">
+								<!-- 
+								<wicket:message key="hotels.secondary.contact">[Secondary contact number]</wicket:message>:
+								<br>
+								<input type="text" class="form-control" wicket:id="secondary_phone" wicket:message="placeholder:hotels.secondary.contact">
+								 -->
+							</div>
+						</div>
+					</div>
+				</div>				
+			</div>
+		</div>
+		<br>
+		<wicket:container wicket:id="contractPanel"></wicket:container>
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.manager.details">[Hotel Manager Details]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.manager">[Hotel manager]</wicket:message>:
+								<br>
+								<input type="text" class="form-control" wicket:id="manager" wicket:message="placeholder:hotels.manager">
+							</div>
+							<div class="col-md-6">
+								<wicket:message key="hotels.manager.email">[Manager's email address]</wicket:message>:
+								<br>
+								<input type="email" class="form-control" wicket:id="manager_email" wicket:message="placeholder:hotels.manager.email">
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.manager.accountant">[Accountant]</wicket:message>:
+								<br>
+								<input type="text" class="form-control" wicket:id="accountant" wicket:message="placeholder:hotels.manager.accountant">
+							</div>
+							<div class="col-md-6">
+								<wicket:message key="hotels.phone">[Phone]</wicket:message>:
+								<br>
+								<input type="text" class="form-control" wicket:id="accountant_phone" wicket:message="placeholder:hotels.phone">
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.manager.reservation_dep">[Reservation department]</wicket:message>:
+								<br>
+								<input type="text" class="form-control" wicket:id="reservation_dep" wicket:message="placeholder:hotels.manager.reservation_dep">
+							</div>
+							<div class="col-md-6">
+								<wicket:message key="hotels.phone">[Phone]</wicket:message>:
+								<br>
+								<input type="text" class="form-control" wicket:id="reservation_dep_phone" wicket:message="placeholder:hotels.phone">
+							</div>
+						</div>	
+					</div>
+				</div>				
+			</div>
+		</div>
+	</form>
+	<a id="toTop" href="#">
+		<i class="fa fa-chevron-left fa-rotate-90" style="margin: 8px 15px 10px 16px; color: #888888"></i>
+	</a>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			moveTop();
+		});	
+	</script>	
+</wicket:panel>

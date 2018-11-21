@@ -1,0 +1,140 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="language" content="ru-Ru" />
+<title>ЭЛЕКТРОННАЯ ЗАЯВКА</title>
+</head>
+<body>
+	<div style="font-family: Verdana, sans-serif; font-size: 14px; padding: 4px; width: 750px;">
+		<div style="font-weight: bold; text-align: center">ПРИЛОЖЕНИЕ К СПЕЦИАЛЬНОМУ СОГЛАШЕНИЮ О СОТРУДНИЧЕСТВЕ № 49/15</div>
+		<br>
+		<div style="font-weight: bold; text-align: center">ФОРМА ЭЛЕКТРОННОЙ ЗАЯВКИ ДЛЯ ЗАКАЗА КОМПЛЕКСА УСЛУГ ПО
+			ОРГАНИЗАЦИИ ВСТРЕЧ И ПРОВОДОВ ГОСТЕЙ В АЭРОПОРТУ Г.ТАШКЕНТА.</div>
+		<br>
+		<table style="width: 750px; border-spacing: 0; border-collapse: 0;border: 1px solid #000000;">
+			<tr style="font-weight: bold; font-size: 16px">
+				<td style="width: 50%;">
+					Куда: $where$
+					<br />
+					Кому: $whom$
+					$cancel_info$
+				</td>
+				<td style="width: 50%; text-align: right; border-left: 1px solid #000000; padding-left: 10px;">Заказчик: $tour_agency$</td>
+			</tr>
+			<tr>
+				<td style="width: 50%; font-size: 16px; vertical-align: top;">
+					<span style="font-weight: bold;">ЗАЯВКА № $order_id$</span>
+					<br />
+					на обслуживание в аэропорту Ташкента
+					<br />
+					<span>$arrival_or_departure$</span>
+					<br />
+					<span style="font-size: 13px;">Дата и время создания: $order_date_time$</span>
+				</td>
+				<td style="width: 50%; text-align: right; border-left: 1px solid #000000; padding-left: 10px;">
+					<br /> 
+					Тел.: $tour_agency_phone$, Факс: $tour_agency_fax$
+					<br /> 
+					Адрес: $tour_agency_address$
+					<br /> 
+					Сотрудник: $ta_name$
+					<br /> 
+					e-mail: <a href="mailto:$tour_agency_email$">$tour_agency_email$</a>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 50%; color: #ff0000; vertical-align: bottom; font-size: 12px;">
+					Заказчик получил автоматическое подтверждение</td>
+				<td	style="width: 50%; font-weight: bold; color: #ff0000; vertical-align: bottom; border-left: 1px solid #000000; padding-left: 10px; text-align: right;">
+					<br />По всем вопросам обращаться к Заказчику
+				</td>
+			</tr>
+			<tr>
+				<th colspan="2"><br /><br />ДЕТАЛИ ЗАЯВКИ</th>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding: 0 8px; ">
+					<table style="border-collapse: collapse; border-spacing: 0; border: 1px solid #000000; width: 100%; font-size: 12px;">
+						<tr>
+							<th style="background-color: #DDDDDD; border: 1px solid #000000;">Страна<br />извещения</th>
+							<th style="background-color: #DDDDDD; border: 1px solid #000000;">Кол-во<br />туристов</th>
+							<th style="background-color: #DDDDDD; border: 1px solid #000000;">Ф.И.О.</th>
+							<th style="background-color: #DDDDDD; border: 1px solid #000000;">№ рейса</th>
+							<th style="background-color: #DDDDDD; border: 1px solid #000000;">Дата и<br />время<br />прибытия/убытия</th>
+							<th style="background-color: #DDDDDD; border: 1px solid #000000;">Встречающее<br />лицо</th>
+							<th style="background-color: #DDDDDD; border: 1px solid #000000;">Лого</th>
+						</tr>
+						$if(detail)$
+						<tr>
+							<td style="border: 1px solid #000000;">$detail.destination$</td>
+							<td style="border: 1px solid #000000;">$detail.guest_count$</td>
+							<td style="border: 1px solid #000000;">$detail.guest_name$</td>
+							<td style="border: 1px solid #000000;">$detail.air_numb$</td>
+							<td style="border: 1px solid #000000;">$detail.air_time$</td>
+							<td style="border: 1px solid #000000;">$detail.guest$</td>
+							<td style="border: 1px solid #000000;">&nbsp;</td>
+						</tr>
+						$endif$
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" style="padding: 8px;">
+					<br />
+					Дополнительные сведения:
+					<div style="border: 1px solid #000000;">
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 8px;">
+					<br />
+					<br />
+					<br />
+					С уважением,
+					<br />
+					Леонид Ибрагимов
+					<br />								                            
+					Директор OOO «Booking System»
+				</td>
+				<td style="padding: 8px; text-align: right;">
+					<br>
+					<br>
+					Подпись и М.П
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div style="height: 25px;">&nbsp;</div>
+					<hr/>
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 220px; vertical-align: top; text-align: center;">
+								<div>заявка оформлена через</div>
+								<img
+									src="cid:logoimg"
+									name="Hotelios.uz" align="bottom" border="0" height="36" width="186"/>
+								<div>B2B online booking system</div>
+								<div>Тел: (+998 71) 200-25-00</div>
+								<div style="font-size: 11px;"><a href="mailto:info@hotelios.uz">info@hotelios.uz</a> <a href="www.hotelios.uz">www.hotelios.uz</a></div>
+								<div style="font-size: 12px;">ежедневно с 09:00 до 18:00</div>
+							</td>
+							<td style="border-left: 1px solid #000000; padding-left: 10px; vertical-align: middle">
+								<div style="font-weight: bold; font-size: 22px; text-align: center;">ВНИМАНИЕ!</div>
+								<div style="font-weight: bold; font-size: 18px;">По всем вопросам, связанным с туристами,</div>
+								<div style="font-weight: bold; font-size: 18px;">просьба обращаться напрямую к Заказчику.</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-12">
+				<wicket:message key="hotels.operday">[Operday]</wicket:message>:<span wicket:id="operday">[dd/mm/yyyy]</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="table-responsive">
+					<table class="table">
+						<tr class="headers">
+							<th><wicket:message key="hotels.room_type.name">[Room Type Name]</wicket:message></th>
+							<th><wicket:message key="hotels.room_type.number_of_rooms">[Number Of Rooms]</wicket:message></th>
+							<th><wicket:message key="hotels.room.rooms.available">[Available Rooms]</wicket:message></th>
+						</tr>
+						<tr wicket:id="list">
+							<td wicket:id="roomtypeName"/>
+							<td wicket:id="numberOfRooms"/>
+							<td wicket:id="availableRoom"/>
+						</tr>		
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</wicket:panel>

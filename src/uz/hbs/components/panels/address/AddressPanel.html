@@ -1,0 +1,85 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-6">
+			<wicket:message key="hotels.details.country">[Country]</wicket:message>
+			:
+			<select wicket:id="countries" class="form-control">
+				<option>Uzbekistan</option>
+			</select>
+		</div>
+		<div class="col-md-6">
+			<wicket:message key="hotels.details.region">[Region]</wicket:message>
+			:
+			<select wicket:id="regions" class="form-control">
+				<option>Tashkent</option>
+			</select>
+		</div>
+	</div>
+	<div style="height: 10px;"></div>
+	<div class="row">
+		<div class="col-md-6">
+			<wicket:message key="hotels.details.city">[City]</wicket:message>
+			: <br>
+			<select wicket:id="cities" class="form-control">
+				<option>Tashkent</option>
+			</select>
+			<!-- <input wicket:id="city" type="text" class="form-control" wicket:message="placeholder:hotels.details.city"> -->
+		</div>
+		<div class="col-md-6">
+			<wicket:message key="hotels.details.postal_index">[Postal index]</wicket:message>
+			:
+			<input wicket:id="postal_index" type="text" class="form-control" wicket:message="placeholder:hotels.details.postal_index">
+		</div>
+	</div>
+	<div style="height: 10px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<wicket:message key="hotels.details.address">[Address]</wicket:message> (<wicket:message key="language.ru">[Russian]</wicket:message>):
+			<input wicket:id="address" type="text" class="form-control">
+		</div>
+	</div>
+	<div style="height: 10px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<wicket:message key="hotels.details.address">[Address]</wicket:message> (<wicket:message key="language.en">[English]</wicket:message>):
+			<input wicket:id="address_en" type="text" class="form-control">
+		</div>
+	</div>
+	<div style="height: 10px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<wicket:message key="hotels.details.address">[Address]</wicket:message> (<wicket:message key="language.uz">[Uzbek]</wicket:message>):
+			<input wicket:id="address_uz" type="text" class="form-control">
+		</div>
+	</div>
+	<div style="height: 10px;"></div>
+	<wicket:enclosure child="longlat">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<wicket:message key="hotels.details.coordinates">[Coordinates]</wicket:message>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row" wicket:id="longlat">
+					<div class="col-md-6">
+						<wicket:message key="latitude">[Latitude]</wicket:message>:
+						<input wicket:id="latitude" type="number" class="form-control" wicket:message="placeholder:latitude">
+					</div>
+					<div class="col-md-6">
+						<wicket:message key="longitude">[Longitude]</wicket:message>:
+						<input wicket:id="longitude" type="number" class="form-control" wicket:message="placeholder:longitude">
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<a wicket:id="indicate_google_map"> <i class="fa fa-map-marker"></i> <wicket:message key="hotels.details.indicate_coordinates_on_map">[Indicate coordinates on Map]</wicket:message>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</wicket:enclosure>
+	<div wicket:id="dialog"></div>
+</wicket:panel>

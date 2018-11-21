@@ -1,0 +1,296 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<form wicket:id="form" role="form">
+				<div class="row">
+					<div class="col-md-12">
+						<div wicket:id="feedback"></div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="touragents.company">[Company name & contacts]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-3">
+								<input wicket:id="display_name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.company.tour_agency_display_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="primary_phone" type="text" class="form-control"
+									wicket:message="placeholder:touragents.company.primary_contact_number"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="email" type="email" class="form-control"
+									wicket:message="placeholder:touragents.company.email_address"
+								>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+						<div style="height: 10px;"></div>
+						<div class="row">
+							<div class="col-md-3">
+								<input wicket:id="name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.company.tour_agency_legal_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="secondary_phone" type="text" class="form-control"
+									wicket:message="placeholder:touragents.company.secondary_contact_number"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<label wicket:for="corp">
+									<input wicket:id="corp" type="checkbox">
+									<wicket:message key="touragents.user.corp">[Corpative]</wicket:message>
+								</label>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					</div>
+				</div>
+				<wicket:container wicket:id="contractPanel"></wicket:container>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="touragents.accountant_details">[Accountant details (optional)]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-3">
+								<input wicket:id="accountants.first_name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.first_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="accountants.last_name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.last_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="accountants.middle_name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.middle_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+						<div style="height: 10px;"></div>
+						<div class="row">
+							<div class="col-md-3">
+								<input wicket:id="accountants.contact_number" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.contact_number"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="accountants.contact_email" type="email" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.contact_email"
+								>
+							</div>
+							<div class="col-md-5"></div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="touragents.company_address">[Company address]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div wicket:id="addressPanel"></div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="touragents.bank">[Banking details]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-5">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title">
+											<wicket:message key="touragents.bank.primary_account">[Primary account]</wicket:message>
+										</h3>
+									</div>
+									<div class="panel-body">
+										<input wicket:id="banks_primary.name" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.name"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_primary.address" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.address"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_primary.account_number" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.account_number"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_primary.correspondent_account" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.correspondent_account"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_primary.identification_code" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.identification_code"
+										>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-5">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title">
+											<wicket:message key="touragents.bank.secondary_account">[Secondary account (optional)]</wicket:message>
+										</h3>
+									</div>
+									<div class="panel-body">
+										<input wicket:id="banks_secondary.name" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.name"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_secondary.address" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.address"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_secondary.account_number" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.account_number"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_secondary.correspondent_account" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.correspondent_account"
+										>
+										<div style="height: 10px;"></div>
+										<input wicket:id="banks_secondary.identification_code" type="text" class="form-control"
+											wicket:message="placeholder:touragents.bank.identification_code"
+										>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="touragents.license_and_cert">[License and Certificate]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-5">
+								<wicket:message key="touragents.license_and_cert.license">[License]</wicket:message>
+								<div class="input-group">
+									<input type="text" class="form-control" readonly="readonly">
+									<span class="input-group-btn"> <span class="btn btn-default-2 btn-file"> <i
+												class="fa fa-folder-open fa-fw"
+											></i> <wicket:message key="browse">[Browse...]</wicket:message> <input wicket:id="licenseFileInput" type="file">
+									</span>
+									</span>
+								</div>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-5">
+								<wicket:message key="touragents.license_and_cert.cert">[Certificate]</wicket:message>
+								<div class="input-group">
+									<input type="text" class="form-control" readonly="readonly">
+									<span class="input-group-btn"> <span class="btn btn-default-2 btn-file"><i
+												class="fa fa-folder-open fa-fw"
+											></i> <wicket:message key="browse">[Browse...]</wicket:message> <input wicket:id="certFileInput" type="file"
+												multiple="multiple"
+											> </span>
+									</span>
+								</div>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+						<div style="height: 10px;"></div>
+						<div class="row">
+							<div class="col-md-5">
+								<input wicket:id="license_id" type="text" class="form-control"
+									wicket:message="placeholder:touragents.license_and_cert.license_id"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-5">
+								<input wicket:id="cert_id" type="text" class="form-control"
+									wicket:message="placeholder:touragents.license_and_cert.cert_id"
+								>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="touragents.admin_details">[Manager details]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-3">
+								<input wicket:id="managers.first_name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.first_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="managers.last_name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.last_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="managers.middle_name" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.middle_name"
+								>
+							</div>
+							<div class="col-md-1"></div>
+						</div>
+						<div style="height: 10px;"></div>
+						<div class="row">
+							<div class="col-md-3">
+								<input wicket:id="managers.contact_number" type="text" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.contact_number"
+								>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-3">
+								<input wicket:id="managers.contact_email" type="email" class="form-control"
+									wicket:message="placeholder:touragents.accountant_details.contact_email"
+								>
+							</div>
+							<div class="col-md-5"></div>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+							<input wicket:id="submit" class="btn btn-primary" type="submit" wicket:message="value:save,title:save">
+						</div>
+					</div>
+				</div>
+				<hr>
+			</form>
+		</div>
+	</div>
+</wicket:panel>

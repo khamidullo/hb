@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket="http://wicket.apache.org">
+<body onunload="alert('Unload event detected!');">
+<wicket:head>
+	<link rel="stylesheet" href="css/validator/formValidation.css"/>
+	<link href="css/bootstrap.css" rel="stylesheet" />
+	
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/validator/formValidation.js"></script>
+    <script type="text/javascript" src="js/validator/framework/bootstrap.js"></script>
+</wicket:head>
+<wicket:extend>
+	<span wicket:id="feedback"></span>
+	<div wicket:id="panel"></div>
+	<form wicket:id="form">
+		<div class="form-group">
+			<label wicket:for="email" class="col-lg-3 control-label">Email</label>
+			<input type="email" wicket:id="email" class="form-control" placeholder="email"/>
+		</div>
+		<select wicket:id="selector"></select>
+		
+		<button wicket:id="ok1" type="submit">
+			OK1
+		</button>
+		<button wicket:id="ok2" onclick="return checkRequiredFields();">
+			OK2
+		</button>
+	</form>
+ </wicket:extend>
+</body>
+</html>

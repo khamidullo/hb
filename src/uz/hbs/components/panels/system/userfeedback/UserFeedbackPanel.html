@@ -1,0 +1,41 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div wicket:id="feedback"></div>
+	<a data-toggle="modal" data-target="#userfeedbackmodal" style="display: scroll; position: fixed; top: 40%; left: 0;"
+		href="#" wicket:message="title:system.feedback.button_title"> <img src="img/feedback_side_button.png" width="28" height="92" />
+	</a>
+	<form wicket:id="form">
+		<div class="modal fade" id="userfeedbackmodal" role="dialog" aria-labelledby="systemModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 wicket:id="title" class="modal-title" id="systemModalLabel">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="form-group">
+								<label for="userfeedbacksubject" class="control-label"><wicket:message key="system.feedback.subject">[Subject]</wicket:message>:</label>
+								<input wicket:id="subject" type="text" class="form-control" id="userfeedbacksubject" required="required">
+							</div>
+							<div class="form-group">
+								<label for="userfeedbackcomment" class="control-label"><wicket:message key="system.feedback.comment">[Comment]</wicket:message>:</label>
+								<textarea wicket:id="comment" rows="10" class="form-control" id="userfeedbackcomment" required="required"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							<wicket:message key="button.close">[Close]</wicket:message>
+						</button>
+						<button wicket:id="submit" type="button" class="btn btn-primary">
+							<wicket:message key="button.send">[Send]</wicket:message>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</wicket:panel>
+

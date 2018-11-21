@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.DeleteHotel">
+	<!-- JAVA da ham shu tartibda chaqirilishi kerak -->
+	
+	<delete id="deleteHotelsDetailsByAdmin" parameterType="long">
+		DELETE FROM hotelsdetails WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsEquipmentsByAdmin" parameterType="long">
+		DELETE FROM hotelsequipments WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsFacilitiesByAdmin" parameterType="long">
+		DELETE FROM hotelsfacilities WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsNearbyPlacesByAdmin" parameterType="long">
+		DELETE FROM hotelsnearbyplaces WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsReservationRulesByAdmin" parameterType="long">
+		DELETE FROM hotelsreservationrules WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsRoomTypesByAdmin" parameterType="long">
+		DELETE FROM hotelsroomtypes WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsServicesInRoomsByAdmin" parameterType="long">
+		DELETE FROM hotelsservicesinrooms WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsUploadedFilesByAdmin" parameterType="long">
+		DELETE FROM hotelsuploadedfiles WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteMealOptionsByAdmin" parameterType="long">
+		DELETE FROM mealoptions WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteRatePlaneDetailsHistoryByAdmin" parameterType="long">
+		DELETE FROM rateplanedetails_history WHERE rateplaneseasons_id IN (SELECT id FROM rateplaneseasons WHERE rateplanes_id IN (SELECT id FROM rateplanes WHERE hotelsusers_id = #{hotelsusers_id}))
+	</delete>
+		
+	<delete id="deleteRatePlaneDetailsByAdmin" parameterType="long">
+		DELETE FROM rateplanedetails WHERE rateplaneseasons_id IN (SELECT id FROM rateplaneseasons WHERE rateplanes_id IN (SELECT id FROM rateplanes WHERE hotelsusers_id = #{hotelsusers_id}))
+	</delete>
+		
+	<delete id="deleteRatePlaneSeasonsHistoryByAdmin" parameterType="long">
+		DELETE FROM rateplaneseasons_history WHERE rateplanes_id IN (SELECT id FROM rateplanes WHERE hotelsusers_id = #{hotelsusers_id})
+	</delete>
+		
+	<delete id="deleteRatePlaneSeasonsByAdmin" parameterType="long">
+		DELETE FROM rateplaneseasons WHERE rateplanes_id IN (SELECT id FROM rateplanes WHERE hotelsusers_id = #{hotelsusers_id})
+	</delete>
+		
+	<delete id="deleteRatePlanesHistoryByAdmin" parameterType="long">
+		DELETE FROM rateplanes_history WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteRatePlanesByAdmin" parameterType="long">
+		DELETE FROM rateplanes WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteGuestsByAdmin" parameterType="long">
+		DELETE FROM guests WHERE reservations_id IN (SELECT id FROM reservations WHERE hotelsusers_id = #{hotelsusers_id})
+	</delete>
+		
+	<delete id="deleteRoomsByAdmin" parameterType="long">
+		DELETE FROM rooms WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteRoomsEquipmentsByAdmin" parameterType="long">
+		DELETE FROM roomsequipments WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsB2CPricesByAdmin" parameterType="long">
+		DELETE FROM hotelsb2cprices WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteSalePlanesHistoryByAdmin" parameterType="long">
+		DELETE FROM saleplanes_history WHERE id IN (SELECT sp.id FROM saleplanes sp WHERE hotelsusers_id = #{hotelsusers_id})
+	</delete>
+		
+	<delete id="deleteSalePlanesByAdmin" parameterType="long">
+		DELETE FROM saleplanes WHERE hotelsusers_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteHotelsByAdmin" parameterType="long">
+		DELETE FROM hotels WHERE users_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteAccountsByAdmin" parameterType="long">
+		DELETE FROM accounts WHERE users_id  = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteContractsByAdmin" parameterType="long">
+		DELETE FROM contracts WHERE users_id = #{hotelsusers_id}
+	</delete>
+		
+	<delete id="deleteUsersByAdmin" parameterType="long">
+		DELETE FROM users WHERE id = #{hotelsusers_id}
+	</delete>
+</mapper>

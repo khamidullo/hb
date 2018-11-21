@@ -1,0 +1,96 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<table class="table table-bordered table-hover table-condensed table-striped">
+		<tr>
+			<td><wicket:message key="hotels.reservation.details.name">[name]</wicket:message>:</td>
+			<td wicket:id="full_name"/>
+		</tr>
+<!--
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.room">[Room]</wicket:message>:</td>
+			<td wicket:id="room_number"/>
+		</tr>
+ -->
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.room.type">[Room Type]</wicket:message>:</td>
+			<td wicket:id="roomtype"/>
+		</tr>
+<!--
+ 		<tr>
+			<td><wicket:message key="meal_options">[Meal]</wicket:message>:</td>
+			<td wicket:id="meal_options"/>
+		</tr>
+ -->
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.adults">[Adults]</wicket:message>:</td>
+			<td wicket:id="adults"/>
+		</tr>
+		<tr>
+			<td><wicket:message key="hotels.reservation.details.children">[Children]</wicket:message>:</td>
+			<td wicket:id="children"/>
+		</tr>
+		<tr>
+			<td><wicket:message key="hotels.reservation.details.check_in">[Check_in]</wicket:message>:</td>
+			<td><span wicket:id="check_in" id="check_in">[CheckIn]</span></td>
+		</tr>
+<!--
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.check_in.actual">[Actual Check_in]</wicket:message>:</td>
+			<td wicket:id="actual_check_in"/>
+		</tr>
+ -->
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.check_out">[Check_out]</wicket:message>:</td>
+			<td><span wicket:id="check_out" id="check_out">[CheckIn]</span></td>
+		</tr>
+<!--
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.check_out_in">[Check_out]</wicket:message>:</td>
+			<td wicket:id="check_out_in"/>
+		</tr>
+ -->
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.number_of_nights">[# of nights]</wicket:message>:</td>
+			<td><span id="number_of_nights">[nights]</span></td>
+		</tr>
+<!-- 		<tr>
+			<td><wicket:message key="hotels.reservation.details.additional_bed">[Additional Bed]</wicket:message>:</td>
+			<td wicket:id="extra_bed"/>
+		</tr>
+ 		<tr>
+			<td><wicket:message key="hotels.reservation.details.room.rate">[Room Rate]</wicket:message>:</td>
+			<td wicket:id="room_rate"/>
+		</tr>-->
+		<tr>
+			<td><wicket:message key="hotels.reservation.details.total">[Type]</wicket:message>:</td>
+			<td wicket:id="total"/>
+		</tr>
+		<tr>
+			<td><wicket:message key="hotels.reservation.details.reservation.type">[Type]</wicket:message>:</td>
+			<td wicket:id="reservation_type"/>
+		</tr>
+		<tr>
+			<td><wicket:message key="hotels.reservation.details.tour_agent">[Type]</wicket:message>:</td>
+			<td wicket:id="tour_agent"/>
+		</tr>
+		<tr>
+			<td><wicket:message key="hotels.reservation.details.comments">[Comments]</wicket:message>:</td>
+			<td wicket:id="guest_comments"/>
+		</tr>
+	</table>
+	<input type="hidden" wicket:id="comments" id="comments">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var from = moment($('#check_in').text(), "DD/MM/YYYY");
+			var to = moment($('#check_out').text(), "DD/MM/YYYY");
+			if (from.isValid() && to.isValid()) {
+				$('#number_of_nights').text(to.diff(from, 'day'));
+			}
+			
+			$comments = $('input#comments');
+			if ($comments.length){
+				var text = $comments.val();
+				if (text.length > 0) alert(text);
+			}
+		});
+	</script>
+</wicket:panel>

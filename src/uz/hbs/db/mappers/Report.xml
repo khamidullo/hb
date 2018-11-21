@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Report">
+	<select id="selectAdditionalServiceReportList" resultType="AdditionalServiceReport" parameterType="map">
+		SELECT name, count_1, amount_1, count_3, amount_3, count_6, amount_6, count_12, amount_12, count, amount
+          FROM additionalservicereport_v
+  		 <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}  
+	</select>
+	
+	<select id="selectAdditionalServiceReportListCount" resultType="long">
+		SELECT COUNT(*)
+          FROM additionalservicereport_v
+	</select>
+	
+	<select id="selectClientReportList" resultType="ClientReport" parameterType="map">
+			SELECT company, manager, regdate, request_count, reserve_count, cancelled_count, 
+			       service_1, hotel_1, service_3, hotel_3, service_6, hotel_6, service_12, 
+			       hotel_12, service, hotel, touragent_id
+			  FROM clientreport_v  		 
+		<trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}  
+	</select>
+	
+	<select id="selectClientReportListCount" resultType="long">
+			SELECT COUNT(*)
+			  FROM clientreport_v  		 
+	</select>
+	
+	<select id="selectHotelReportList" resultType="HotelReport" parameterType="map">
+			SELECT hotel_id, hotel, city, putting_number, login, manage_rate, month_1, 
+       			   month_3, month_6, month_12, month, tentative, regdate
+			  FROM hotelreport_v  		 
+		<trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}  
+	</select>
+	
+	<select id="selectHotelReportListCount" resultType="long">
+			SELECT COUNT(*)
+			  FROM hotelreport_v  		 
+	</select>
+	
+	<select id="selectTotalVolumeReservations" resultType="double" parameterType="long">
+		SELECT COALESCE(SUM(r.total),0) AS total
+		  FROM reservations r
+		 <where>
+			 <if test="value != null">
+			 	 EXISTS (SELECT *
+			 	           FROM users u
+			 	          WHERE u.workusers_id = #{value}
+			 	            AND r.creator_user_id = u.id)
+			 </if>
+		 </where> 
+	</select>
+	
+	<select id="selectTotalCountReservations" resultType="long" parameterType="long">
+		SELECT COUNT(*) AS total
+		  FROM reservations r
+		 <where>
+			 <if test="value != null">
+			 	 EXISTS (SELECT *
+			 	           FROM users u
+			 	          WHERE u.workusers_id = #{value}
+			 	            AND r.creator_user_id = u.id)
+			 </if>
+		 </where> 
+	</select>
+
+	<select id="selectReservationsReportListForAdmin" parameterType="map" resultType="ReservationDetail">
+		SELECT r.id,
+		       r.create_date,
+		       r.hotelsusers_id,
+			 <if test="user_type == 50">
+			   u.id AS "tour_agent.users_id",
+			   u.name AS "tour_agent.name",
+			 </if>
+			 <if test="user_type != 50">
+			   ta.users_id AS "tour_agent.users_id",
+			   ta.display_name AS "tour_agent.name",
+			 </if>
+			   u.login || ', ' || u.name AS creator,
+		       COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name AS hotel_name,
+		       hu.name AS hotel_legal_name,
+		       g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') AS guest_name,
+		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservations_id = r.id) AS guest_count,
+		       r.check_in,
+		       r.check_out,
+		       r.status AS "status.id",
+		       r.payment_owner,
+		       r.total,
+		       r.reservation_type,
+		       r.payment_method,
+		       r.payment_confirmation,
+		       (SELECT COUNT(re.reservations_id) FROM reservationemails re WHERE re.reservations_id = r.id AND re.type = 'CREATED' AND re.status = 'SENT') AS emails_sent
+		  FROM reservations r
+		<if test="user_type != 50">
+		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
+		</if>
+		  JOIN users u ON r.creator_user_id = u.id AND u.type = #{user_type}
+		  JOIN users hu ON r.hotelsusers_id = hu.id
+		  LEFT JOIN (SELECT g.reservations_id,
+  				            g.first_name,
+  				            g.middle_name,
+  				            g.last_name,
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+				       FROM guests g
+				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+		       hotels h,
+		       hotelsdetails hd,
+		       addresses ad,
+		       cities c
+		 WHERE r.hotelsusers_id = h.users_id
+		   AND h.users_id = hd.hotelsusers_id
+		   AND hd.addresses_id = ad.id
+		   AND c.id = ad.cities_id
+	 	<if test="reservations_id != null">
+	 	   AND r.id = #{reservations_id}
+	 	</if>
+		<if test="reservations_id == null">
+	 		<if test="created_from != null">
+	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+	 		</if>
+	 		<if test="created_to != null">
+	 		   AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+	 		</if>
+	 		<if test="checkin_from != null">
+	 		   AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+	 		</if>
+	 		<if test="checkin_to != null">
+	 		   AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+	 		</if>
+	 		<if test="checkout_from != null">
+	 		   AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+	 		</if>
+	 		<if test="checkout_to != null">
+	 		   AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+	 		</if>
+	 		<if test="reservation_type != null">
+	 		   AND r.reservation_type = #{reservation_type.id}
+	 		</if>
+	 		<if test="reservation_status != null">
+		 	   AND r.status = #{reservation_status.id}
+	 		</if>
+	 		<if test="touragent != null">
+	 		   AND r.touragentsusers_id = #{touragent.id}
+	 		</if>
+	 		<if test="hotel != null">
+	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		</if>
+	 		<if test="city != null">
+	 		   AND ad.cities_id = #{city.id}
+	 		</if>
+	 		<if test="payment_method != null">
+	 		   AND r.payment_method = #{payment_method}
+	 		</if>
+	 		<if test="payment_confirmation != null">
+	 		   AND r.payment_confirmation = #{payment_confirmation}
+	 		</if>
+		    <trim prefix="ORDER BY">
+				<if test="sortField != null">
+					${sortField} ${sortOrder}
+				</if>
+			</trim>
+			 LIMIT #{limit} OFFSET #{offset}            
+		 </if>
+	</select>
+
+	<select id="selectReservationsReportCountForAdmin" parameterType="map" resultType="long">
+		SELECT COUNT(*)
+		  FROM reservations r
+		<if test="user_type != 50">
+		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
+		</if>
+		  JOIN users u ON r.creator_user_id = u.id AND u.type = #{user_type}
+		  JOIN users hu ON r.hotelsusers_id = hu.id
+		  LEFT JOIN (SELECT g.reservations_id,
+  				            g.first_name,
+  				            g.middle_name,
+  				            g.last_name,
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+				       FROM guests g
+				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+		       hotels h,
+		       hotelsdetails hd,
+		       addresses ad,
+		       cities c
+		 WHERE r.hotelsusers_id = h.users_id
+		   AND h.users_id = hd.hotelsusers_id
+		   AND hd.addresses_id = ad.id
+		   AND c.id = ad.cities_id
+	 	<if test="reservations_id != null">
+	 	   AND r.id = #{reservations_id}
+	 	</if>
+		<if test="reservations_id == null">
+	 		<if test="created_from != null">
+	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+	 		</if>
+	 		<if test="created_to != null">
+	 		   AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+	 		</if>
+	 		<if test="checkin_from != null">
+	 		   AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+	 		</if>
+	 		<if test="checkin_to != null">
+	 		   AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+	 		</if>
+	 		<if test="checkout_from != null">
+	 		   AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+	 		</if>
+	 		<if test="checkout_to != null">
+	 		   AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+	 		</if>
+	 		<if test="reservation_type != null">
+	 		   AND r.reservation_type = #{reservation_type.id}
+	 		</if>
+	 		<if test="reservation_status != null">
+		 	   AND r.status = #{reservation_status.id}
+	 		</if>
+	 		<if test="touragent != null">
+	 		   AND r.touragentsusers_id = #{touragent.id}
+	 		</if>
+	 		<if test="hotel != null">
+	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		</if>
+	 		<if test="city != null">
+	 		   AND ad.cities_id = #{city.id}
+	 		</if>
+	 		<if test="payment_method != null">
+	 		   AND r.payment_method = #{payment_method}
+	 		</if>
+		 </if>
+	</select>
+	
+	<select id="selectReservationsReportListForHotel" parameterType="map" resultType="ReservationDetail">
+		SELECT r.id,
+		       r.create_date,
+		       r.hotelsusers_id,
+		       CASE WHEN u.type = 50 THEN u.id ELSE ta.users_id END AS "tour_agent.users_id",
+		       CASE WHEN u.type = 50 THEN g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') ELSE ta.display_name END AS "tour_agent.name",
+		       (SELECT STRING_AGG(rt.name, ', ') from reservationrooms rr, roomtypes rt where rr.reservations_id = r.id AND rr.roomtypes_id = rt.id) AS room_type,
+		       COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name AS hotel_name,
+		       hu.name AS hotel_legal_name,
+		       g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') AS guest_name,
+		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservations_id = r.id) AS guest_count,
+		       r.check_in,
+		       r.check_out,
+		       r.status AS "status.id",
+		       r.reservation_type,
+		       r.payment_owner,
+		       r.total
+		  FROM reservations r
+		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
+		  JOIN users u ON r.creator_user_id = u.id
+		  JOIN users hu ON r.hotelsusers_id = hu.id
+		  LEFT JOIN (SELECT g.reservations_id,
+  				            g.first_name,
+  				            g.middle_name,
+  				            g.last_name,
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+				       FROM guests g
+				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+		       hotels h,
+		       hotelsdetails hd,
+		       addresses ad,
+		       cities c
+		 WHERE r.hotelsusers_id = h.users_id
+		   AND h.users_id = hd.hotelsusers_id
+		   AND hd.addresses_id = ad.id
+		   AND c.id = ad.cities_id
+		   AND r.hotelsusers_id = #{hotel.id}
+	 	<if test="reservations_id != null">
+	 	   AND r.id = #{reservations_id}
+	 	</if>
+		<if test="reservations_id == null">
+	 		<if test="created_from != null">
+	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+	 		</if>
+	 		<if test="created_to != null">
+	 		   AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+	 		</if>
+	 		<if test="checkin_from != null">
+	 		   AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+	 		</if>
+	 		<if test="checkin_to != null">
+	 		   AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+	 		</if>
+	 		<if test="checkout_from != null">
+	 		   AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+	 		</if>
+	 		<if test="checkout_to != null">
+	 		   AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+	 		</if>
+	 		<if test="reservation_type != null">
+	 		   AND r.reservation_type = #{reservation_type}
+	 		</if>
+	 		<if test="reservation_status != null">
+		 	   AND r.status = #{reservation_status.id}
+	 		</if>
+		    <trim prefix="ORDER BY">
+				<if test="sortField != null">
+					${sortField} ${sortOrder}
+				</if>
+			</trim>
+			 LIMIT #{limit} OFFSET #{offset}            
+		 </if>
+	</select>
+
+	<select id="selectReservationsReportCountForHotel" parameterType="map" resultType="long">
+		SELECT COUNT(*)
+		  FROM reservations r
+		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
+		  JOIN users u ON r.creator_user_id = u.id
+		  JOIN users hu ON r.hotelsusers_id = hu.id
+		  LEFT JOIN (SELECT g.reservations_id,
+  				            g.first_name,
+  				            g.middle_name,
+  				            g.last_name,
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+				       FROM guests g
+				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+		       hotels h,
+		       hotelsdetails hd,
+		       addresses ad,
+		       cities c
+		 WHERE r.hotelsusers_id = h.users_id
+		   AND h.users_id = hd.hotelsusers_id
+		   AND hd.addresses_id = ad.id
+		   AND c.id = ad.cities_id
+	 	   AND r.hotelsusers_id = #{hotel.id}
+	 	<if test="reservations_id != null">
+	 	   AND r.id = #{reservations_id}
+	 	</if>
+		<if test="reservations_id == null">
+	 		<if test="created_from != null">
+	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+	 		</if>
+	 		<if test="created_to != null">
+	 		   AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+	 		</if>
+	 		<if test="checkin_from != null">
+	 		   AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+	 		</if>
+	 		<if test="checkin_to != null">
+	 		   AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+	 		</if>
+	 		<if test="checkout_from != null">
+	 		   AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+	 		</if>
+	 		<if test="checkout_to != null">
+	 		   AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+	 		</if>
+	 		<if test="reservation_type != null">
+	 		   AND r.reservation_type = #{reservation_type}
+	 		</if>
+	 		<if test="reservation_status != null">
+		 	   AND r.status = #{reservation_status.id}
+	 		</if>
+		 </if>
+	</select>
+	
+	<select id="selectReservationsReportListForTouragent" parameterType="map" resultType="ReservationDetail">
+		SELECT r.id,
+		       r.create_date,
+		       r.hotelsusers_id,
+		       COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name AS hotel_name,
+		       g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') AS guest_name,
+		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservations_id = r.id) AS guest_count,
+		       r.check_in,
+		       r.check_out,
+		       r.status AS "status.id",
+		       r.payment_owner,
+		       r.total
+		  FROM reservations r
+		  LEFT JOIN (SELECT g.reservations_id,
+  				            g.first_name,
+  				            g.middle_name,
+  				            g.last_name,
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+				       FROM guests g
+				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+		       hotels h,
+		       hotelsdetails hd,
+		       addresses ad,
+		       cities c
+		 WHERE r.hotelsusers_id = h.users_id
+		   AND h.users_id = hd.hotelsusers_id
+		   AND hd.addresses_id = ad.id
+		   AND c.id = ad.cities_id
+		   AND r.creator_user_id = #{touragent.id}
+	 	<if test="reservations_id != null">
+	 	   AND r.id = #{reservations_id}
+	 	</if>
+		<if test="reservations_id == null">
+	 		<if test="created_from != null">
+	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+	 		</if>
+	 		<if test="created_to != null">
+	 		   AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+	 		</if>
+	 		<if test="checkin_from != null">
+	 		   AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+	 		</if>
+	 		<if test="checkin_to != null">
+	 		   AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+	 		</if>
+	 		<if test="checkout_from != null">
+	 		   AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+	 		</if>
+	 		<if test="checkout_to != null">
+	 		   AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+	 		</if>
+	 		<if test="reservation_type != null">
+	 		   AND r.reservation_type = #{reservation_type.id}
+	 		</if>
+	 		<if test="reservation_status != null">
+		 	   AND r.status = #{reservation_status.id}
+	 		</if>
+	 		<if test="hotel != null">
+	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		</if>
+	 		<if test="city != null">
+	 		   AND ad.cities_id = #{city.id}
+	 		</if>
+		    <trim prefix="ORDER BY">
+				<if test="sortField != null">
+					${sortField} ${sortOrder}
+				</if>
+			</trim>
+			 LIMIT #{limit} OFFSET #{offset}            
+		 </if>
+	</select>
+
+	<select id="selectReservationsReportCountForTouragent" parameterType="map" resultType="long">
+		SELECT COUNT(*)
+		  FROM reservations r
+		  LEFT JOIN (SELECT g.reservations_id,
+  				            g.first_name,
+  				            g.middle_name,
+  				            g.last_name,
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+				       FROM guests g
+				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+		       hotels h,
+		       hotelsdetails hd,
+		       addresses ad,
+		       cities c
+		 WHERE r.hotelsusers_id = h.users_id
+		   AND h.users_id = hd.hotelsusers_id
+		   AND hd.addresses_id = ad.id
+		   AND c.id = ad.cities_id
+		   AND r.creator_user_id = #{touragent.id}
+	 	<if test="reservations_id != null">
+	 	   AND r.id = #{reservations_id}
+	 	</if>
+		<if test="reservations_id == null">
+	 		<if test="created_from != null">
+	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+	 		</if>
+	 		<if test="created_to != null">
+	 		   AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+	 		</if>
+	 		<if test="checkin_from != null">
+	 		   AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+	 		</if>
+	 		<if test="checkin_to != null">
+	 		   AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+	 		</if>
+	 		<if test="checkout_from != null">
+	 		   AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+	 		</if>
+	 		<if test="checkout_to != null">
+	 		   AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+	 		</if>
+	 		<if test="reservation_type != null">
+	 		   AND r.reservation_type = #{reservation_type.id}
+	 		</if>
+	 		<if test="reservation_status != null">
+		 	   AND r.status = #{reservation_status.id}
+	 		</if>
+	 		<if test="hotel != null">
+	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		</if>
+	 		<if test="city != null">
+	 		   AND ad.cities_id = #{city.id}
+	 		</if>
+		 </if>
+	</select>
+	
+	<select id="selectHotelsForAnalysis" parameterType="int" resultType="Hotel">
+		SELECT h.users_id,
+			   hd.display_name,
+			   u.status,
+			   u.name AS legal_name,
+			   c.name AS city,
+			   h.primary_phone,
+			   h.corporate_email,
+			   ct.contract_type AS "contract.contract_type.id",
+			   ct.contract_number AS "contract.contract_number",
+			   ct.contract_date AS "contract.contract_date",
+			   ct.commission_type AS "contract.commission_type",
+			   ct.commission_value AS "contract.commission_value",
+			   h.manager,
+			   h.manager_email,
+			   h.accountant,
+			   h.accountant_phone,
+			   h.reservation_dep,
+			   h.reservation_dep_phone,
+			   hd.contact_email2 AS "hotelsDetails.contact_email2",
+			   hd.contact_email AS "hotelsDetails.contact_email",
+			   hd.contact_number AS "hotelsDetails.contact_number",
+			   hd.contact_number2 AS "hotelsDetails.contact_number2",
+			   hd.fax AS "hotelsDetails.fax",
+			   hd.fax2 AS "hotelsDetails.fax2"
+		  FROM users u, hotels h, hotelsdetails hd, addresses ad, cities c, contracts ct
+		 WHERE u.id = h.users_id
+		   AND h.users_id = hd.hotelsusers_id
+		   AND hd.addresses_id = ad.id
+		   AND ad.cities_id = c.id
+		   AND u.id = ct.users_id
+		   AND c.id = #{city_id}
+		 ORDER BY hd.display_name
+	</select>
+</mapper>

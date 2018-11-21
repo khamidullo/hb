@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.HotelReports">
+    <select id="selectReportTourAgentList" resultType="TourAgent" parameterType="map">
+        SELECT ta.users_id, u.name, ct.name AS city, ta.primary_phone, u.email 
+		  FROM users u, touragents ta
+		       LEFT JOIN addresses a ON ta.addresses_id = a.id
+		       LEFT JOIN cities ct ON a.cities_id = ct.id
+		 WHERE u.id = ta.users_id
+		   AND EXISTS ( SELECT *
+				          FROM reservations r
+				         WHERE r.create_date::date BETWEEN #{date_from}::date AND #{date_to}::date
+				           AND r.touragentsusers_id = ta.users_id
+				           AND r.hotelsusers_id = #{hotelsusers_id}
+				           AND r.status IN (1,2,3))
+    </select>
+    
+    <select id="selectReservationByTAReport" parameterType="map" resultType="HotelReservationReport">
+        SELECT r.id, 
+               r.create_date, 
+               g.first_name, 
+               g.last_name, 
+               g.middle_name, 
+               r.check_in, 
+               r.check_out, 
+               r.reservation_type AS reserve_type, 
+               r.total, r.status
+          FROM reservations r JOIN guests g ON g.reservations_id = r.id
+         WHERE r.create_date::date BETWEEN #{date_from}::date AND #{date_to}::date
+           AND r.touragentsusers_id = #{touragentuser_id}
+           AND r.hotelsusers_id = #{hotelsusers_id}
+           AND r.status IN (1,2,3)
+           AND g.guest_index = 1
+    </select>
+    
+    <select id="selectGroupByTAReport" parameterType="map" resultType="HotelReservationReport">
+        SELECT r.id, 
+               r.create_date, 
+               g.first_name, 
+               g.last_name, 
+               g.middle_name, 
+               r.check_in, 
+               r.check_out, 
+               r.reservation_type AS reserve_type, 
+               r.total, r.status,
+               u.name AS tour_agent 
+          FROM reservations r JOIN guests g ON g.reservations_id = r.id, 
+               users u JOIN touragents ta ON u.id = ta.users_id
+         WHERE r.create_date::date BETWEEN #{date_from}::date AND #{date_to}::date
+           AND r.is_group = true
+           AND r.status IN (1,2,3)
+           AND r.hotelsusers_id = #{hotelsusers_id}
+           AND r.touragentsusers_id = ta.users_id
+           AND g.guest_index = 1
+    </select>
+    
+    <select id="selectAllReservationsReport" parameterType="map" resultType="HotelReservationReport">
+        SELECT r.id, r.create_date, 
+               g.first_name, 
+               g.last_name, 
+               g.middle_name, 
+               r.check_in, 
+               r.check_out, 
+               r.reservation_type AS reserve_type, 
+               r.total, 
+               r.status,
+               u.name AS tour_agent 
+          FROM reservations r JOIN guests g ON g.reservations_id = r.id, 
+               users u JOIN touragents ta ON u.id = ta.users_id
+         WHERE r.create_date::date BETWEEN #{date_from}::date AND #{date_to}::date
+           AND r.status IN (0,1,2,3)
+           AND r.hotelsusers_id = #{hotelsusers_id}
+           AND r.touragentsusers_id = ta.users_id
+           AND g.guest_index = 1
+    </select>
+    
+    <select id="selectRegisteredGuestReport" parameterType="map" resultType="HotelReservationReport">
+        SELECT (SELECT g1.first_name || ' ' || g1.last_name FROM guests g1 WHERE g1.reservations_id = r.id AND g1.guest_index = 1) AS name, 
+               rm.room_number, 
+               rt.name AS roomtype,
+               r.check_in, 
+               r.check_out,
+               get_check_out_in(r.check_out) AS check_out_in,
+               (SELECT COUNT(*) FROM guests g2 WHERE g2.reservationrooms_id = g.reservationrooms_id) AS guests
+          FROM reservations r, 
+               (SELECT reservations_id, reservationrooms_id FROM guests GROUP BY reservations_id, reservationrooms_id) AS g, 
+               reservationrooms rr, rooms rm, roomtypes rt
+         WHERE r.create_date::date BETWEEN #{date_from}::date AND #{date_to}::date
+           AND g.reservations_id = r.id
+           AND r.hotelsusers_id = #{hotelsusers_id}
+           AND rr.reservations_id = r.id
+           AND rt.id = rr.roomtypes_id
+           AND rm.id = rr.rooms_id
+           AND g.reservationrooms_id = rr.id
+           AND r.status = 1
+    </select>
+    
+    <select id="selectLeftGuestReport" parameterType="map" resultType="HotelReservationReport">
+        SELECT (SELECT first_name || ' ' || last_name FROM guests g1 WHERE g1.reservations_id = r.id AND g1.guest_index = 1) AS name, 
+               rm.room_number, 
+               rt.name AS roomtype,
+               r.check_in, 
+               r.check_out,
+               get_check_out_in(r.check_out) AS check_out_in,
+               (SELECT COUNT(*) FROM guests g2 WHERE g2.reservationrooms_id = g.reservationrooms_id) AS guests
+          FROM reservations r, 
+               (SELECT reservations_id, reservationrooms_id FROM guests GROUP BY reservations_id, reservationrooms_id) AS g, 
+               reservationrooms rr, rooms rm, roomtypes rt
+         WHERE r.check_out::date BETWEEN #{date_from}::date AND #{date_to}::date
+           AND g.reservations_id = r.id
+           AND r.hotelsusers_id = #{hotelsusers_id}
+           AND rr.reservations_id = r.id
+           AND rt.id = rr.roomtypes_id
+           AND rm.id = rr.rooms_id
+           AND g.reservationrooms_id = rr.id
+           AND r.status = 3
+    </select>
+
+    <select id="selectExpectedGuestReport" parameterType="map" resultType="HotelReservationReport">
+        SELECT g.first_name, 
+        	   g.last_name, 
+        	   g.middle_name,  
+               rm.room_number, 
+               rt.name AS roomtype,
+               r.check_in, 
+               r.check_out,
+               get_check_out_in(r.check_out) AS check_out_in,
+               r.adults AS guests
+          FROM reservations r      LEFT JOIN guests g ON g.reservations_id = r.id, 
+               reservationrooms rr LEFT JOIN rooms rm ON rr.rooms_id = rm.id, 
+               roomtypes rt
+         WHERE r.check_in::date BETWEEN #{date_from}::date AND #{date_to}::date
+           AND r.hotelsusers_id = #{hotelsusers_id}
+           AND rr.reservations_id = r.id
+           AND rt.id = rr.roomtypes_id
+           AND r.status = 0
+           AND g.guest_index = 1
+    </select>
+    
+    <select id="selectLeavingGuestReport" parameterType="map" resultType="HotelReservationReport">
+        SELECT (SELECT first_name || ' ' || last_name FROM guests g1 WHERE g1.reservations_id = r.id AND g1.guest_index = 1) AS name, 
+               rm.room_number, rt.name AS roomtype,
+               r.check_in::date, r.check_out::date,
+               get_check_out_in(r.check_out) AS check_out_in,
+               (SELECT COUNT(*) FROM guests g2 WHERE g2.reservationrooms_id = g.reservationrooms_id) AS guests
+          FROM reservations r, 
+               (SELECT reservations_id, reservationrooms_id FROM guests GROUP BY reservations_id, reservationrooms_id) AS g, 
+               reservationrooms rr, rooms rm, roomtypes rt
+         WHERE r.create_date::date BETWEEN #{date_from}::date AND #{date_to}::date
+           AND g.reservations_id = r.id
+           AND r.hotelsusers_id = #{hotelsusers_id}
+           AND rr.reservations_id = r.id
+           AND rt.id = rr.roomtypes_id
+           AND rm.id = rr.rooms_id
+           AND g.reservationrooms_id = rr.id
+           AND r.status = 1
+           AND r.check_out::date BETWEEN now()::date AND (now() + '1 day'::INTERVAL)::date 
+    </select>
+    
+    <select id="selectReservationsCountByTypeOrStatus" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		  FROM reservations r, users u
+		 WHERE r.creator_user_id = u.id
+		   AND u.type = #{user_type}
+		  <if test="reservation_type != null">
+		   AND r.reservation_type = #{reservation_type}    
+		  </if>
+		  <if test="status != null">
+		   AND r.status = #{status}
+		  </if>
+		  <if test="creator_user_id != null">
+		   AND r.creator_user_id = #{creator_user_id}
+		  </if>
+		  <if test="hotelsusers_id != null">
+		   AND r.hotelsusers_id = #{hotelsusers_id}
+		  </if>
+    </select>
+</mapper>    

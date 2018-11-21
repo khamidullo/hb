@@ -1,0 +1,122 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<wicket:message key="hotels.reference_info.meal_options">[Meal options]</wicket:message>
+			</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="checkbox">
+						<label wicket:for="meal_options.breakfast">
+							<input type="checkbox" wicket:id="meal_options.breakfast">
+							<wicket:message key="hotels.reference_info.meal_options.breakfast">[Breakfast]</wicket:message>
+						</label>
+					</div>
+					<table style="margin-left: 20px;" wicket:id="breakfast_container">
+						<tr>
+							<td colspan="4">
+								<div class="checkbox">
+									<label wicket:for="meal_options.breakfast_included_to_room_rate">
+										<input type="checkbox" wicket:id="meal_options.breakfast_included_to_room_rate">
+										<wicket:message key="hotels.reference_info.meal_options.included_to_room_rate">[Included to room rate]</wicket:message>
+									</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">
+								<wicket:message key="hotels.reference_info.meal_options.costs">[Costs]</wicket:message>
+							</td>
+							<td>&nbsp;</td>
+							<td>
+								<input type="text" class="form-control" wicket:id="meal_options.breakfast_per_person_per_night"
+									wicket:message="placeholder:hotels.reference_info.meal_options.costs">
+							</td>
+							<td>&nbsp;</td>
+							<td nowrap="nowrap">
+								<wicket:message key="hotels.reservation.per_person_per_night">[per person per night]</wicket:message>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-8"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="checkbox">
+						<label wicket:for="meal_options.lunch">
+							<input type="checkbox" wicket:id="meal_options.lunch">
+							<wicket:message key="hotels.reference_info.meal_options.lunch">[Lunch]</wicket:message>
+						</label>
+					</div>
+					<table style="margin-left: 20px;" wicket:id="lunch_container">
+						<tr>
+							<td colspan="4">
+								<div class="checkbox">
+									<label wicket:for="meal_options.lunch_included_to_room_rate">
+										<input type="checkbox" wicket:id="meal_options.lunch_included_to_room_rate">
+										<wicket:message key="hotels.reference_info.meal_options.included_to_room_rate">[Included to room rate]</wicket:message>
+									</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">
+								<wicket:message key="hotels.reference_info.meal_options.costs">[Costs]</wicket:message>
+							</td>
+							<td>&nbsp;</td>
+							<td>
+								<input type="text" class="form-control" wicket:id="meal_options.lunch_per_person_per_night"
+									wicket:message="placeholder:hotels.reference_info.meal_options.costs">
+							</td>
+							<td>&nbsp;</td>
+							<td nowrap="nowrap">
+								<wicket:message key="hotels.reservation.per_person_per_night">[per person per night]</wicket:message>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-8"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="checkbox">
+						<label wicket:for="meal_options.dinner">
+							<input type="checkbox" wicket:id="meal_options.dinner">
+							<wicket:message key="hotels.reference_info.meal_options.dinner">[Dinner]</wicket:message>
+						</label>
+					</div>
+					<table style="margin-left: 20px;" wicket:id="dinner_container">
+						<tr>
+							<td colspan="4">
+								<div class="checkbox">
+									<label wicket:for="meal_options.dinner_included_to_room_rate">
+										<input type="checkbox" wicket:id="meal_options.dinner_included_to_room_rate">
+										<wicket:message key="hotels.reference_info.meal_options.included_to_room_rate">[Included to room rate]</wicket:message>
+									</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td nowrap="nowrap">
+								<wicket:message key="hotels.reference_info.meal_options.costs">[Costs]</wicket:message>
+							</td>
+							<td>&nbsp;</td>
+							<td>
+								<input type="text" class="form-control" wicket:id="meal_options.dinner_per_person_per_night"
+									wicket:message="placeholder:hotels.reference_info.meal_options.costs">
+							</td>
+							<td>&nbsp;</td>
+							<td nowrap="nowrap">
+								<wicket:message key="hotels.reservation.per_person_per_night">[per person per night]</wicket:message>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-8"></div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

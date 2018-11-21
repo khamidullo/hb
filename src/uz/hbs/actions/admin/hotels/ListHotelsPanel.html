@@ -1,0 +1,36 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+	<wicket:panel>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-right" style="margin-bottom: 5px;">
+					<a wicket:id="addWizardLink" href="#" class="btn btn-success">
+						<i class="fa fa-plus"></i>
+						<wicket:message key="hotels.add" />
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<form wicket:id="form">
+					<select wicket:id="countries" class="form-control">
+						<option id="uz">[Uzbekistan]</option>
+					</select>
+				</form>
+			</div>
+		</div>
+		<div style="height: 10px;"></div>
+		<div class="row" wicket:id="container">
+			<div class="col-md-12">
+				<form wicket:id="filterForm">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover table-condensed table-striped" wicket:id="table"></table>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div wicket:id="feedback">[Feedback]</div>
+	</wicket:panel>
+</body>
+</html>

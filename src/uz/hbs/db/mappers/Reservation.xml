@@ -1,0 +1,1906 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Reservation">
+    <select id="selectReservationRuleByHotel" parameterType="map" resultType="ReservationRuleType">
+        SELECT hotelsusers_id, 
+        	   check_in_from_time, 
+        	   check_in_to_time, 
+		       check_in_half_charge_from_time, 
+		       check_in_half_charge_to_time, 
+		       check_in_half_charge_service_charge, 
+		       check_in_half_charge_service_charge_type, 
+		       check_in_full_charge_from_time, 
+		       check_in_full_charge_to_time, 
+		       check_in_full_charge_service_charge, 
+		       check_in_full_charge_service_charge_type, 
+		       check_out_from_time, 
+		       check_out_to_time, 
+		       check_out_half_charge_from_time, 
+		       check_out_half_charge_to_time, 
+		       check_out_half_charge_service_charge, 
+		       check_out_half_charge_service_charge_type,
+		       check_out_full_charge_from_time, 
+		       check_out_full_charge_to_time, 
+		       check_out_full_charge_service_charge, 
+		       check_out_full_charge_service_charge_type, 
+		       minimum_free_age, 
+		       extra_bed_price_type_value, 
+		       extra_bed_price_type, 
+		       system_commission, 
+		       city_tax, 
+		       reservationcancellationpolicy_id,
+  			   exceed_type,
+  			   exceed_type_value,
+               maximum_discount_age,
+               maximum_discount_age_value,
+               maximum_discount_age_type,
+               guide_escort,
+               guide_escort_type,
+               guide_escort_type_value,
+               guide_escort_price_type,
+               guide_escort_price_type_value
+		  FROM hotelsreservationrules
+		 WHERE hotelsusers_id = #{hotelsusers_id}
+		   AND is_group = #{is_group} 
+    </select>
+
+    <select id="selectReservationRoomsList" parameterType="map" resultType="Room">
+	    SELECT id, room_number, holding_capacity as "holding_capacity.id", additional_bed as "additional_bed.id"
+	      FROM rooms
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	       AND roomtypes_id = #{roomtypes_id}
+	      <if test="onsale != null">
+	       AND onsale_state = #{onsale}  
+	      </if>    
+	</select>
+    
+    <select id="selectReservationRoomType" parameterType="long" resultType="RoomType">
+        SELECT rt.id, rt.name
+          FROM roomtypes rt, reservationrooms rr
+         WHERE rt.id = rr.roomtypes_id
+           AND rr.reservations_id = #{reservations_id} 
+    </select>
+    
+    <select id="selectReservationRoom" parameterType="map" resultType="Room">
+        SELECT rr.id, r.name
+          FROM rooms r, reservationrooms rr
+         WHERE r.id = rr.rooms_id
+           AND rr.reservations_id = #{reservations_id}
+           AND rr.roomtypes_id = #{roomtypes_id} 
+    </select>
+    
+    <select id="selectReservationRoomList" parameterType="map" resultType="Room">
+	    SELECT id, room_number, holding_capacity as "holding_capacity.id", 
+	           additional_bed as "additional_bed.id",
+	           r.roomratesplanes_id as "room_rate.id",
+	           r.onsale_state as "onsale_state.id",
+	           r.room_state AS "room_state.id",
+	      FROM rooms r
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	       AND roomtypes_id = #{roomtypes_id}
+	       AND onsale_state IN (0,1)   
+	</select>
+	
+    <select id="selectReserveRoomList" parameterType="long" resultType="ReservationRoom">
+	    SELECT roomtypes_id AS "roomtype.id",
+	    	   COUNT(*) AS room_count	
+	      FROM reservationrooms
+	     WHERE reservations_id = #{reservations_id}
+	    GROUP BY roomtypes_id    
+	</select>
+    
+    <select id="selectReserveRoomAllList" parameterType="long" resultType="ReservationRoom">
+	    SELECT rr.id,
+	           rr.reservations_id,
+	    	   rt.id AS "roomtype.id",
+	           rt.name AS "roomtype.name",
+	           COALESCE(r.id, -1) AS "room.id",
+	           r.room_number AS "room.room_number",
+	           hrt.holding_capacity AS "room.holding_capacity.id",
+	           rr.rate
+	      FROM reservationrooms rr LEFT JOIN roomtypes rt ON rr.roomtypes_id = rt.id
+	                                    JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id   
+	                               LEFT JOIN rooms r ON rr.rooms_id = r.id 
+	     WHERE reservations_id = #{reservations_id}
+	     ORDER BY 1
+	</select>
+    
+    <select id="selectReserveRoomByGuestList" parameterType="long" resultType="ReservationRoom">
+	    SELECT rr.reservations_id,
+	    	   rt.id AS "roomtype.id",
+	           rt.name AS "roomtype.name",
+	           COALESCE(r.id, -1) AS "room.id",
+	           r.room_number AS "room.room_number",
+	           COALESCE(r.holding_capacity, (SELECT MAX(holding_capacity) FROM rooms t WHERE t.roomtypes_id = rr.roomtypes_id)) AS "room.holding_capacity.id",
+	           (SELECT COUNT(*) FROM guests g WHERE g.reservationrooms_id = rr.id) AS guest_count,
+			   array_to_string(ARRAY(SELECT g.person_title||' '||g.first_name||' '||g.last_name FROM guests g WHERE g.reservationrooms_id = rr.id),'<![CDATA[<br>]]>') as guests	           
+          FROM reservationrooms rr LEFT JOIN roomtypes rt ON rr.roomtypes_id = rt.id
+	                               LEFT JOIN rooms r ON rr.rooms_id = r.id 
+	     WHERE reservations_id = #{reservations_id}
+	</select>
+    
+    <insert id="insertReservation" parameterType="ReservationDetail">
+        <selectKey order="BEFORE" resultType="long" keyProperty="id">
+            SELECT NEXTVAL('reservations_id_seq')
+        </selectKey>
+        INSERT INTO reservations(id, 
+        						 hotelsusers_id, 
+                                 touragentsusers_id, 
+                                 initiator_user_id, 
+                                 creator_user_id, 
+                                 rateplanes_id, 
+        						 group_name, 
+        					     adults, 
+        					     children, 
+        					     check_in, 
+                                 check_out, 
+                                 total, 
+                                 reservation_type, 
+                                 is_group, 
+                                 status, 
+                                 auto_cancel_time, 
+                                 resident,
+                                 ta_comments,
+                                 reception_comments, 
+                                 guest_comments,
+                                 payment_owner,
+                                 additional_service_cost)
+	    VALUES (#{id}, 
+	    		#{hotelsusers_id}, 
+	            #{tour_agent.users_id}, 
+	            #{initiator_user_id}, 
+	            #{creator_user_id},
+	            #{rateplane.id}, 
+	    		#{group_name}, 
+	            #{adults}, 
+	            #{children}, 
+	            #{check_in}, 
+	            #{check_out}, 
+	            #{total}, 
+	            #{reservation_type}, 
+	            #{is_group}, 
+	            #{status.id}, 
+	            #{auto_cancel_time}, 
+	            #{resident},
+	            #{ta_comments}, 
+	            #{reception_comments}, 
+	            #{guest_comments},
+	            #{payment_owner},
+	            #{additional_service_cost})
+    </insert>
+    
+    <update id="updateConfirmReservation" parameterType="ReservationDetail">
+        UPDATE reservations
+           SET total = #{total},
+               adults = #{adults},
+               children = #{children}
+         WHERE id = #{id}      
+    </update>
+    
+    <select id="selectReservationDetailById" parameterType="long" resultType="ReservationDetail">
+        SELECT r.id,
+			   r.hotelsusers_id AS hotelsusers_id,
+			   r.group_name,
+			   r.adults,
+			   r.children,
+			   r.check_in,
+			   r.check_out,
+			   r.total,
+			   r.touragentsusers_id AS "tour_agent.users_id",
+			   r.reservation_type,
+			   r.guest_comments,
+			   r.reception_comments,
+			   r.is_group,
+			   r.status AS "status.id",
+			   r.create_date,
+			   r.update_date,
+			   r.resident,
+			   r.payment_owner,
+			   CASE 
+			   (SELECT COUNT(*) 
+			      FROM insurances i JOIN additionalserviceorders aso ON i.additionalserviceorders_id = aso.id
+			     WHERE aso.reservations_id = r.id) WHEN 0 THEN false ELSE true END AS insurance,
+			   r.initiator_user_id,
+			   r.rateplanes_id AS "rateplane.id",
+			   rrp.internal AS "rateplane.internal",
+			   r.auto_cancel_time,
+			   r.ta_comments,
+			   g.person_title AS "main_guest.person_title.title",
+			   g.first_name AS "main_guest.first_name",
+			   g.last_name AS "main_guest.last_name", 
+			   rr.custom_rate,
+			   rr.non_smokers,
+			   rr.city_view,
+			   rr.extra_bed_needed,
+			   COALESCE(rr.meal_options, -1) AS meal_options, 
+			   (r.check_out::date - r.check_in::date) AS number_of_nights
+	      FROM reservations r JOIN rateplanes rrp ON r.rateplanes_id = rrp.id,
+			   reservationrooms rr,
+			   guests g
+	     WHERE r.id = #{id}
+		   AND r.id = rr.reservations_id
+		   AND g.reservationrooms_id = rr.id
+		   AND g.guest_index = 1
+		 ORDER BY rr.id
+		 LIMIT 1
+    </select>
+    
+    <select id="selectMainGuestReservation" parameterType="long" resultType="Guest">
+        SELECT g.person_title AS "person_title.title",
+			   g.first_name,
+			   g.last_name, 
+			   g.nationality
+		  FROM guests g, reservationrooms rr
+		 WHERE g.reservationrooms_id = rr.id
+		   AND g.guest_index = 1
+		   AND rr.reservations_id = #{value}
+		   ORDER BY rr.id ASC   
+		   LIMIT 1
+    </select>
+    
+    <select id="selectReservationRoomParamByReservId" parameterType="long" resultType="ReservationDetail">
+			SELECT rr.rooms_id AS rooms_id,
+               	   rr.roomtypes_id AS roomtypes_id,
+			  FROM reservationrooms rr LEFT JOIN rooms rm ON rr.rooms_id = rm.id 
+	         WHERE rr.reservations_id = #{value}
+    </select>
+    
+    <select id="selectReservationRoomTypeByHotel" parameterType="map" resultType="RoomType">
+	    SELECT rt.id, rt.name, hrt.number_of_rooms, hrt.holding_capacity AS "holding_capacity.id"
+	      FROM roomtypes rt JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
+	     WHERE hrt.hotelsusers_id = #{hotelsusers_id}
+	     <if test="roomtypelist != null">
+	         AND rt.id NOT IN 
+	         <foreach collection="roomtypelist" index="index" item="item" open="(" close=")" separator=",">
+	             #{item}
+	         </foreach>
+	     </if>
+<!-- 	     <if test="isTA != null">
+	         AND COALESCE(get_count_available_rooms(rt.id, #{check_in}::timestamp, #{check_out}::timestamp, #{isTA}, #{reserved_id}), 0) > 0
+	     </if>
+ -->
+ 	</select>
+	
+    <select id="selectReserveRoomTypeByHotel" parameterType="map" resultType="RoomType">
+	    SELECT rt.id, rt.name, hrt.number_of_rooms
+	      FROM roomtypes rt JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
+	     WHERE hrt.hotelsusers_id = #{hotelsusers_id}
+ 	</select>
+	
+    <select id="selectRoomReserveList" parameterType="map" resultType="Room">
+	        SELECT r.id, r.room_number, 
+	               r.holding_capacity AS "holding_capacity.id", 
+	               r.additional_bed AS "additional_bed.id", 
+	               r.onsale_state AS "onsale_state.id",
+	               r.room_state AS "room_state.id"
+	          FROM rooms r 
+	         WHERE r.roomtypes_id = #{roomtypes_id}
+	           AND r.onsale_state IN (0,1)
+	           AND r.holding_capacity >= #{adults}
+	          <if test="additional_bed != null and additional_bed == true">
+	           AND r.additional_bed = #{additional_bed}  
+	          </if> 
+	           AND NOT EXISTS (SELECT * 
+		                         FROM reservationrooms rr JOIN reservations rv ON rr.reservations_id = rv.id
+						        WHERE ((COALESCE(#{check_in}::timestamp,now()::timestamp),#{check_out}::timestamp) OVERLAPS (rv.check_in,rv.check_out))
+						          AND rr.rooms_id = r.id
+						          AND rr.roomtypes_id = r.roomtypes_id)
+	    <if test="rooms_id != null">
+	        UNION 
+	        SELECT r.id, r.room_number, 
+	               r.holding_capacity AS "holding_capacity.id", 
+	               r.additional_bed AS "additional_bed.id", 
+	               r.onsale_state AS "onsale_state.id",
+	               r.room_state AS "room_state.id"
+	          FROM rooms r 
+	         WHERE r.roomtypes_id = #{roomtypes_id}
+	           AND r.id = #{rooms_id}
+		</if>
+		ORDER BY room_number ASC
+    </select>
+    
+    <select id="selectRoomReserveListOld" parameterType="map" resultType="Room">
+	        SELECT r.id, r.room_number, 
+	               r.holding_capacity AS "holding_capacity.id", 
+	               r.additional_bed AS "additional_bed.id", 
+	               r.onsale_state AS "onsale_state.id",
+	               r.room_state AS "room_state.id",
+	               COALESCE(r.roomratesplanes_id, rts.roomratesplanes_id) AS "room_rate.id"
+	          FROM rooms r JOIN roomratesseasons rts ON r.roomtypes_id = rts.roomtypes_id 
+	                                                 AND ((COALESCE(#{check_in}::timestamp,now()::timestamp), #{check_out}::timestamp) OVERLAPS (date_trunc('day',rts.season_from)::timestamp, get_end_of_day(rts.season_to)))
+	         WHERE r.roomtypes_id = #{roomtypes_id}
+	           AND r.onsale_state IN (0,1)
+	           AND r.holding_capacity >= #{adults} 
+	           AND NOT EXISTS (SELECT * 
+		                         FROM reservationrooms rr JOIN reservations rv ON rr.reservations_id = rv.id
+						        WHERE ((COALESCE(#{check_in}::timestamp,now()::timestamp),#{check_out}::timestamp) OVERLAPS (rv.check_in,rv.check_out))
+						          AND rr.rooms_id = r.id
+						          AND rr.roomtypes_id = r.roomtypes_id)
+	    <if test="rooms_id != null">
+	        UNION 
+	        SELECT r.id, r.room_number, 
+	               r.holding_capacity AS "holding_capacity.id", 
+	               r.additional_bed AS "additional_bed.id", 
+	               r.onsale_state AS "onsale_state.id",
+	               r.room_state AS "room_state.id",
+	               COALESCE(r.roomratesplanes_id, rts.roomratesplanes_id) AS "room_rate.id"
+	          FROM rooms r JOIN roomratesseasons rts ON r.roomtypes_id = rts.roomtypes_id 
+	                                                 AND ((COALESCE(#{check_in}::timestamp,now()::timestamp), #{check_out}::timestamp) OVERLAPS (date_trunc('day',rts.season_from)::timestamp(0), get_end_of_day(rts.season_to)))
+	         WHERE r.roomtypes_id = #{roomtypes_id}
+	           AND r.id = #{rooms_id}
+		</if>
+		ORDER BY room_number ASC
+    </select>
+    
+    <select id="selectRoomTypeCountByHotel" parameterType="map" resultType="short">
+	    SELECT COUNT(*)
+	      FROM roomtypes rt JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
+	     WHERE hrt.hotelsusers_id = #{hotelsusers_id}
+	</select>
+    
+    <select id="selectReservationAvailableRoomsByRoomType" parameterType="map" resultType="short">
+        SELECT COALESCE(get_available_room_count(#{roomtypes_id}, #{check_in}::date, false), 0)
+    </select>
+    
+    <select id="selectCountAvailableRooms" parameterType="map" resultType="short">
+        SELECT COALESCE(get_available_room_count(#{roomtypes_id}, #{reserved_id}, #{check_in}::timestamp, #{check_out}::timestamp, false), 0)
+    </select>
+    
+    <select id="selectReservationAvailableRoomList" parameterType="map" resultType="Room">
+        SELECT id, room_number, 
+               holding_capacity AS "holding_capacity.id", 
+               additional_bed AS "additional_bed.id", 
+               onsale_state AS "onsale_state.id"
+          FROM rooms r
+         WHERE 
+         <if test="onsale_state != null">
+             r.onsale_state = #{onsale_state}
+             <if test="reservations_id != null">
+                 AND EXISTS (SELECT * FROM reservationrooms rr WHERE rr.reservations_id = #{reservations_id} AND rr.rooms_id = r.id)
+             </if>
+         </if>
+         <if test="onsale_state == null">
+         	r.onsale_state IN (0,1)    
+         </if>
+           AND r.roomtypes_id = #{roomtypes_id}
+         <if test="hotelsusers_id != null">
+           AND r.hotelsusers_id = #{hotelsusers_id}  
+         </if>  
+         <if test="room_count != null">
+           LIMIT #{room_count} 
+         </if>
+        <if test="rooms_id != null">
+            UNION ALL
+	        SELECT id, room_number, 
+	               holding_capacity AS "holding_capacity.id", 
+	               additional_bed AS "additional_bed.id", 
+	               onsale_state AS "onsale_state.id"
+	          FROM rooms r
+	         WHERE id = #{rooms_id}
+        </if> 
+         ORDER BY room_number ASC  
+    </select>
+    
+    <update id="updateReservation" parameterType="ReservationDetail">
+        UPDATE reservations
+           SET group_name = #{group_name},
+               adults = #{adults},
+               children = #{children}, 
+               check_in = #{check_in}, 
+               check_out = #{check_out}, 
+               total = #{total}, 
+               touragentsusers_id = #{tour_agent.users_id}, 
+               reservation_type = #{reservation_type}, 
+               guest_comments = #{guest_comments}, 
+               reception_comments = #{reception_comments}, 
+               rateplanes_id = #{rateplane.id},
+               update_date = now()::timestamp(0), 
+               initiator_user_id = #{initiator_user_id},
+               additional_service_cost = #{additional_service_cost},
+               auto_cancel_time = #{auto_cancel_time},
+               ta_comments = #{ta_comments},
+               payment_owner = #{payment_owner}
+         WHERE id = #{id}
+    </update>
+    
+    <update id="updateReservationStatus" parameterType="ReservationDetail">
+        UPDATE reservations
+           SET status = #{status.id}, 
+               update_date = now()::timestamp(0), 
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+    </update>
+    
+    <insert id="insertReservationRoom" parameterType="ReservationRoom">
+        <selectKey order="BEFORE" resultType="long" keyProperty="id">
+            SELECT NEXTVAL('reservationrooms_id_seq')
+        </selectKey>
+        INSERT INTO reservationrooms(id, 
+                                     roomtypes_id, 
+                                     <if test="room != null">rooms_id,</if> 
+                                     initiator_user_id, 
+                                     reservations_id, 
+                                     previously_rooms_id,
+                                     non_smokers,
+                                     city_view,
+                                     extra_bed_needed,
+                                     adults_count,
+                                     children_count,
+                                     meal_options,
+                                     custom_rate,
+                                     rate,
+                                     extra_bed_cost,
+                                     meal_cost,
+                                     early_check_in_cost,
+                                     late_check_out_cost)
+        VALUES (#{id}, 
+                #{roomtype.id}, 
+                <if test="room != null">#{room.id},</if> 
+                #{initiator_user_id}, 
+                #{reservations_id}, 
+                #{previously_rooms_id},
+                #{non_smokers},
+                #{city_view},
+                #{extra_bed_needed},
+                #{adults_count},
+                #{children_count},
+                #{meal_options}, 
+	            #{custom_rate},
+	            #{rate},
+	            #{extra_bed_cost},
+	            #{meal_cost},
+	            #{early_check_in_cost},
+	            #{late_check_out_cost})
+    </insert>
+    
+    <select id="selectRoomCountReserveRoom" parameterType="ReservationRoom" resultType="short">
+        SELECT COUNT(*)
+          FROM reservationrooms 
+         WHERE reservations_id = #{reservations_id}
+           AND roomtypes_id = #{roomtype.id} 
+    </select>
+    
+    <update id="updateReservationRoom" parameterType="ReservationRoom">
+        UPDATE reservationrooms
+           SET roomtypes_id = #{roomtype.id}, 
+           <if test="room != null">
+               rooms_id = #{room.id},
+           </if>    
+        	   update_date = now()::timestamp(0),
+               non_smokers = #{non_smokers},
+               city_view = #{city_view},
+               extra_bed_needed = #{extra_bed_needed},
+               adults_count = #{adults_count},
+               children_count = #{children_count},
+               meal_options = #{meal_options}, 
+	           custom_rate = #{custom_rate},
+	           rate = #{rate},
+	           extra_bed_cost = #{extra_bed_cost},
+	           meal_cost = #{meal_cost},
+	           early_check_in_cost = #{early_check_in_cost},
+	           late_check_out_cost = #{late_check_out_cost},
+        	   initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}	   
+    </update>
+    
+    <update id="updateReserveRoomById" parameterType="ReservationRoom">
+        UPDATE reservationrooms
+           SET rooms_id = #{room.id},
+        	   update_date = now()::timestamp(0),
+        	   initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteReservationRoomById" parameterType="long">
+        DELETE FROM reservationrooms WHERE id = #{value}
+    </delete>
+    
+    <update id="updateReserveRoom" parameterType="ReservationRoom">
+        UPDATE reservationrooms
+           SET rooms_id = #{room.id},
+        	   update_date = now()::timestamp(0),
+        	   initiator_user_id = #{initiator_user_id}
+         WHERE reservations_id = #{reservations_id}
+           AND roomtypes_id = #{roomtype.id}	   
+    </update>
+    
+    <update id="updateCurrentReserveDetail" parameterType="ReservationDetail">
+        UPDATE reservations
+           SET meal_options = #{meal_options},
+               rateplanes_id = #{rateplane.id},
+        	   update_date = now()::timestamp(0),
+        	   rate = #{rate},
+        	   extra_bed = #{extra_bed},
+        	   initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}	   
+    </update>
+    
+    <update id="updateReservationRoomClosed" parameterType="ReservationRoom">
+        UPDATE reservationrooms
+           SET reservation_to = now()::date,
+        	   update_date = now()::timestamp(0),
+        	   initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}	   
+    </update>
+    
+    <select id="selectIndividualReservationRoomId" parameterType="IndividualReservation" resultType="long">
+        SELECT id
+          FROM reservationrooms
+         WHERE reservations_id = #{id}
+    </select>
+    
+    <insert id="insertGuest" parameterType="Guest">
+        <selectKey order="BEFORE" resultType="long" keyProperty="id">
+             SELECT NEXTVAL('guests_id_seq')
+        </selectKey>
+       INSERT INTO guests(id, reservations_id, reservationrooms_id, person_title, first_name, last_name, gender, nationality, 
+            			   passport_number, passport_date_of_issue, passport_issue_place, 
+            			   addresses_id, company, purpose_of_arrival, relationship, guest_index, 
+            			   visa_type, visa_number, visa_valid_from, visa_valid_to, source_of_reservation,
+            			   create_date, update_date, date_and_place_of_birth, email, occupation, initiator_user_id
+            			   <if test="additionalservicedetails_id != null">, additionalservicedetails_id </if>)
+       VALUES (#{id}, #{reservations_id}, #{reservationrooms_id}, #{person_title.title}, #{first_name}, #{last_name}, #{gender.id}, #{nationality.code}, 
+               #{passport_number}, #{passport_date_of_issue}, #{passport_issue_place}, 
+               #{guest_address.id}, #{company}, #{purpose_of_arrival}, #{relationship}, #{guest_index},
+               #{visa_type}, #{visa_number}, #{visa_valid_from}, #{visa_valid_to}, #{source_of_reservation}, 
+               now(), now(), #{date_and_place_of_birth}, #{email}, #{occupation}, #{initiator_user_id}
+               <if test="additionalservicedetails_id != null">, #{additionalservicedetails_id} </if>)
+    </insert>
+    
+   	<select id="deleteGuestByReserveRoom" parameterType="long">
+   		DELETE FROM guests WHERE reservationrooms_id = #{id}
+   	</select>
+    
+    
+    
+    <update id="updateGuest" parameterType="Guest">
+        UPDATE guests
+           SET person_title = #{person_title.title}, 
+               first_name = #{first_name},
+           	   last_name = #{last_name},
+           	   nationality = #{nationality.code}, 
+           	  <if test="gender != null">
+               gender = #{gender.id}, 
+           	  </if>  
+           	  <if test="passport_number != null">
+               	passport_number = #{passport_number}, 
+           	  </if>
+           	  <if test="passport_date_of_issue != null">
+               passport_date_of_issue = #{passport_date_of_issue}, 
+           	  </if>
+           	  <if test="passport_issue_place != null">
+               passport_issue_place = #{passport_issue_place},
+           	  </if>
+              <if test="company != null">
+       		   company = #{company}, 
+              </if>
+              <if test="email != null">
+       		   email = #{email}, 
+              </if>
+              <if test="purpose_of_arrival != null">
+       		   purpose_of_arrival = #{purpose_of_arrival}, 
+              </if>  
+			  <if test="relationship != null">
+       		   relationship = #{relationship}, 
+              </if>
+              <if test="visa_type != null">
+	           visa_type = #{visa_type}, 
+              </if>
+              <if test="visa_number != null">
+               visa_number = #{visa_number}, 
+              </if>
+              <if test="visa_valid_from != null">
+               visa_valid_from = #{visa_valid_from}, 
+              </if>
+              <if test="visa_valid_to != null">
+               visa_valid_to = #{visa_valid_from},
+              </if>
+              <if test="source_of_reservation != null">
+               source_of_reservation = #{source_of_reservation},
+              </if>
+              <if test="occupation != null">
+               occupation = #{occupation},
+              </if>              
+               update_date = now()::timestamp(0), 
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id} 
+    </update>
+    
+    <delete id="deleteGuestById" parameterType="long">
+        DELETE FROM guests WHERE id = #{id}
+    </delete>
+	    
+    <select id="selectGuestsList" parameterType="long" resultType="Guest">
+        SELECT g.id, 
+        	   g.reservations_id, 
+        	   g.reservationrooms_id,
+        	   rr.roomtypes_id AS "roomtype.id",
+        	   rr.roomtypes_id AS roomtypes_id,
+        	   rr.rooms_id AS "room.id",
+        	   rr.rooms_id AS rooms_id,
+         	   g.person_title, 
+         	   g.first_name, 
+         	   g.last_name, 
+         	   g.gender AS "gender.id", 
+         	   g.nationality AS "nationality.code", 
+         	   (SELECT c1.name FROM countries c1 WHERE c1.code = g.nationality) AS "nationality.name",
+   			   g.passport_number, 
+   			   g.passport_date_of_issue, 
+   			   g.passport_issue_place, 
+   			   g.company, 
+   			   g.purpose_of_arrival, 
+   			   g.relationship, 
+   			   g.guest_index, 
+   			   g.create_date, 
+   			   g.update_date, 
+   			   g.initiator_user_id, 
+   			   g.email,
+   			   a.address, 
+   			   ct.name AS "city.name", 
+   			   ct.id AS "city.id", 
+   			   r.name AS "region.name",
+   			   r.id AS "region.id",
+   			   c.name AS "country.name", 
+   			   c.id AS "country.id",
+   			   g.date_and_place_of_birth, 
+   			   g.addresses_id AS address_id,
+   			   g.visa_type, 
+   			   g.visa_number, 
+   			   g.visa_valid_from, 
+   			   g.visa_valid_to, 
+   			   g.source_of_reservation,
+   			   g.occupation
+   		  FROM guests g LEFT JOIN reservationrooms rr ON g.reservationrooms_id = rr.id
+   		                LEFT JOIN addresses a ON g.addresses_id = a.id
+   		                LEFT JOIN regions r ON a.regions_id = r.id
+	           LEFT JOIN countries c ON a.countries_id = c.id
+	           LEFT JOIN cities ct ON a.cities_id = ct.id
+   		 WHERE g.reservations_id = #{reservations_id}
+   		 ORDER BY rr.id, g.guest_index
+    </select>
+    
+    <select id="selectGuestsList2" parameterType="long" resultType="Guest">
+        SELECT g.id, 
+        	   g.reservations_id, 
+        	   g.reservationrooms_id,
+        	   rr.roomtypes_id AS "roomtype.id",
+        	   rr.roomtypes_id AS roomtypes_id,
+        	   rr.rooms_id AS "room.id",
+        	   rr.rooms_id AS rooms_id,
+         	   g.person_title AS "person_title.title", 
+         	   g.first_name, 
+         	   g.last_name, 
+         	   g.gender AS "gender.id", 
+         	   g.nationality AS "nationality.code", 
+         	   (SELECT c1.name FROM countries c1 WHERE c1.code = g.nationality) AS "nationality.name",
+   			   g.passport_number, 
+   			   g.passport_date_of_issue, 
+   			   g.passport_issue_place, 
+   			   g.company, 
+   			   g.purpose_of_arrival, 
+   			   g.relationship, 
+   			   g.guest_index, 
+   			   g.create_date, 
+   			   g.update_date, 
+   			   g.initiator_user_id, 
+   			   g.email,
+   			   a.address, 
+   			   ct.name AS "city.name", 
+   			   ct.id AS "city.id", 
+   			   r.name AS "region.name",
+   			   r.id AS "region.id",
+   			   c.name AS "country.name", 
+   			   c.id AS "country.id",
+   			   g.date_and_place_of_birth, 
+   			   g.addresses_id AS address_id,
+   			   g.visa_type, 
+   			   g.visa_number, 
+   			   g.visa_valid_from, 
+   			   g.visa_valid_to, 
+   			   g.source_of_reservation,
+   			   g.occupation
+   		  FROM guests g LEFT JOIN reservationrooms rr ON g.reservationrooms_id = rr.id
+   		                LEFT JOIN addresses a ON g.addresses_id = a.id
+   		                LEFT JOIN regions r ON a.regions_id = r.id
+	           LEFT JOIN countries c ON a.countries_id = c.id
+	           LEFT JOIN cities ct ON a.cities_id = ct.id
+   		 WHERE g.reservationrooms_id = #{value}
+   		 ORDER BY rr.id, g.guest_index
+    </select>
+    
+    <insert id="insertChild" parameterType="Child">
+        <selectKey order="BEFORE" resultType="long" keyProperty="id">
+             SELECT NEXTVAL('children_id_seq')
+        </selectKey>
+        INSERT INTO children(id, reservations_id, name, date_of_birth, child_index, age)
+        VALUES (#{id}, #{reservations_id}, #{name}, #{date_of_birth}, #{child_index}, date_part('year', age(current_date, #{date_of_birth})))
+   	</insert>
+    
+   	<update id="updateChild" parameterType="Child">
+        UPDATE children
+           SET name = #{name},
+               age = date_part('year', age(current_date, #{date_of_birth})),
+               date_of_birth = #{date_of_birth}
+         WHERE id = #{id}      
+   	</update>
+   	
+   	<select id="selectChildrenList" parameterType="long" resultType="Child">
+        SELECT id, reservations_id, name, date_of_birth
+   		  FROM children
+   		 WHERE reservations_id = #{reservations_id}  	   
+   	</select>
+    
+   	<update id="updateReservationChangeStatus" parameterType="map">
+        UPDATE reservations
+           SET status = #{new_status},
+           <if test="new_status == 1">
+               check_in = now()::timestamp(0),
+           </if>
+           <if test="new_status == 3">
+               check_out = now()::timestamp(0),
+           </if>
+               update_date = now()::timestamp(0),
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+           AND status = #{old_status}     
+   	</update>
+    
+   	<update id="updateReserveCheckOut" parameterType="ReservationDetail">
+        UPDATE reservations
+           SET check_out = now()::timestamp(0),
+               update_date = now()::timestamp(0),
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+   	</update>
+    
+   	<update id="updateReservationChangeStatusClosed" parameterType="map">
+        UPDATE reservations
+           SET status = 3,
+               total = #{total},
+               update_date = now()::timestamp(0),
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+           AND status = 1     
+   	</update>
+    
+   	<update id="updateReservationChangeOnSaleState" parameterType="map">
+        UPDATE rooms
+           SET onsale_state = #{new_state},
+           	   update_date = now()::timestamp(0),
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+         <if test="old_state != null">
+           AND onsale_state = #{old_state}  
+         </if>
+                
+   	</update>
+    
+   	<select id="selectRoomIdByReservationRoomId" parameterType="long" resultType="long">
+        SELECT r.id
+          FROM rooms r, reservationrooms rr
+         WHERE r.id = rr.rooms_id
+           AND rr.id = #{id}  
+   	</select>
+    
+   	<select id="selectRegisteredGuestList" parameterType="map" resultType="ReservationDetail">
+        SELECT r.id, 
+			   r.group_name, 
+			   g.first_name AS "main_guest.first_name", 
+			   g.last_name  AS "main_guest.last_name",
+			   g.person_title AS "main_guest.person_title.title",
+			   g.nationality AS "main_guest.nationality.code",
+               (SELECT string_agg(rt.name, ';')
+                  FROM roomtypes rt, reservationrooms rr 
+                 WHERE rr.roomtypes_id = rt.id
+                   AND rr.reservations_id = r.id) as room_type,
+               (SELECT string_agg(rt.room_number,';') 
+                  FROM rooms rt, reservationrooms rr 
+                 WHERE rr.rooms_id = rt.id
+                   AND rr.reservations_id = r.id) as room_number,
+               (SELECT COUNT(*) FROM guests g WHERE g.reservations_id = r.id) AS guest_count,
+               r.hotelsusers_id AS hotelsusers_id,
+               r.check_in,
+               r.check_out,
+               r.total,
+               r.adults,
+               r.children,
+               r.reservation_type,
+               r.status AS "status.id",
+               r.rateplanes_id AS "rateplane.id",
+               r.touragentsusers_id AS "tour_agent.users_id",
+               ta.display_name AS "tour_agent.name",
+               r.reception_comments, 
+               r.guest_comments, 
+               get_check_out_in(r.check_out) AS check_out_in,
+               r.auto_cancel_time, 
+               r.is_group
+          FROM reservations r LEFT JOIN hotelsreservationrules hrr ON r.hotelsusers_id = hrr.hotelsusers_id AND hrr.is_group = r.is_group
+                              LEFT JOIN guests g ON g.reservations_id = r.id, touragents ta
+         WHERE r.hotelsusers_id = #{hotelsusers_id}
+           AND r.is_group = #{is_group}
+           AND r.status = 1
+           AND g.guest_index = 1
+           AND r.touragentsusers_id = ta.users_id
+           AND EXISTS (SELECT * FROM guests g WHERE g.reservations_id = r.id)
+        <if test="group_name != null">
+           AND LOWER(r.group_name) LIKE '%'||LOWER(#{group_name})||'%' 
+        </if>    
+        <if test="last_name != null">
+           AND LOWER(g.last_name) LIKE '%'||LOWER(#{last_name})||'%' 
+        </if>    
+        <if test="first_name != null">
+           AND LOWER(g.first_name) LIKE '%'||LOWER(#{first_name})||'%' 
+        </if>    
+        <if test="check_in != null">
+           AND r.check_in = #{check_in}::date 
+        </if>    
+        <if test="check_out != null">
+           AND r.check_out = #{check_out}::date 
+        </if>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+    </select>
+    
+   	<select id="selectRegisteredGuestListCount" parameterType="map" resultType="long">
+        SELECT COUNT(*)
+          FROM reservations r LEFT JOIN guests g ON g.reservations_id = r.id 
+         WHERE r.hotelsusers_id = #{hotelsusers_id}
+           AND r.is_group = #{is_group}
+           AND r.status = 1
+           AND g.guest_index = 1
+           AND EXISTS (SELECT * FROM guests g WHERE g.reservations_id = r.id)
+        <if test="group_name != null">
+           AND LOWER(r.group_name) LIKE '%'||LOWER(#{group_name})||'%' 
+        </if>    
+        <if test="last_name != null">
+           AND LOWER(g.last_name) LIKE '%'||LOWER(#{last_name})||'%' 
+        </if>    
+        <if test="first_name != null">
+           AND LOWER(g.first_name) LIKE '%'||LOWER(#{first_name})||'%' 
+        </if>    
+        <if test="check_in != null">
+           AND r.check_in = #{check_in}::date 
+        </if>    
+        <if test="check_out != null">
+           AND r.check_out = #{check_out}::date 
+        </if>
+    </select>
+<!--     
+   	<select id="selectPendingReservationList" parameterType="map" resultType="ReservationDetail">
+       SELECT r.id, 
+       		  r.hotelsusers_id, 
+       		  r.group_name, 
+			  g.first_name AS "main_guest.first_name", 
+			  g.last_name  AS "main_guest.last_name",
+			  g.person_title AS "main_guest.person_title.title",
+		      g.nationality AS "main_guest.nationality.code",
+              ta.display_name AS "tour_agent.name",
+              r.touragentsusers_id AS "tour_agent.users_id",
+			  (SELECT string_agg(DISTINCT(rt.name),'; ') 
+                 FROM reservationrooms rr, roomtypes rt 
+                WHERE rr.reservations_id = r.id
+                  AND rr.roomtypes_id = rt.id) AS room_type,              
+              r.create_date, 
+              r.guest_comments AS guest_comments,
+              r.check_in, 
+              r.check_out,  
+              r.reservation_type, 
+              r.is_group, 
+              r.status AS "status.id", 
+              r.total,
+              r.payment_owner,
+              rateplanes_id AS "rateplanes.id"
+         FROM reservations r LEFT JOIN guests g ON g.reservations_id = r.id, 
+              touragents ta
+        WHERE r.touragentsusers_id = ta.users_id
+          AND g.id = (SELECT MIN(g2.id) FROM guests g2 WHERE g2.guest_index = 1 AND g2.reservations_id = g.reservations_id)
+        <if test="hotelsusers_id != null">
+          AND r.hotelsusers_id = #{hotelsusers_id}
+        </if>
+        <if test="reservation_status == null">
+          AND r.status IN (0, 1, 2, 3, 4) 
+        </if>
+        <if test="reservation_status != null">
+          AND r.status = #{reservation_status.id} 
+        </if>
+        <if test="tour_agent != null">
+          AND LOWER(ta.name) LIKE '%'||LOWER(#{tour_agent})||'%'
+        </if>  
+        <if test="group_name != null">
+          AND LOWER(r.group_name) LIKE '%'||LOWER(#{group_name})||'%'
+        </if>  
+        <if test="first_name != null">
+          AND LOWER(g.first_name) LIKE '%'||LOWER(#{first_name})||'%'
+        </if>  
+        <if test="last_name != null">
+          AND LOWER(g.last_name) LIKE '%'||LOWER(#{last_name})||'%'
+        </if>  
+        <if test="date_from != null">
+          AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+        </if>    
+        <if test="date_to != null">
+          AND r.check_in::date <![CDATA[<=]]>  #{date_to}::date 
+        </if>
+        <if test="check_in_equal != null">
+          AND r.check_in::date = #{check_in_equal}::date 
+        </if>    
+        <if test="check_out_equal != null">
+          AND r.check_out::date =  #{check_out_equal}::date 
+        </if>
+        <if test="reservation_type != null">
+          AND r.reservation_type = #{reservation_type.id} 
+        </if>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+	</select>
+   
+   	<select id="selectPendingReservationListCount" parameterType="map" resultType="long">
+       SELECT COUNT(*)
+         FROM reservations r LEFT JOIN guests g ON g.reservations_id = r.id, touragents ta
+        WHERE r.touragentsusers_id = ta.users_id
+          AND g.id = (SELECT MIN(g2.id) FROM guests g2 WHERE g2.guest_index = 1 AND g2.reservations_id = g.reservations_id)
+        <if test="hotelsusers_id != null">
+          AND r.hotelsusers_id = #{hotelsusers_id}
+        </if>
+        <if test="reservation_status == null">
+          AND r.status IN (0, 1, 2, 3, 4) 
+        </if>
+        <if test="reservation_status != null">
+          AND r.status = #{reservation_status.id} 
+        </if>
+        <if test="tour_agent != null">
+          AND LOWER(ta.name) LIKE '%'||LOWER(#{tour_agent})||'%'
+        </if>  
+        <if test="group_name != null">
+          AND LOWER(r.group_name) LIKE '%'||LOWER(#{group_name})||'%'
+        </if>  
+        <if test="first_name != null">
+          AND LOWER(g.first_name) LIKE '%'||LOWER(#{first_name})||'%'
+        </if>  
+        <if test="last_name != null">
+          AND LOWER(g.last_name) LIKE '%'||LOWER(#{last_name})||'%'
+        </if>  
+        <if test="date_from != null">
+          AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+        </if>    
+        <if test="date_to != null">
+          AND r.check_in::date <![CDATA[<=]]> #{date_to}::date 
+        </if>
+        <if test="reservation_type != null">
+          AND r.reservation_type = #{reservation_type.id} 
+        </if>
+   	</select>
+ -->   
+   	<select id="selectCurrentReserveDetails" parameterType="long" resultType="ReservationDetail">
+       SELECT rv.id,
+              r.room_number AS room_number,
+              rv.meal_options,
+              rv.adults,
+              rv.children,
+              rv.check_in,
+              rv.check_out,
+              CASE WHEN COALESCE(rv.extra_bed,0) > 0 THEN true ELSE false END AS "additional_bed.id",
+              rv.rate,
+              rv.first_name,
+              rv.last_name,
+              r.holding_capacity AS "room.holding_capacity.id",
+              r.hotelsusers_id AS hotelsusers_id,
+              rv.rateplanes_id AS "rateplane.id" 
+         FROM reservationrooms rr JOIN rooms r ON rr.rooms_id = r.id, reservations rv 
+        WHERE rr.reservations_id = rv.id
+          AND rv.id = #{id}
+   	</select>
+   
+   	<select id="selectReservationRoomByReservId" parameterType="int" resultType="ReservationRoom">
+       SELECT rr.* 
+         FROM reservationrooms rr 
+        WHERE rr.reservations_id = #{id}
+   	</select>
+   
+   	<select id="selectReservationTourAgent" resultType="TourAgent">
+       SELECT ta.users_id, u.name
+         FROM touragents ta, users u
+        WHERE ta.users_id = u.id
+          AND u.id > 0
+          AND u.status = 1 
+   	</select>
+   
+   	<select id="selectCountAvailableRoomsForReport" parameterType="map" resultType="int">
+       <if test="type == -1">
+           	SELECT COALESCE(get_available_room_count(#{roomtypes_id}, null, date_trunc('day',#{date}::date::timestamp), date_trunc('day',#{date}::date::timestamp), false), 0)
+       </if>
+       <if test="type == 1">
+			SELECT COALESCE(get_available_room_count(#{roomtypes_id}, null, get_end_of_day(#{date}::date::timestamp), get_end_of_day(#{date}::date::timestamp), false), 0)	
+       </if>
+    </select>
+   
+   	<select id="selectRoomIsClosed" parameterType="map" resultType="short">
+       SELECT COUNT(*)
+	     FROM rooms r
+	    WHERE r.hotelsusers_id = #{hotelsusers_id}
+	      AND r.roomtypes_id = #{roomtypes_id}
+	      AND r.onsale_state = 0
+   	</select>
+   
+   	<select id="selectCheckOutIn" parameterType="java.util.Date" resultType="string">
+       SELECT get_check_out_in(#{date}::date)
+   	</select>
+   
+	<select id="selectReservationRoomTypesByHotel" parameterType="map" resultType="RoomType">
+	    SELECT rt.id, 
+	    	   rt.name, 
+	    	   hrt.number_of_rooms
+	      FROM roomtypes rt 
+	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
+	     WHERE hrt.hotelsusers_id = #{hotelsusers_id}
+           AND NOT EXISTS (SELECT * 
+		                      FROM reservationrooms rr JOIN reservations rv ON rr.reservations_id = rv.id
+					         WHERE ((#{check_in}::timestamp,#{check_out}::timestamp) OVERLAPS (rv.check_in,rv.check_out))
+					           AND rv.hotelsusers_id = hrt.hotelsusers_id 
+					        <if test="roomtypes_id != null">
+					           AND rr.roomtypes_id != #{roomtypes_id}
+					        </if>
+					        <if test="roomtypes_id == null">
+					           AND rr.roomtypes_id = rt.id
+					        </if>)
+	     <if test="reservations_id != null">
+	       AND EXISTS (SELECT * FROM reservationrooms rr WHERE rr.roomtypes_id = rt.id AND rr.reservations_id = #{reservations_id})  
+	     </if> 
+	</select> 
+	
+	<select id="selectReserveRoomTypesByHotel" parameterType="map" resultType="RoomType">
+	    SELECT rt.id, 
+	    	   rt.name, 
+	    	   hrt.number_of_rooms
+	      FROM roomtypes rt 
+	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
+	     WHERE hrt.hotelsusers_id = #{hotelsusers_id}
+	       AND 
+           AND NOT EXISTS (SELECT * 
+		                      FROM reservationrooms rr JOIN reservations rv ON rr.reservations_id = rv.id
+					         WHERE ((#{check_in}::timestamp,#{check_out}::timestamp) OVERLAPS (rv.check_in,rv.check_out))
+					           AND rv.hotelsusers_id = hrt.hotelsusers_id 
+					        <if test="roomtypes_id != null">
+					           AND rr.roomtypes_id != #{roomtypes_id}
+					        </if>
+					        <if test="roomtypes_id == null">
+					           AND rr.roomtypes_id = rt.id
+					        </if>)
+	     <if test="reservations_id != null">
+	       AND EXISTS (SELECT * FROM reservationrooms rr WHERE rr.roomtypes_id = rt.id AND rr.reservations_id = #{reservations_id})  
+	     </if> 
+	</select> 
+	
+	<select id="selectReservationMealOption" parameterType="map" resultType="bigdecimal">
+	    SELECT SUM(COALESCE(mo.cost_per_person_per_night,0)) AS cost
+	      FROM mealoptions mo
+	     WHERE hotelsusers_id = #{hotelsusers_id}
+	     <if test="meal_type == 0">
+		      AND meal_type = #{meal_type} 
+	     </if>
+	     <if test="meal_type == 1">
+	         AND meal_type IN (0,1)
+	     </if> 
+	     <if test="meal_type == 2">
+	         AND meal_type IN (0,2)
+	     </if> 
+	     <if test="meal_type == 3">
+	         AND meal_type IN (0,1,2)
+	     </if> 
+		 AND included_to_room_rate = false   
+	</select>
+	
+	<select id="selectReservationDetailsById" parameterType="long" resultType="ReservationDetail">
+	   SELECT r.room_number AS "room.room_number",
+              rt.id AS "roomtype.id",
+              rt.name AS "roomtype.name",
+              r.id AS "room.id",
+              COALESCE(rv.meal_options,-1) AS meal_options,
+              rv.adults,
+              rv.children,
+              rv.extra_bed,
+              CASE WHEN COALESCE(rv.extra_bed,0) > 0 THEN true ELSE false END AS "additional_bed.id",
+              rv.rate,
+              rv.first_name, 
+              rv.last_name,
+              rv.reservation_type,
+              rv.check_in,
+              rv.check_out,
+              rv.total,
+              ta.name as "tour_agent.name",
+              rv.reception_comments,
+              rv.auto_cancel_time
+         FROM reservationrooms rr LEFT JOIN rooms r ON r.id = rr.rooms_id, 
+              roomtypes rt, reservations rv JOIN users ta ON rv.touragentsusers_id = ta.id 
+        WHERE rv.id = #{id}
+          AND rr.reservations_id = rv.id
+          AND rt.id = rr.roomtypes_id 
+	</select>
+	
+	<select id="selectReserveDetailsById" parameterType="long" resultType="ReservationDetail">
+	   SELECT (SELECT string_agg(rt.name,';') 
+                 FROM roomtypes rt, reservationrooms rr 
+                WHERE rr.roomtypes_id = rt.id
+                  AND rr.reservations_id = r.id
+              ) AS room_type,
+              (SELECT string_agg(rt.room_number,';') 
+                 FROM rooms rt, reservationrooms rr 
+                WHERE rr.rooms_id = rt.id
+                  AND rr.reservations_id = r.id
+              ) AS "room.room_number",
+              r.adults,
+              r.children,
+              r.group_name, 
+              g.first_name AS "main_guest.first_name", 
+              g.last_name AS "main_guest.last_name",
+              r.reservation_type,
+              r.check_in,
+              r.check_out,
+              r.total,
+              ta.name AS "tour_agent.name",
+              r.reception_comments,
+              r.auto_cancel_time,
+              r.status AS "status.id"
+         FROM reservations r LEFT JOIN guests g ON g.reservations_id = r.id
+              JOIN users ta ON r.touragentsusers_id = ta.id 
+        WHERE r.id = #{id}
+          AND g.guest_index = 1
+        LIMIT 1
+	</select>
+	
+	<select id="selectTourAgentDetailsById" parameterType="long" resultType="TourAgent">
+	    SELECT u.name,
+	           m.first_name AS "managers.first_name", 
+	           m.middle_name AS "managers.middle_name", 
+	           m.last_name AS "managers.last_name",
+	           m.contact_number AS "managers.contact_number",
+	           m.contact_email AS "managers.contact_email",
+	           ta.primary_phone,
+	           ad.address AS "addresses.address"
+	      FROM touragents ta LEFT JOIN addresses ad ON ad.id = ta.addresses_id, managers m, users u
+	     WHERE ta.users_id = #{tour_agent}
+	       AND m.users_id = ta.users_id
+	       AND u.id = m.users_id
+	</select>
+	
+	<select id="selectGuestCount" parameterType="long" resultType="short">
+	    SELECT COUNT(*)
+	      FROM guests g
+	     WHERE g.reservations_id = #{reservations_id} 
+	</select>
+	
+	<select id="selectAdultCount" parameterType="long" resultType="short">
+	    SELECT r.adults
+	      FROM reservations r
+	     WHERE r.id = #{reservations_id} 
+	</select>
+	
+	<select id="selectChildCount" parameterType="long" resultType="short">
+	    SELECT COALESCE(r.children, 0) as childs
+	      FROM reservations r
+	     WHERE r.id = #{reservations_id} 
+	</select>
+	
+	<select id="selectChildrenCount" parameterType="long" resultType="short">
+	    SELECT COUNT(*)
+	      FROM children c
+	     WHERE c.reservations_id = #{reservations_id} 
+	</select>
+	
+	<select id="selectReservationStatusById" parameterType="long" resultType="byte">
+	    SELECT status
+	      FROM reservations
+	     WHERE id = #{id} 
+	</select>
+	
+	<select id="selectReservetionsIdToCancel" resultType="long">
+	    SELECT r.id
+	      FROM reservations r, hotels h
+	     WHERE r.status = 0
+	       AND r.hotelsusers_id = h.users_id
+	       AND r.auto_cancel_time is not null 
+	       AND to_timestamp(to_char(r.check_in,'dd.mm.yyyy')||' '||r.auto_cancel_time,'dd.mm.yyyy hh24:mi') > now()::timestamp(0)
+	</select>
+	
+	<select id="selectRoomIdByPendingReserveId" parameterType="long" resultType="long">
+	    SELECT rr.rooms_id
+	      FROM reservationrooms rr
+	     WHERE rr.reservations_id = #{id}
+	       AND rr.rooms_id IS NOT NULL
+	       AND EXISTS (SELECT *
+	                     FROM reservations r
+	                    WHERE r.id = rr.reservations_id
+	                      AND r.status = 0) 
+	</select>
+	
+	<select id="selectTotalAvailableRooms" parameterType="ReservationDetail" resultType="short">
+	    SELECT get_available_room_count(#{roomtype.id}, #{check_in}::date, false)
+	</select>
+	
+	<select id="selectReservationLogs" parameterType="long" resultType="ReservationLog">
+	    SELECT rl.create_date, rl.description, u.name AS author
+	      FROM reservationlogs rl, users u
+	     WHERE rl.initiator_user_id = u.id
+	       AND rl.reservations_id = #{value} 
+	</select>
+	
+	<select id="selectRoomAvailibilityReport" parameterType="map" resultType="RoomAvailability">
+	    SELECT t0.max_rooms,
+	    	   t1.under_repair, 
+	    	   t1.closed,
+	    	   t1.available, 
+	           t2.definitive, 
+	           t2.tentative,
+	           t3.adults, 
+	           t3.children,
+	           t4.guests_arrive,
+	           t5.guests_leave
+	      FROM (SELECT SUM(number_of_rooms) AS max_rooms
+	              FROM hotelsroomtypes r
+	             WHERE r.hotelsusers_id = #{hotelsusers_id}) AS t0,
+	           (SELECT COALESCE(SUM(CASE r.onsale_state WHEN 9 THEN 1 ELSE 0 END), 0) AS under_repair,
+	      			   COALESCE(SUM(CASE r.onsale_state WHEN 0 THEN 1 ELSE 0 END), 0) AS closed,
+	                   COALESCE(SUM(CASE r.onsale_state WHEN 1 THEN 1 ELSE 0 END), 0) AS available
+	              FROM rooms r
+	             WHERE r.hotelsusers_id = #{hotelsusers_id}) AS t1,
+	            (SELECT COALESCE(SUM(CASE r.reservation_type WHEN 1 THEN 1 ELSE 0 END), 0) AS definitive,
+	                    COALESCE(SUM(CASE r.reservation_type WHEN 2 THEN 1 ELSE 0 END), 0) AS tentative
+	               FROM reservations r
+	              WHERE r.hotelsusers_id = #{hotelsusers_id}
+	                AND ((DATE_TRUNC('day', #{date}::date::timestamp), GET_END_OF_DAY(#{date}::date::timestamp)) OVERLAPS (r.check_in::timestamp,r.check_out::timestamp))
+	                AND r.status = 1
+	            ) AS t2,
+	            (SELECT COALESCE(SUM(r.adults), 0) AS adults,
+	                    COALESCE(SUM(r.children), 0) AS children
+	               FROM reservations r
+	              WHERE r.hotelsusers_id = #{hotelsusers_id}
+	                AND ((DATE_TRUNC('day', #{date}::date::timestamp), GET_END_OF_DAY(#{date}::date::timestamp)) OVERLAPS (r.check_in::timestamp,r.check_out::timestamp))
+	                AND r.status = 1
+	            ) AS t3,
+	            (SELECT COALESCE(SUM(r.adults), 0) AS guests_arrive 
+	               FROM reservations r
+	              WHERE r.hotelsusers_id = #{hotelsusers_id}
+	                AND r.check_in::date = #{date}::date::date
+	                AND r.status = 0
+	            ) AS t4,
+	            (SELECT COALESCE(SUM(r.adults), 0) AS guests_leave 
+	               FROM reservations r
+	              WHERE r.hotelsusers_id = #{hotelsusers_id}
+	                AND r.check_out::date = #{date}::date::date
+	                AND r.status = 1
+	            ) AS t5
+	</select>
+	
+	<select id="selectTentativeReserveListWarn" resultType="ReservationDetail">
+	    SELECT r.id, ta.users_id AS "touragent.id", 
+	           r.hotelsusers_id AS hotelsusers_id
+	      FROM reservations r, reservationrules rr, reservationcancellationpolicy rcp,
+	           touragents ta
+	     WHERE r.hotelsusers_id = rr.hotelsusers_id
+	       AND rr.reservationcancellationpolicy_id = rcp.id
+	       AND r.is_group = rr.is_group
+	       AND rcp.support_tentative_reservation = true
+	       AND (r.check_in::date - now()::date) <![CDATA[<=]]> notify_ta_before_days::smallint
+	       AND r.status = 0 
+	       AND r.touragentsusers_id = ta.id
+	       AND r.warned = false
+	</select>
+	
+	<update id="updateTentativeWarn" parameterType="long">
+	    UPDATE reservations
+	       SET warned = true
+	     WHERE id = #{id}  
+	</update>
+	
+	<select id="selectReserveRoomIdByParam" parameterType="ReservationRoom" resultType="long">
+	    SELECT id
+	      FROM reservationrooms
+	     WHERE reservations_id = #{reservations_id}
+	       AND roomtypes_id = #{roomtype.id}
+	     <if test="room != null">
+	       AND rooms_id = #{room.id}    
+	     </if>  
+	     <if test="room == null">
+	       AND rooms_id IS NULL    
+	      </if>  
+	</select>
+	
+	<select id="selectRoomIdByReserveId" parameterType="long" resultType="int">
+	    SELECT rooms_id
+	      FROM reservationrooms 
+	     WHERE reservations_id = #{value} 
+	</select>
+	
+	<select id="selectPreviouslyRoomId" parameterType="PreviouslyRoom" resultType="long">
+	    SELECT get_previously_room_id(#{roomtypes_id}, #{check_in}, #{check_out}, #{guests}::smallint)
+	</select>
+	
+	<select id="selectIsHotelUser" resultType="boolean" parameterType="long">
+	    SELECT CASE COUNT(*) WHEN 0 THEN false ELSE true END  
+	      FROM users u
+	     WHERE u.id = #{value}
+	       AND u.type = 2 
+	</select>
+	
+	<select id="selectVisaTypeList" resultType="string">
+	    SELECT name
+	      FROM visatypes
+	</select>
+	
+	<select id="selectReservationRatePlaneList" resultType="RatePlane" parameterType="map">
+	    SELECT * from get_rate_plane_list(#{check_in}, #{isTA}, #{roomtypes_id})
+	</select>
+	
+	<select id="selectCurrentRatePlane" resultType="RateDetails" parameterType="map">
+	    SELECT r.id AS rateplane_id, rd.rate, rd.rate_uz
+	      FROM rateplaneseasons rs, rateplanedetails rd, rateplanes r
+	     WHERE r.hotelsusers_id = #{hotelsusers_id}
+	       AND r.internal = true
+  	       AND rs.rateplanes_id = r.id 
+	       AND current_date BETWEEN rs.season_from AND rs.season_to
+	       AND rd.rateplaneseasons_id = rs.id
+	       AND rd.person_number = #{person_number}
+	       AND rd.is_group = #{is_group}
+	       AND rd.roomtypes_id = #{roomtypes_id}
+	</select>
+	
+    
+    <select id="selectRateSale" resultType="RateSale" parameterType="map">
+        SELECT a.* FROM get_rate_and_sale_room(#{hotelsusers_id}, #{person_number}, #{resident}, #{check_in}, #{roomtypes_id}, #{is_group}, #{is_internal}) AS a
+    </select>
+    
+    <select id="getCheckInCharge" parameterType="map" resultType="BigDecimal">
+        SELECT * FROM calc_check_in_charge(#{hotelsusers_id}, #{is_group}, #{check_in}, #{rate});
+    </select>
+    
+    <select id="getCheckOutCharge" parameterType="map" resultType="BigDecimal">
+        SELECT * FROM calc_check_out_charge(#{hotelsusers_id}, #{is_group}, #{check_out}, #{rate});
+    </select>
+	
+	<select id="selectChildAge" parameterType="ReservationDetail" resultType="ChildAge">
+	    SELECT child_index, date_part('year', age(#{check_out}, date_of_birth)) AS age
+          FROM children
+         WHERE reservations_id = #{id} 
+	</select>
+	
+   	<select id="selectReservationList" parameterType="map" resultType="ReservationDetail">
+       SELECT r.id, 
+       		  r.hotelsusers_id 
+         FROM reservations r, touragents ta
+        WHERE r.touragentsusers_id = ta.users_id
+        <if test="status != null">
+          AND r.status = #{status} 
+        </if>
+        <if test="check_in != null">
+          AND r.check_in::date = #{check_in}::date - INTERVAL '1 day'
+        </if>    
+        <if test="check_out != null">
+          AND r.check_out::date = #{check_out}::date - INTERVAL '1 day'
+        </if>
+	</select>
+	
+   	<select id="selectReservationByOrderIdForSendingToHotel" parameterType="map" resultType="ReservationTemplate">
+		SELECT r.id AS reservation_id,
+		       r.hotelsusers_id,
+		       r.creator_user_id,
+			   (SELECT COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name 
+			      FROM hotelsdetails hd, addresses ad, regions reg, cities c 
+			     WHERE hd.hotelsusers_id = r.hotelsusers_id
+			       AND hd.addresses_id = ad.id
+			       AND ad.regions_id = reg.id
+			       AND reg.id = c.regions_id
+			       AND ad.cities_id = c.id
+			   ) AS hotel_name_region,
+			   (SELECT hd.contact_email FROM hotelsdetails hd WHERE hd.hotelsusers_id = r.hotelsusers_id) AS hotel_email,
+			   tu.login AS ta_login,
+			   au.login AS touragency_login,
+			   tu.name AS ta_name,
+			   tu.email AS ta_email,
+			   tu.phone_number AS ta_phone,
+			   ata.display_name AS touragency_name,
+			   ata.primary_phone || ', ' || ata.secondary_phone AS touragency_phone,
+			   r.id AS order_number,
+			   au.email AS touragency_email,
+			   (SELECT ct.name ||', '|| ad.address 
+			      FROM addresses ad LEFT JOIN cities ct ON ad.cities_id = ct.id, 
+			      	   touragents ta 
+			     WHERE ad.id = ta.addresses_id 
+			       AND ta.users_id = r.touragentsusers_id
+			   ) AS touragency_address,
+			   (SELECT ad.address 
+			      FROM addresses ad, 
+			      	   hotelsdetails hd 
+			     WHERE ad.id = hd.addresses_id 
+			       AND hd.hotelsusers_id = h.users_id
+			   ) AS hotel_address,
+			   r.check_in,
+			   r.check_out,
+			   r.create_date,
+			   (r.check_out::date - r.check_in::date) AS nights,
+			   g.first_name,
+			   g.last_name,
+			   (SELECT COALESCE(c.name, g.nationality, '') 
+			      FROM guests g 
+			           LEFT JOIN countries c ON g.nationality = c.code 
+			     WHERE g.reservations_id = r.id 
+			       AND g.guest_index = 1
+			     LIMIT 1
+			   ) AS guest_nationality,
+			   r.total * #{currency} AS total,
+			   r.additional_service_cost * #{currency} AS additional_service_cost,
+			   (r.total + r.additional_service_cost) * #{currency} AS grand_total,
+			   r.reservation_type,
+			   r.payment_owner,
+			   r.ta_comments,
+			   h.primary_phone AS hotel_phone,
+			   r.resident
+		  FROM reservations r 
+		  LEFT JOIN users tu ON r.creator_user_id = tu.id 
+		  LEFT JOIN users au ON r.touragentsusers_id = au.id
+		  LEFT JOIN touragents ata ON r.touragentsusers_id = ata.users_id
+		  LEFT JOIN hotels h ON r.hotelsusers_id = h.users_id,
+			   reservationrooms rr, 
+			   guests g
+		 WHERE r.id = #{reservations_id}
+		   AND r.id = rr.reservations_id
+		   AND rr.id = g.reservationrooms_id
+		   AND g.guest_index = 1
+		 ORDER BY r.id
+		 LIMIT 1
+   	</select>
+   	
+   	<select id="selectReservationAdultsCount" parameterType="long" resultType="int">
+   	    SELECT SUM(r.adults) 
+   	      FROM reservations r
+   	     WHERE r.id = #{id}
+   	</select>
+   	
+  	<select id="selectRoomTypeDetails" parameterType="map" resultType="RoomTypeDetails">
+		SELECT rv.id,
+			   rt.name,
+			   rr.adults_count AS adults,
+			   rr.children_count AS children,
+			   1 AS count,
+			   (rr.rate / (rv.check_out::date - rv.check_in::date)) * #{currency} AS price,
+			   rr.rate * #{currency} AS total_price,
+			   rr.extra_bed_needed,
+		       CASE WHEN rr.extra_bed_needed = true
+		          THEN hrr.extra_bed_price_type_value
+		          ELSE 0
+		       END AS extra_bed_price_type_value,
+		       COALESCE(rr.meal_options, -1) AS meal_options,
+		       COALESCE((CASE COALESCE(rr.meal_options, -1) 
+		            WHEN 0 THEN (SELECT COALESCE(mo.cost_per_person_per_night, 0) FROM mealoptions mo WHERE mo.hotelsusers_id = rv.hotelsusers_id AND mo.meal_type = 0)
+		            WHEN 1 THEN (SELECT SUM(COALESCE(mo.cost_per_person_per_night, 0)) FROM mealoptions mo WHERE mo.hotelsusers_id = rv.hotelsusers_id AND mo.meal_type IN (0, 1))
+		            WHEN 2 THEN (SELECT SUM(COALESCE(mo.cost_per_person_per_night, 0)) FROM mealoptions mo WHERE mo.hotelsusers_id = rv.hotelsusers_id AND mo.meal_type IN (0, 2))
+		            WHEN 3 THEN (SELECT SUM(COALESCE(mo.cost_per_person_per_night, 0)) FROM mealoptions mo WHERE mo.hotelsusers_id = rv.hotelsusers_id AND mo.meal_type IN (0, 1, 2))
+		            ELSE 0
+		       END), 0) * #{currency} AS meal_cost
+		  FROM reservations rv 
+		       LEFT JOIN hotelsreservationrules hrr ON rv.hotelsusers_id = hrr.hotelsusers_id AND rv.is_group = hrr.is_group,
+		       reservationrooms rr LEFT JOIN roomtypes rt ON rr.roomtypes_id = rt.id
+		 WHERE rv.id = #{reservations_id}
+		   AND rv.id = rr.reservations_id
+		 ORDER BY rv.id
+    </select>
+        
+    <select id="selectGuestList" parameterType="long" resultType="RoomTypeDetails">
+		SELECT rt.name,
+			   (SELECT STRING_AGG(g.first_name || ' ' || g.last_name || ' (' || (CASE WHEN g.nationality = 'uz' THEN 'Резидент' ELSE 'Нерезидент' END) || ')', <![CDATA['<br/>']]>)
+			      FROM guests g
+			     WHERE g.reservationrooms_id = rr.id
+			   ) AS guest_name
+		  FROM reservations r, reservationrooms rr, roomtypes rt
+		 WHERE r.id = #{id}
+		   AND r.id = rr.reservations_id
+		   AND rr.roomtypes_id = rt.id
+		 ORDER BY rt.name
+    </select>
+    
+    <select id="selectGuestListCount" parameterType="long" resultType="int">
+		SELECT COUNT(g.first_name)
+		  FROM reservations r, guests g
+		 WHERE r.id = #{id}
+		   AND r.id = g.reservations_id
+    </select>
+    
+    <select id="selectRateSaleReserve" parameterType="map" resultType="double">
+        SELECT get_rate_and_sale_room2(#{hotelsusers_id}, #{holding_capacity}::smallint, #{resident}, #{check_date}::timestamp, #{roomtypes_id}, #{is_group}, #{internal})
+    </select>
+    
+    <select id="selectReservationRoomsByReservationId" parameterType="map" resultType="RoomTypeDetails">
+		SELECT rv.id,
+		       rt.name,
+		       rr.id AS reservationrooms_id,
+		       COALESCE(rr.meal_options, -1) AS meal_options,
+		       rv.adults,
+		       rv.children,
+		       rr.extra_bed_needed,
+		       rr.rate,
+		       (SELECT string_agg(g.first_name || ' ' || g.last_name, ', ') FROM guests g WHERE g.reservationrooms_id = rr.id) AS guest_name,
+		       rr.status,
+		       rv.is_group
+		 FROM reservations rv, reservationrooms rr, roomtypes rt
+		WHERE rv.id = rr.reservations_id
+		  AND rr.roomtypes_id = rt.id
+		  AND rv.id = #{reservations_id}
+		ORDER BY rr.id
+	</select>
+      
+	<update id="updateReservationRoomsStatusById" parameterType="RoomTypeDetails">
+		UPDATE reservationrooms 
+		   SET status = #{status}
+		   <if test="status == 1">
+		       , no_show_until_time = get_no_show_time(#{hotelsusers_id}, #{is_group}, now()::timestamp)
+		   </if>
+		 WHERE id = #{reservationrooms_id}
+	</update>
+	
+	<select id="selectCheckOutList" resultType="ReservationDetail" parameterType="map">
+	    SELECT r.id, r.check_in, r.check_out,
+		       (SELECT string_agg(rt.room_number,';') 
+		          FROM rooms rt, reservationrooms rr 
+		         WHERE rr.rooms_id = rt.id
+		           AND rr.reservations_id = r.id) as room_number 
+		  FROM reservations r, hotelsreservationrules hrr
+		 WHERE hrr.hotelsusers_id = #{hotelsusers_id}
+		   AND r.hotelsusers_id = hrr.hotelsusers_id
+		   AND r.is_group = hrr.is_group
+		   AND r.status IN (0,1)
+		   AND EXISTS (SELECT * FROM reservationrooms rr WHERE r.id = rr.reservations_id AND rr.roomtypes_id = #{roomtypes_id})
+		   AND r.check_out <![CDATA[>]]>  (#{check_date}::date||' '||hrr.check_out_to_time)::timestamp(0)
+		   AND r.check_out <![CDATA[<=]]> (#{check_date}::date||' '||'23:59:59'::time)::timestamp(0)
+	</select>
+	
+	<select id="selectIsVisibleNoShow" parameterType="ReservationDetail" resultType="boolean">
+	    SELECT CASE WHEN now()::timestamp(0) <![CDATA[>=]]> #{check_in}::timestamp(0)
+	                 AND now()::timestamp(0) <![CDATA[<]]> #{check_out}::timestamp(0)
+	                THEN true ELSE false END  
+	</select>
+	
+	<select id="selectHotelCheckerboard" parameterType="map" resultType="Range">
+	    SELECT r.check_in AS date_from,
+	           TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 23:59:59','yyyy-dd-mm hh24:mi:ss') AS date_to,
+	           r.status AS status
+	      FROM reservations r, reservationrooms rr
+	     WHERE r.hotelsusers_id = #{hotelsusers_id}
+	       AND r.check_in BETWEEN TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 00:00:00','yyyy-dd-mm hh24:mi:ss') AND TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 23:59:59','yyyy-dd-mm hh24:mi:ss') 
+	       AND rr.reservations_id = r.id
+	       AND rr.roomtypes_id = #{roomtypes_id}
+	       AND COALESCE(rr.previously_rooms_id, rr.rooms_id) = #{rooms_id}
+	    UNION ALL
+	    SELECT TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 00:00:00','yyyy-dd-mm hh24:mi:ss') AS date_from,
+	           r.check_out AS date_to,
+	           r.status AS status
+	      FROM reservations r, reservationrooms rr
+	     WHERE r.hotelsusers_id = #{hotelsusers_id}
+	       AND r.check_out BETWEEN TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 00:00:00','yyyy-dd-mm hh24:mi:ss') AND TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 23:59:59','yyyy-dd-mm hh24:mi:ss') 
+	       AND rr.reservations_id = r.id
+	       AND rr.roomtypes_id = #{roomtypes_id}
+	       AND COALESCE(rr.previously_rooms_id, rr.rooms_id) = #{rooms_id}
+	    UNION ALL
+	    SELECT TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 00:00:00','yyyy-dd-mm hh24:mi:ss') AS date_from,
+	           TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 23:59:59','yyyy-dd-mm hh24:mi:ss') AS date_to,
+	           r.status
+	      FROM reservations r, reservationrooms rr
+	     WHERE r.hotelsusers_id = #{hotelsusers_id}
+	       AND (r.check_in, r.check_out) OVERLAPS (TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 00:00:00','yyyy-dd-mm hh24:mi:ss'), TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 23:59:59','yyyy-dd-mm hh24:mi:ss'))
+	       AND r.check_in::date <![CDATA[<]]> TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 00:00:00','yyyy-dd-mm hh24:mi:ss')
+	       AND r.check_out::date <![CDATA[>]]> TO_TIMESTAMP(TO_CHAR(#{date}::date,'yyyy-dd-mm')||' 23:59:59','yyyy-dd-mm hh24:mi:ss')
+	       AND rr.reservations_id = r.id
+	       AND rr.roomtypes_id = #{roomtypes_id}
+	       AND COALESCE(rr.previously_rooms_id, rr.rooms_id) = #{rooms_id}
+	</select>
+	
+	<select id="selectAllReservationList" parameterType="map" resultType="ReservationDetail">
+        SELECT r.id,
+			   r.hotelsusers_id,
+			   r.group_name,
+			   r.adults,
+			   r.children,
+			   r.check_in,
+			   r.check_out,
+			   r.total,
+			   <if test="user_type == 50">
+			   u.id AS "tour_agent.users_id",
+			   u.name AS "tour_agent.name",
+			   </if>
+			   <if test="user_type != 50">
+			   ta.users_id AS "tour_agent.users_id",
+			   ta.display_name AS "tour_agent.name",
+			   </if>
+			   u.login || ', ' || u.name AS creator,
+			   r.reservation_type,
+			   r.guest_comments,
+			   r.reception_comments,
+			   r.is_group,
+			   r.status AS "status.id",
+			   r.create_date,
+			   r.update_date,
+			   r.resident,
+			   r.creator_user_id,
+			   CASE 
+			   (SELECT COUNT(*) 
+			      FROM insurances i JOIN additionalserviceorders aso ON i.additionalserviceorders_id = aso.id
+			     WHERE aso.reservations_id = r.id) WHEN 0 THEN false ELSE true END AS insurance,
+			   r.initiator_user_id,
+			   r.rateplanes_id AS "rateplane.id",
+			   rrp.internal AS "rateplane.internal",
+			   r.auto_cancel_time,
+			   r.ta_comments,
+			   g.person_title AS "main_guest.person_title.title",
+			   g.first_name AS "main_guest.first_name",
+			   g.last_name AS "main_guest.last_name", 
+			   rr.custom_rate,
+			   rr.non_smokers,
+			   rr.city_view,
+			   rr.extra_bed_needed,
+			   COALESCE(rr.meal_options, -1) AS meal_options,
+			   r.payment_owner, 
+			   (r.check_out::date - r.check_in::date) AS number_of_nights
+	      FROM reservations r JOIN rateplanes rrp ON r.rateplanes_id = rrp.id
+	      					<if test="user_type != 50">
+	      					  JOIN touragents ta ON  r.touragentsusers_id = ta.users_id
+	      					</if>
+	      					  JOIN users u ON r.creator_user_id = u.id AND u.type = #{user_type}
+			   				  JOIN reservationrooms rr ON r.id = rr.reservations_id
+			   				  JOIN (SELECT g.reservations_id,
+			   				  			   g.reservationrooms_id, 
+			   				               g.first_name,
+			   				               g.last_name,
+			   				               person_title,
+			   				               ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.reservationrooms_id) AS rownum
+								      FROM guests g
+								     WHERE g.guest_index = 1) AS g ON rr.id = g.reservationrooms_id AND g.rownum = 1 
+		 <where>
+		 	<if test="reservations_id != null">
+		 	   r.id = #{reservations_id}
+		 	</if>
+		 	<if test="reservations_id == null">
+		 		<if test="created_from != null">
+		 			AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+		 		</if>
+		 		<if test="created_to != null">
+		 			AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+		 		</if>
+		 		<if test="checkin_from != null">
+		 			AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+		 		</if>
+		 		<if test="checkin_to != null">
+		 			AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+		 		</if>
+		 		<if test="checkout_from != null">
+		 			AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+		 		</if>
+		 		<if test="checkout_to != null">
+		 			AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+		 		</if>
+		 		<if test="check_in != null">
+		 			AND r.check_in::date = #{check_in}::date
+		 		</if>
+		 		<if test="check_out != null">
+		 			AND r.check_out::date = #{check_out}::date
+		 		</if>
+		 		<if test="first_name != null">
+		 			AND LOWER(g.first_name) LIKE '%'||LOWER(#{first_name})||'%'
+		 		</if>
+		 		<if test="last_name != null">
+		 			AND LOWER(g.last_name) LIKE '%'||LOWER(#{last_name})||'%'
+		 		</if>
+		 		<if test="reservation_type != null">
+		 			AND r.reservation_type = #{reservation_type.id}
+		 		</if>
+		 		<if test="reservation_status != null">
+		 			AND r.status = #{reservation_status.id}
+		 		</if>
+		 		<if test="touragent != null">
+		 		    AND r.touragentsusers_id = #{touragent.id}
+		 		</if>
+		 		<if test="hotel != null">
+		 		    AND r.hotelsusers_id = #{hotel.id}
+		 		</if>
+		 		<if test="city != null">
+		 		    AND EXISTS (SELECT *
+		 		                  FROM hotelsdetails hb, addresses ad
+		 		                 WHERE hb.addresses_id = ad.id
+		 		                   AND ad.cities_id = #{city.id})
+		 		</if>
+		 	</if>
+		 </where>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+	</select>
+	
+	<select id="selectAllReservationListCount" parameterType="map" resultType="long">
+        SELECT COUNT(*)
+	      FROM reservations r JOIN rateplanes rrp ON r.rateplanes_id = rrp.id
+			   				  JOIN reservationrooms rr ON r.id = rr.reservations_id
+			   				  JOIN users u ON r.creator_user_id = u.id AND u.type = #{user_type}
+			   				  JOIN (SELECT g.reservations_id, g.reservationrooms_id, 
+			   				               g.first_name, g.last_name, person_title,
+			   				               row_number() over (partition by g.reservations_id order by g.reservationrooms_id) as rownum
+								  FROM guests g
+								 WHERE g.guest_index = 1) AS g ON rr.id = g.reservationrooms_id AND g.rownum = 1 
+		 <where>
+		 	<if test="reservations_id != null">
+		 	   r.id = #{reservations_id}
+		 	</if>
+		 	<if test="reservations_id == null">
+		 		<if test="created_from != null">
+		 			AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
+		 		</if>
+		 		<if test="created_to != null">
+		 			AND r.create_date::date <![CDATA[<=]]> #{created_to}::date 
+		 		</if>
+		 		<if test="checkin_from != null">
+		 			AND r.check_in::date <![CDATA[>=]]> #{checkin_from}::date 
+		 		</if>
+		 		<if test="checkin_to != null">
+		 			AND r.check_in::date <![CDATA[<=]]> #{checkin_to}::date 
+		 		</if>
+		 		<if test="checkout_from != null">
+		 			AND r.check_out::date <![CDATA[>=]]> #{checkout_from}::date 
+		 		</if>
+		 		<if test="checkout_to != null">
+		 			AND r.check_out::date <![CDATA[<=]]> #{checkout_to}::date 
+		 		</if>
+		 		<if test="check_in != null">
+		 			AND r.check_in::date = #{check_in}::date
+		 		</if>
+		 		<if test="check_out != null">
+		 			AND r.check_out::date = #{check_out}::date
+		 		</if>
+		 		<if test="first_name != null">
+		 			AND LOWER(g.first_name) LIKE '%'||LOWER(#{first_name})||'%'
+		 		</if>
+		 		<if test="last_name != null">
+		 			AND LOWER(g.last_name) LIKE '%'||LOWER(#{last_name})||'%'
+		 		</if>
+		 		<if test="reservation_type != null">
+		 			AND r.reservation_type = #{reservation_type.id}
+		 		</if>
+		 		<if test="reservation_status != null">
+		 			AND r.status = #{reservation_status.id}
+		 		</if>
+		 		<if test="touragent != null">
+		 		    AND r.touragentsusers_id = #{touragent.id}
+		 		</if>
+		 		<if test="hotel != null">
+		 		    AND r.hotelsusers_id = #{hotel.id}
+		 		</if>
+		 		<if test="city != null">
+		 		    AND EXISTS (SELECT *
+		 		                  FROM hotelsdetails hb, addresses ad
+		 		                 WHERE hb.addresses_id = ad.id
+		 		                   AND ad.cities_id = #{city.id})
+		 		</if>
+		 	</if>
+		 </where>
+	</select>
+	
+	<select id="selectCalcMealOption" parameterType="map" resultType="float">
+		SELECT calc_mealoption(#{mo_type}::numeric, #{mo_value}::numeric, #{check_in}::timestamp(0),#{check_out}::timestamp(0))
+	</select>
+	
+	<select id="selectAllTourAgentList" resultType="IdLongAndName">
+	    SELECT ta.users_id AS id, ta.display_name AS name
+	      FROM touragents ta JOIN users u ON ta.users_id = u.id
+	     WHERE u.status = 1 
+	       AND u.id <![CDATA[>]]> 0 
+	     ORDER BY 1 
+	</select>
+
+	<select id="selectAllHotelList" parameterType="AllReservationFilter" resultType="IdLongAndName">
+	    SELECT hd.hotelsusers_id AS id,
+	    	   COALESCE(hd.display_name_en, hd.display_name) AS name
+	      FROM hotelsdetails hd JOIN users u ON hd.hotelsusers_id = u.id
+	     WHERE u.status = 1 
+		<if test="city != null">
+	       AND EXISTS (SELECT *
+	                     FROM addresses ad
+	                    WHERE hd.addresses_id = ad.id
+	                      AND ad.cities_id = #{city.id})
+		</if>	      
+	     ORDER BY 1 
+	</select>
+	
+	<select id="selectTADisplayNameByUser" parameterType="AdditionalServiceOrderFilter" resultType="String">
+		SELECT ta.display_name
+		  FROM touragents ta
+		 <if test="creator_user_id != null">
+			  , users u
+			 WHERE ta.users_id = u.workusers_id
+			   AND u.id = #{creator_user_id}
+		 </if> 
+		 <if test="touragent_id != null">
+		   WHERE ta.users_id = #{touragent_id}	
+		 </if>   
+	</select>
+	
+	<select id="selectTAAssignedManagers" resultType="IdLongAndName">
+	    SELECT u.id, u.name
+	      FROM users u
+	     WHERE EXISTS (SELECT ta.*
+	                     FROM touragents ta 
+						WHERE u.id = ta.creator_user_id)
+	       AND u.status = 1
+	</select>
+	
+	<select id="selectFinanceTotalVolume" parameterType="map" resultType="FinanceReport">
+	    SELECT get_finance_total_volume(0, #{id}, #{year}, #{month}) AS hotel,
+	           get_finance_total_volume(1, #{id}, #{year}, #{month}) AS service 
+	</select>
+	
+	<select id="selectFinanceAnnualVolume" parameterType="map" resultType="FinanceReport">
+	    SELECT get_finance_annual_volume(0, #{id}, #{year}, #{month}) AS hotel,
+	           get_finance_annual_volume(1, #{id}, #{year}, #{month}) AS service 
+	</select>
+	
+	<select id="selectTourAgentListAssignedManager" parameterType="long" resultType="TourAgent">
+		SELECT ta.users_id,
+		       ta.display_name,
+		       u.create_date
+          FROM touragents ta JOIN users u ON ta.users_id = u.id 
+		 WHERE ta.creator_user_id = #{creator_user_id}
+	</select>
+	
+	<select id="selectAllReservationManageCount" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		  FROM reservations r, users u
+		 WHERE r.creator_user_id = u.id
+		   AND u.type = #{user_type}
+		 	<if test="datefrom != null">
+		 		AND r.create_date::date <![CDATA[>=]]> #{datefrom}::date
+		 	</if>
+		 	<if test="dateto != null">
+		 		AND r.create_date::date <![CDATA[<=]]> #{dateto}::date
+		 	</if>
+		 	<if test="check_type != null">
+		 		AND
+		 		<choose>
+		 			<when test="check_type == 1">
+		 				r.status = 0
+		 			</when>
+		 			<when test="check_type == 2">
+		 				r.status = 1
+		 			</when>
+		 			<when test="check_type == 3">
+		 				r.status = 3
+		 			</when>
+		 			<when test="check_type == 4">
+		 				r.status = 2
+		 			</when>
+		 			<when test="check_type == 5">
+		 				r.status IN (0,1) AND r.reservation_type = 1 
+		 			</when>
+		 			<when test="check_type == 6">
+		 				r.status IN (0,1) AND r.reservation_type = 2 
+		 			</when>
+		 		</choose>
+		 	</if>
+	</select>
+	
+	<select id="selectTouragentReservationDatePeriod" parameterType="long" resultType="Reservation">
+		SELECT MIN(r.create_date) AS fromdate, 
+			   MAX(r.create_date) AS todate
+		  FROM reservations r 
+		 WHERE r.creator_user_id = #{creator_user_id}
+	</select>
+	
+	<select id="selectFixGuestIndex" parameterType="long" resultType="boolean">
+		SELECT fix_guest_index(#{reservations_id}::BIGINT)
+	</select>
+</mapper>

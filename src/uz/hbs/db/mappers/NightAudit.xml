@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.NightAudit">
+    <select id="selectNightAuditHotelList" resultType="Hotel">
+        SELECT h.users_id, COALESCE(h.operday, (now() - '1 day'::interval)::date) AS operday
+          FROM hotels h
+    </select>
+    
+    <select id="selectNightAuditRegisteredByHotelId" parameterType="Hotel" resultType="ReservationDetail">
+        SELECT id, extra_bed, COALESCE(meal_options,-1) AS meal_options, 
+               adults, children, is_group, check_in, 
+               hotelsusers_id AS hotelsusers_id, rate,
+               (#{operday}::date - check_in) AS check_in_day,
+               (#{operday}::date - check_out) AS check_out_day
+          FROM reservations r
+         WHERE r.hotelsusers_id = #{users_id}
+           AND r.check_in <![CDATA[<=]]> #{operday}::date
+           AND r.status = 1 
+    </select>
+    
+    <select id="selectNightAuditReservedByHotelId" parameterType="Hotel" resultType="ReservationDetail">
+        SELECT r.id, t.id as rooms_id
+          FROM reservations r, reservationrooms rr LEFT JOIN rooms t ON rr.rooms_id = t.id 
+         WHERE r.hotelsusers_id = #{users_id}
+           AND rr.reservations_id = r.id
+           AND r.check_in <![CDATA[<]]> now()::dateд
+           AND r.status = 0 
+    </select>
+    
+    <update id="updateReserveCheckOutNextDay" parameterType="ReservationDetail">
+        UPDATE reservations
+           SET checkout = checkout + '1 day'::inteval,
+               initiator_user_id = #{initiator_user_id},
+               update_date = now()
+         WHERE id = #{id}  
+    </update>
+    
+    <update id="updateHotelOperday" parameterType="Hotel">
+        UPDATE hotels
+           SET operday = operday + '1 day'::inteval,
+               update_date = now()
+         WHERE users_id = #{users_id}  
+    </update>
+    
+    <select id="selectExistsBillData" parameterType="ReservationDetail" resultType="boolean">
+        SELECT COUNT(*)
+          FROM reservationbills
+         WHERE reservations_id = #{id}
+           AND hotelsusers_id = #{hotelsusers_id}
+    </select>
+    
+    <insert id="insertNightAuditLog" parameterType="NightAuditLog">
+        <selectKey order="BEFORE" resultType="long" keyProperty="id">
+            SELECT NEXTVAL('nightauditlogs_id_seq')
+        </selectKey>
+        
+        INSERT INTO nightauditlogs (id, description)
+        VALUES (#{id}, #{description})       
+    </insert>
+    
+</mapper>    

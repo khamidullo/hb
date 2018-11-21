@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="Config.properties" />
+
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="aggressiveLazyLoading" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="false" />
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<!-- <setting name="defaultStatementTimeout" value="25" /> -->
+		<setting name="safeRowBoundsEnabled" value="false" />
+		<setting name="mapUnderscoreToCamelCase" value="false" />
+		<setting name="localCacheScope" value="SESSION" />
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString" />
+		<setting name="logImpl" value="SLF4J" />
+	</settings>
+
+	<typeAliases>
+		<package name="uz.hbs.beans" />
+		<package name="uz.hbs.beans.rate" />
+		<package name="uz.hbs.beans.reports" />
+		<package name="uz.hbs.beans.filters" />
+	</typeAliases>
+
+	<typeHandlers>
+		<typeHandler handler="uz.hbs.db.typehandler.ActionRightTypeHandler" />
+		<typeHandler handler="uz.hbs.db.typehandler.IdAndValueTypeHandler" />
+		<typeHandler handler="uz.hbs.db.typehandler.KeyAndValueTypeHandler" />
+		<typeHandler handler="uz.hbs.db.typehandler.IdByteAndNameTypeHandler" />
+	</typeHandlers>
+
+	<environments default="postgres">
+		<environment id="postgres">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${database.driver}" />
+				<property name="url" value="${database.url}" />
+				<property name="username" value="${database.username}" />
+				<property name="password" value="${database.password}" />
+				<property name="poolMaximumActiveConnections" value="${database.maximumActiveConnections}" />
+				<property name="poolMaximumIdleConnections" value="${database.maximumIdleConnections}" />
+				<property name="poolMaximumCheckoutTime" value="${database.maximumCheckoutTime}" />
+				<property name="poolTimeToWait" value="${database.maximumWait}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<databaseIdProvider type="DB_VENDOR">
+		<property name="Postgres" value="postgres" />
+	</databaseIdProvider>
+
+	<mappers>
+		<mapper resource="uz/hbs/db/mappers/Accounts.xml" />
+		<mapper resource="uz/hbs/db/mappers/Addresses.xml" />
+		<mapper resource="uz/hbs/db/mappers/AuditLogs.xml" />
+		<mapper resource="uz/hbs/db/mappers/Booking.xml" />
+		<mapper resource="uz/hbs/db/mappers/Contract.xml" />
+		<mapper resource="uz/hbs/db/mappers/DeleteHotel.xml" />
+		<mapper resource="uz/hbs/db/mappers/Email.xml" />
+		<mapper resource="uz/hbs/db/mappers/GeneratedReport.xml" />
+		<mapper resource="uz/hbs/db/mappers/HotelReports.xml" />
+		<mapper resource="uz/hbs/db/mappers/Hotels.xml" />
+		<mapper resource="uz/hbs/db/mappers/HotelsPreferences.xml" />
+		<mapper resource="uz/hbs/db/mappers/IssueBill.xml" />
+		<mapper resource="uz/hbs/db/mappers/Messages.xml" />
+		<mapper resource="uz/hbs/db/mappers/NightAudit.xml" />
+		<mapper resource="uz/hbs/db/mappers/Preferences.xml" />
+		<mapper resource="uz/hbs/db/mappers/RatePlane.xml" />
+		<mapper resource="uz/hbs/db/mappers/Report.xml" />
+		<mapper resource="uz/hbs/db/mappers/Reservation.xml" />
+		<mapper resource="uz/hbs/db/mappers/RoomManagement.xml" />
+		<mapper resource="uz/hbs/db/mappers/SalePlane.xml" />
+		<mapper resource="uz/hbs/db/mappers/Spectators.xml" />
+		<mapper resource="uz/hbs/db/mappers/System.xml" />
+		<mapper resource="uz/hbs/db/mappers/TourAgentAdditionalService.xml" />
+		<mapper resource="uz/hbs/db/mappers/TourAgentReservation.xml" />
+		<mapper resource="uz/hbs/db/mappers/TourAgents.xml" />
+		<mapper resource="uz/hbs/db/mappers/Users.xml" />
+		<mapper resource="uz/hbs/db/mappers/UserSettings.xml" />
+	</mappers>
+</configuration>

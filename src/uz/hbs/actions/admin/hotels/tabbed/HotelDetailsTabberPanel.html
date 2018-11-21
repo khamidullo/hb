@@ -1,0 +1,364 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<form wicket:id="form">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-right">
+					<button class="btn btn-primary" wicket:id="next">
+						<wicket:message key="tabbed.save_and_next">[Save and continue]</wicket:message>
+						<i class="fa fa-forward"></i>
+					</button>
+					<button class="btn btn-success" wicket:id="save">
+						<wicket:message key="button.save">[Save]</wicket:message>
+						<i class="fa fa-save"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.hotel_category">[Hotel's category]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<select wicket:id="hotelCategory" class="form-control">
+									<option>Choice One</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.hotel_stars">[Hotel stars]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<select wicket:id="hotelStars" class="form-control">
+									<option>Choice One</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.resident.support">[Resident support]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<label wicket:for="support_resident_rate" class="checkbox-inline">
+									<input wicket:id="support_resident_rate" type="checkbox">
+									<wicket:message key="hotels.details.resident.support">[Support Resident Rate]</wicket:message>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.hotel_display_name">[Hotel display name]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<wicket:message key="language.ru">[Russian]</wicket:message>:<br>
+						<input type="text" class="form-control" wicket:id="display_name" wicket:message="placeholder:language.ru">
+						<wicket:message key="language.en">[Russian]</wicket:message>:<br>
+						<input type="text" class="form-control" wicket:id="display_name_en" wicket:message="placeholder:language.en">
+						<wicket:message key="language.uz">[Russian]</wicket:message>:<br>
+						<input type="text" class="form-control" wicket:id="display_name_uz" wicket:message="placeholder:language.uz">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.contacts">[Contacts]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.details.custom_contact_number_1">[Customer contact number 1]</wicket:message>
+								: <br>
+								<input type="text" class="form-control" wicket:id="contact_number"
+									wicket:message="placeholder:hotels.details.custom_contact_number_1">
+							</div>
+							<div class="col-md-6">
+								<wicket:message key="hotels.details.custom_contact_number_2">[Customer contact number 2]</wicket:message>
+								: <br>
+								<input type="text" class="form-control" wicket:id="contact_number2"
+									wicket:message="placeholder:hotels.details.custom_contact_number_2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.details.custom_contact_email_1">[Customer contact email 1]</wicket:message>
+								: <br>
+								<input type="email" class="form-control" wicket:id="contact_email"
+									wicket:message="placeholder:hotels.details.custom_contact_email_1">
+							</div>
+							<div class="col-md-6">
+								<wicket:message key="hotels.details.custom_contact_email_2">[Customer contact email 2]</wicket:message>
+								: <br>
+								<input type="email" class="form-control" wicket:id="contact_email2"
+									wicket:message="placeholder:hotels.details.custom_contact_email_2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.details.custom_fax_1">[Customer fax 1]</wicket:message>
+								: <br>
+								<input type="text" class="form-control" wicket:id="fax" wicket:message="placeholder:hotels.details.custom_fax_1">
+							</div>
+							<div class="col-md-6">
+								<wicket:message key="hotels.details.custom_fax_2">[Customer fax 2]</wicket:message>
+								: <br>
+								<input type="text" class="form-control" wicket:id="fax2"
+									wicket:message="placeholder:hotels.details.custom_fax_2">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.address">[Address]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<wicket:container wicket:id="address_container"></wicket:container>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.nearbyplaces">[Nearby places]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:container wicket:id="nearbyplaces_container" />
+								<wicket:message key="hotels.details.place.eg">[E.g.: Golf Course (6 km), Subway (3 mins of walk) and etc.]</wicket:message>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.services_in_rooms">[Services in rooms]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12" wicket:id="service_container">
+								<strong><wicket:message key="hotels.details.service">[Service]</wicket:message></strong> <br> <span
+									id="service_warn" style="color: red; display: none;"> <wicket:message
+										key="hotels.details.services_in_rooms">[Services in rooms]</wicket:message> is/are mandatory
+								</span>
+								<wicket:container wicket:id="service">
+									<wicket:container wicket:id="servicelist">
+										<div>
+											<input type="checkbox" wicket:id="checkService" class="service"/>
+											<label class="checkbox-inline" wicket:for="checkService">
+												<span wicket:id="name">[Service Name]</span>
+											</label>
+										</div>
+									</wicket:container>
+								</wicket:container>
+								<br>
+								<div style="font-weight: bold;">
+									<a wicket:id="add_service"><i class="fa fa-plus"></i> <wicket:message key="add_another">[Add another]</wicket:message></a>
+								</div>
+								<br>
+								<wicket:message key="hotels.details.service.eg">[E.g.: Free WiFi, Satellite Channels and etc.]</wicket:message>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.facility_highlights">[Hotel facilities]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<wicket:container wicket:id="facilitiesPalette" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.upload_hotel_images">[Upload hotel images]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="input-group">
+									<input type="text" class="form-control" readonly="readonly">
+									<span class="input-group-btn"> <span class="btn btn-default-2 btn-file"><i
+												class="fa fa-folder-open fa-fw"></i> <wicket:message key="browse">[Browse...]</wicket:message> <input
+												wicket:id="hotel_images" type="file" multiple="multiple"> </span>
+									</span>
+								</div>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div wicket:id="imgPanel" class="col-md-12"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.description">[Description]</wicket:message> (<wicket:message key="language.ru">[Ru]</wicket:message>)
+						</h3>
+					</div>
+					<div class="panel-body" style="padding: 0">
+						<textarea wicket:id="description" class="ckeditor" cols="80" id="editor_ru" name="editor_ru" rows="10">
+						</textarea>
+						<script>
+							CKEDITOR.replace('editor_ru', {language: 'ru'});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.description">[Description]</wicket:message> (<wicket:message key="language.en">[En]</wicket:message>)
+						</h3>
+					</div>
+					<div class="panel-body" style="padding: 0">
+						<textarea wicket:id="description_en" class="ckeditor" cols="80" id="editor_en" name="editor_en" rows="10">
+						</textarea>
+						<script>
+							CKEDITOR.replace('editor_en', {language: 'ru'});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.description">[Description]</wicket:message> (<wicket:message key="language.uz">[Uz]</wicket:message>)
+						</h3>
+					</div>
+					<div class="panel-body" style="padding: 0">
+						<textarea wicket:id="description_uz" class="ckeditor" cols="80" id="editor_uz" name="editor_uz" rows="10">
+						</textarea>
+						<script>
+							CKEDITOR.replace('editor_uz', {language: 'ru'});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			// file input style changer
+			$(document).on('change', '.btn-file :file', function() {
+				var $input = $(this);
+				var numFiles = $input.get(0).files ? $input.get(0).files.length : 1;
+				var label = $input.val().replace(/\\/g, '/').replace(/.*\//, '');
+				$input.trigger('fileselect', [ numFiles, label ]);
+			});
+
+			$(document).ready(function() {
+				$('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+					var input = $(this).parents('.input-group').find(':text');
+					var log = numFiles > 1 ? numFiles + ' files selected' : label;
+					if (input.length) {
+						input.val(log);
+					}
+				});
+			});
+		</script>
+	</form>
+	<div wicket:id="dialog"></div>
+	<script type="text/javascript">
+		var service_data = [];
+
+		function setter() {
+			service_data = [];
+			$('input:checkbox:checked.service').each(function(index, element) {
+				$element = $(element);
+				service_data[index] = $element.attr('data-item');
+			});
+		}
+
+		function getter() {
+			for (var i = 0; i < service_data.length; i++) {
+				$element = $('input:checkbox.service[data-item=' + service_data[i] + ']');
+				if ($element.length) {
+					$element.prop('checked', true);
+				}
+			}
+		}
+	</script>
+	<a id="toTop" href="#"> <i class="fa fa-chevron-left fa-rotate-90"
+			style="margin: 8px 15px 10px 16px; color: #888888"></i>
+	</a>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			moveTop();
+		});
+	</script>
+</wicket:panel>

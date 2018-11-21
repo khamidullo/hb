@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Addresses">
+	<insert id="insertAddresses" parameterType="Address">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+		    SELECT NEXTVAL('addresses_id_seq')
+		</selectKey>
+	    INSERT INTO addresses (id, <if test="countries != null">countries_id,</if> <if test="regions != null">regions_id,</if> cities_id, address, address_en, address_uz, postal_index, latitude, longitude, initiator_user_id)
+	    VALUES (#{id}, <if test="countries != null">#{countries.id},</if> <if test="regions != null">#{regions.id},</if> <if test="cities != null">#{cities.id},</if> #{address}, #{address_en}, #{address_uz}, #{postal_index}, #{latitude}, #{longitude}, #{initiator_user_id})
+	</insert>
+	
+	<update id="updateAddresses" parameterType="Address">
+	    UPDATE addresses 
+	       SET address = #{address},
+	           address_en = #{address_en},
+	           address_uz = #{address_uz},
+	        <if test="postal_index != null">
+	           postal_index = #{postal_index},
+			</if>
+	        <if test="countries != null">
+	           countries_id = #{countries.id},
+	        </if>
+	        <if test="regions != null">
+	       	   regions_id = #{regions.id},
+	        </if>
+	        <if test="cities != null">
+	           cities_id = #{cities.id},
+	        </if>
+	        <if test="latitude != null">
+	           latitude = #{latitude}, 
+	        </if>
+	        <if test="longitude != null">
+	           longitude = #{longitude}, 
+	        </if> 
+	           initiator_user_id = #{initiator_user_id},
+	           update_date = CURRENT_TIMESTAMP
+	     WHERE id = #{id}
+	</update>
+	
+	<select id="selectAddressById" parameterType="long" resultType="Address">
+	    SELECT ad.id, 
+	    	   ad.countries_id AS "countries.id",
+	    	   ad.regions_id AS "regions.id", 
+	    	   ad.cities_id AS "cities.id", 
+	    	   ad.postal_index,
+	    	   ad.address, 
+	    	   ad.address_en, 
+	    	   ad.address_uz, 
+	    	   ad.latitude, 
+	    	   ad.longitude, 
+	    	   ad.initiator_user_id, 
+       		   ad.create_date, 
+       		   ad.update_date
+   		 FROM addresses ad LEFT JOIN cities ct ON ad.cities_id = ct.id
+   		WHERE ad.id = #{id} 
+	</select>
+	
+	<select id="selectCountryRegionCityList" parameterType="map" resultType="City">
+		SELECT ct.countries_id,
+			   c.name AS country_name,
+			   ct.regions_id,
+			   r.name AS region_name,
+			   ct.id,
+			   ct.name,
+			   ct.name_uz,
+			   ct.name_en
+		  FROM countries c, regions r, cities ct
+		 WHERE c.id = r.countries_id
+		   AND r.id = ct.regions_id
+		 <if test="id != null">
+		   AND ct.id = #{id}
+		 </if>
+		 <if test="country_name != null">
+		   AND LOWER(c.name) LIKE '%' || LOWER(#{country_name}) || '%'
+		 </if>
+		 <if test="region_name != null">
+		   AND LOWER(r.name) LIKE '%' || LOWER(#{region_name}) || '%'
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{name}) || '%'
+		 </if>
+		 <if test="name_uz != null">
+		   AND LOWER(ct.name_uz) LIKE '%' || LOWER(#{name_uz}) || '%'
+		 </if>
+		 <if test="name_en != null">
+		   AND LOWER(ct.name_en) LIKE '%' || LOWER(#{name_en}) || '%'
+		 </if>
+	     <trim prefix="ORDER BY">
+			<if test="sortField != null">
+			   ${sortField} ${sortOrder}
+			</if>
+		 </trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectCountryRegionCityCount" parameterType="map" resultType="long">
+		SELECT COUNT(*)
+		  FROM countries c, regions r, cities ct
+		 WHERE c.id = r.countries_id
+		   AND r.id = ct.regions_id
+		 <if test="id != null">
+		   AND ct.id = #{id}
+		 </if>
+		 <if test="country_name != null">
+		   AND LOWER(c.name) LIKE '%' || LOWER(#{country_name}) || '%'
+		 </if>
+		 <if test="region_name != null">
+		   AND LOWER(r.name) LIKE '%' || LOWER(#{region_name}) || '%'
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{name}) || '%'
+		 </if>
+		 <if test="name_uz != null">
+		   AND LOWER(ct.name_uz) LIKE '%' || LOWER(#{name_uz}) || '%'
+		 </if>
+		 <if test="name_en != null">
+		   AND LOWER(ct.name_en) LIKE '%' || LOWER(#{name_en}) || '%'
+		 </if>
+	</select>
+
+	<insert id="insertCity" parameterType="City">
+		INSERT INTO cities (id, countries_id, regions_id, name, name_uz, name_en)
+		VALUES (NEXTVAL('cities_id_seq'), #{countries_id}, #{regions_id}, #{name}, #{name_uz}, #{name_en})
+	</insert>
+	
+	<update id="updateCity" parameterType="City">
+		UPDATE cities
+		   SET name = #{name},
+			   name_uz = #{name_uz},
+			   name_en = #{name_en}
+		 WHERE id = #{id}
+	</update>
+
+	<delete id="deleteCity" parameterType="int">
+		DELETE FROM cities WHERE id = #{id}
+	</delete>
+	
+	<select id="selectCountryRegionList" parameterType="map" resultType="Region">
+		SELECT c.id AS countries_id,
+			   c.name AS country_name,
+			   r.id,
+			   r.name,
+			   r.name_uz,
+			   r.name_en
+		  FROM countries c, regions r
+		 WHERE c.id = r.countries_id
+		 <if test="id != null">
+		   AND r.id = #{id}
+		 </if>
+		 <if test="country_name != null">
+		   AND LOWER(c.name) LIKE '%' || LOWER(#{country_name}) || '%'
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(r.name) LIKE '%' || LOWER(#{name}) || '%'
+		 </if>
+		 <if test="name_uz != null">
+		   AND LOWER(r.name_uz) LIKE '%' || LOWER(#{name_uz}) || '%'
+		 </if>
+		 <if test="name_en != null">
+		   AND LOWER(r.name_en) LIKE '%' || LOWER(#{name_en}) || '%'
+		 </if>
+	     <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		 </trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectCountryRegionCount" parameterType="map" resultType="long">
+		SELECT COUNT(*)
+		  FROM countries c, regions r
+		 WHERE c.id = r.countries_id
+		 <if test="id != null">
+		   AND r.id = #{id}
+		 </if>
+		 <if test="country_name != null">
+		   AND LOWER(c.name) LIKE '%' || LOWER(#{country_name}) || '%'
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(r.name) LIKE '%' || LOWER(#{name}) || '%'
+		 </if>
+		 <if test="name_uz != null">
+		   AND LOWER(r.name_uz) LIKE '%' || LOWER(#{name_uz}) || '%'
+		 </if>
+		 <if test="name_en != null">
+		   AND LOWER(r.name_en) LIKE '%' || LOWER(#{name_en}) || '%'
+		 </if>
+	</select>
+	
+	<insert id="insertRegion" parameterType="Region">
+		INSERT INTO regions (id, countries_id, name, name_uz, name_en)
+		VALUES (NEXTVAL('regions_id_seq'), #{countries_id}, #{name}, #{name_uz}, #{name_en})
+	</insert>
+
+	
+	<update id="updateRegion" parameterType="Region">
+		UPDATE regions
+		   SET name = #{name},
+			   name_uz = #{name_uz},
+			   name_en = #{name_en}
+		 WHERE id = #{id}
+	</update>
+
+	<delete id="deleteRegion" parameterType="int">
+		DELETE FROM regions WHERE id = #{id}
+	</delete>
+	
+	<select id="selectCountryByCode" parameterType="map" resultType="Country">
+		SELECT c.code, <choose><when test="locale == 'en'">c.name_en</when><when test="locale == 'uz'">c.name_uz</when><otherwise>c.name</otherwise></choose> AS name
+    	  FROM countries c
+    	 WHERE c.code = #{code}
+	</select>
+</mapper>

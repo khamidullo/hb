@@ -1,0 +1,39 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div style="padding: 10px;">
+		<form wicket:id="form">
+			<div wicket:id="feedback"></div>
+			<div wicket:id="container">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover table-condensed table-striped">
+						<tr>
+							<th>
+								<wicket:message key="hotels.reservation.details.reservation.roomtype">[Room type]</wicket:message>
+							</th>
+							<th>
+								<wicket:message key="hotels.reservation.details.guest.name">[Guest name]</wicket:message>
+							</th>
+							<th>
+								<wicket:message key="hotels.reservation.details.reservation.status">[Status]</wicket:message>
+							</th>
+							<th>
+								<wicket:message key="hotels.reservation.details.choose">[Choose]</wicket:message>
+							</th>
+						</tr>
+						<tr wicket:id="list">
+							<td wicket:id="roomType"></td>
+							<td wicket:id="guestName"></td>
+							<td wicket:id="status"></td>
+							<td>
+								<input wicket:id="selected" type="checkbox">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div style="float: right">
+				<input wicket:id="submit" type="submit" class="btn btn-primary"
+					wicket:message="value:hotels.reservation.details.reservation.status.no_show">
+			</div>
+		</form>
+	</div>
+</wicket:panel>

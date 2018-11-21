@@ -1,0 +1,132 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+	<wicket:panel>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title" wicket:id="panelTitle">[Edit 'agency name']</h3>
+					</div>
+					<div class="panel-body">
+						<form wicket:id="form" role="form">
+							<div class="row">
+								<div class="col-md-12">
+									<div wicket:id="feedback"></div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">
+										<wicket:message key="touragents.status">[Status]</wicket:message>
+									</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="radio">
+												<div wicket:id="status">
+													<label>
+														<input wicket:id="status_active" type="radio">
+														<wicket:message key="touragents.status.active">[Active]</wicket:message>
+													</label>
+													<br>
+													<label>
+														<input wicket:id="status_disabled" type="radio">
+														<wicket:message key="touragents.status.disabled">[Disabled]</wicket:message>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">
+										<wicket:message key="spectators.agency">[Agency]</wicket:message>
+									</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-3">
+											<wicket:message key="spectators.agency.agency_name">[Agency name]</wicket:message>
+											<input wicket:id="name" type="text" class="form-control">
+										</div>
+										<div class="col-md-1"></div>
+										<div class="col-md-3">
+											<wicket:message key="touragents.company.primary_contact_number">[Primary contact number]</wicket:message>
+											<input wicket:id="primary_phone" type="text" class="form-control">
+										</div>
+										<div class="col-md-1"></div>
+										<div class="col-md-3">
+											<wicket:message key="touragents.company.email_address">[Email address]</wicket:message>
+											<input wicket:id="email" type="email" class="form-control">
+										</div>
+										<div class="col-md-1"></div>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">
+										<wicket:message key="spectators.representative_details">[Representative details]</wicket:message>
+									</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-3">
+											<wicket:message key="touragents.accountant_details.first_name">[First name]</wicket:message>
+											<input wicket:id="first_name" type="text" class="form-control">
+										</div>
+										<div class="col-md-1"></div>
+										<div class="col-md-3">
+											<wicket:message key="touragents.accountant_details.last_name">[Last name]</wicket:message>
+											<input wicket:id="last_name" type="text" class="form-control">
+										</div>
+										<div class="col-md-1"></div>
+										<div class="col-md-3">
+											<wicket:message key="touragents.accountant_details.middle_name">[Middle name (optional)]</wicket:message>
+											<input wicket:id="middle_name" type="text" class="form-control">
+										</div>
+										<div class="col-md-1"></div>
+									</div>
+									<div class="row">
+										<div class="col-md-3">
+											<wicket:message key="touragents.accountant_details.contact_number">[Contact number]</wicket:message>
+											<input wicket:id="contact_number" type="text" class="form-control">
+										</div>
+										<div class="col-md-1"></div>
+										<div class="col-md-3">
+											<wicket:message key="touragents.accountant_details.contact_email">[Contact email]</wicket:message>
+											<input wicket:id="contact_email" type="email" class="form-control">
+										</div>
+										<div class="col-md-5"></div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="pull-right">
+												<button wicket:id="resend" class="btn btn-primary btn-outline" type="button"
+													wicket:message="area-label:touragents.resend_account_details,title:touragents.resend_account_details">
+													<wicket:message key="touragents.resend_account_details"></wicket:message>
+													<span class="fa fa-send-o"></span>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="pull-right">
+										<input wicket:id="submit" class="btn btn-primary" type="submit" wicket:message="value:save,title:save">
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</wicket:panel>
+</body>
+</html>

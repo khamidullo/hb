@@ -1,0 +1,54 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<form wicket:id="form" role="form">
+				<div wicket:id="container" class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="address.region.add">[Add region]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-4">
+								<wicket:message key="hotels.details.country">[Country]</wicket:message>
+								<select wicket:id="country" class="form-control">
+									<option>[Country 1]</option>
+									<option>[Country 2]</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<span wicket:id="labelName">[Name]</span>
+								<input wicket:id="name" type="text" class="form-control">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<span wicket:id="labelNameUz">[Name UZ]</span>
+								<input wicket:id="name_uz" type="text" class="form-control">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<span wicket:id="labelNameEn">[Name EN]</span>
+								<input wicket:id="name_en" type="text" class="form-control">
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="pull-right">
+									<input wicket:id="submit" type="submit" class="btn btn-primary" wicket:message="value:save">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div wicket:id="dialog"></div>
+				<div wicket:id="feedback"></div>
+			</form>
+		</div>
+	</div>
+</wicket:panel>

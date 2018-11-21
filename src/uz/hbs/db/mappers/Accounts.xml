@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Accounts">
+	<insert id="insertAccounts" parameterType="Account">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+		    SELECT NEXTVAL('accounts_id_seq')
+		</selectKey>
+	    INSERT INTO accounts (id, users_id, balance, status)
+	    VALUES (#{id}, #{users_id}, #{balance}, #{status})
+	</insert>
+	
+	<update id="updateAccounts" parameterType="Account">
+	    UPDATE accounts 
+	       <set>
+	           balance = #{balance},
+	           update_date = CURRENT_TIMESTAMP,
+	        <if test="status != null">
+	           status = #{status},
+			</if>
+	       </set>
+	     WHERE id = #{id}
+	</update>
+	
+	<select id="selectAccounts" parameterType="map" resultType="Account">
+	    SELECT id,
+	    	   balance,
+	    	   status, 
+       		   create_date, 
+       		   update_date
+   		 FROM accounts
+   	    <where>
+   		 <if test="id != null">
+   		  AND id = #{id}
+   		 </if>
+   		 <if test="users_id != null">
+   		  AND users_id = #{users_id}
+   		 </if>
+   		</where> 
+	</select>
+</mapper>

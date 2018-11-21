@@ -1,0 +1,68 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>Условия бронирования</h4>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-12">
+								<br>
+								Check-in Time: <span wicket:id="check_in_from">14:00</span>-<span wicket:id="check_in_to">23:59</span>
+								<br> 
+								Ранний заезд: по <span wicket:id="early_check_in_to_half">14:00</span><span> Стоимость раннего заезда:</span> + <span wicket:id="early_check_in_to_value_half">50%</span><span> к стоимости номера</span>
+								<br>
+								Ранний заезд: по <span wicket:id="early_check_in_to_full">14:00</span><span> Стоимость раннего заезда:</span> + <span wicket:id="early_check_in_to_value_full">50%</span><span> к стоимости номера</span>
+								<br><br>
+								Check-out Time:<span wicket:id="check_out_from">14:00</span>-<span wicket:id="check_out_to">23:59</span>
+								<br> 
+								Поздний выезд: после <span wicket:id="late_check_out_from_half">14:00</span><span> Стоимость позднего выезда:</span> + <span wicket:id="late_check_out_from_value_half">50%</span><span> к стоимости номера</span>
+								<br>
+								Поздний выезд: после <span wicket:id="late_check_out_from_full">14:00</span><span> Стоимость позднего выезда:</span> + <span wicket:id="late_check_out_from_value_full">50%</span><span> к стоимости номера</span>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<strong>Условия проживания для детей и порядок предоставления дополнительных кроватей</strong>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								При размещении всех детей младше <span wicket:id="child_free_age">9</span> лет на имеющихся кроватях, проживание им предоставляется бесплатно.
+								<br>
+								При размещении детей старшего возраста или взрослых на дополнительных кроватях взимается <span wicket:id="extra_bed_cost">20</span> USD с человека за ночь
+								<br><br>	
+								Максимальное количество дополнительных кроватей в номере – 1
+								<br>
+								Детская кроватка предоставляется по предварительному запросу. 
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<strong>Условия аннуляции броней и штрафы</strong>
+								<br><br>
+								Примите к сведению, что в случае отмены бронирования за <span wicket:id="cancelation_day">[7]</span> дня/дней до заезда гостей, штраф не взимается
+								<br>
+								<span wicket:id="cancelation_policy">Если бронь отменена позже 7 дня/дней до заезда гостей,  штраф составляет 100% стоимости первых суток/ 50% стоимости всей брони</span>
+								<br>
+								<span wicket:id="noshow_policy">В случае незаезда гостей штраф составляет 100% стоимости первых суток/ 50% стоимости всей брони</span>
+								<br>
+								Налоги и сборы:
+								В стоимость проживания входит единый налог 6% и городской налог для иностранных граждан в размере 2$ с человека за ночь.
+								<br>
+								Комиссионный сбор не применяется. 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+</div>	
+</wicket:panel>

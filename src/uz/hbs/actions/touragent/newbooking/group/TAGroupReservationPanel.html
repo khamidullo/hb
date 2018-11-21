@@ -1,0 +1,548 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+<style type="text/css">
+select[readonly]{
+    cursor:no-drop;
+}
+
+select[readonly] option {
+    display:none;
+}
+</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8">
+			<h2 style="margin-top: 0px;">
+				<span wicket:id="hotel_name"></span>
+			</h2>
+			<div style="padding-bottom: 10px;">
+				<table>
+					<tr wicket:id="roomtypelist">
+						<td>
+							<strong wicket:id="room_count"></strong>
+						</td>
+						<td>&nbsp;&nbsp;x&nbsp;&nbsp;</td>
+						<td>
+							<strong wicket:id="roomtype"></strong>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<p>
+				<span><wicket:message key="touragents.newbooking.check_in">[Check-in]</wicket:message></span>: 
+				<strong wicket:id="checkInLabel">[07 May from 06:00]</strong> <br /> 
+				<span><wicket:message key="touragents.newbooking.check_out">[Check-out]</wicket:message></span>: 
+				<strong wicket:id="checkOutLabel">10 May until 12:00</strong><br />
+				<wicket:message key="users.total">[Total]</wicket:message>: 
+				<strong><span wicket:id="nightsLabel" class="badge" style="">[1]</span> <span wicket:id="nightsSuffixLabel">[night]</span></strong><br>
+				<span wicket:id="ageLabel">[Adults: 1, children: 0]</span>
+			</p>
+		</div>
+		<div class="col-md-4">
+			<div class="pull-right">
+				<h3 style="color: green">
+					<wicket:message key="touragents.newbooking.total_price">[Total price]</wicket:message>: <span wicket:id="totalPrice"></span>
+				</h3>
+				<h4 wicket:id="amountOfNightsLabel"></h4>
+				<h4 wicket:id="amountOfGuestsLabel"></h4>
+				<h4 wicket:id="amountOfChildrenLabel"></h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<a wicket:id="backToSearchResultsLink" class="btn btn-success btn-outline"><wicket:message key="touragents.newbooking.back_to_search_results">[Back to search results]</wicket:message></a> 
+			<a wicket:id="newBookingLink" class="btn btn-success btn-outline"><wicket:message key="touragents.newbooking.new_search">[New booking]</wicket:message></a>
+		</div>
+	</div>
+	<br>
+	<br>
+	<form wicket:id="form">
+		<div class="row">
+			<div class="col-md-12">
+				<input class="form-control" wicket:id="group_name" type="text" wicket:message="placeholder:hotels.reservation.details.group.name">
+			</div>
+		</div>	
+		<div class="row">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title"><wicket:message key="touragents.newbooking.rooms_details">[Rooms details]</wicket:message></h4>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="table-responsive">
+											<table style="width: 100%" wicket:id="container">
+												<wicket:container wicket:id="reserveroomlist">
+													<tr>
+														<th colspan="4" style="padding: 8px 0; font-size: 16px;">
+															<table>
+																<tr>
+																	<td>
+																		<strong wicket:id="reserveOrder">#</strong>.&nbsp;&nbsp;
+																	</td>
+																	<td>
+																		<wicket:message key="hotels.reservation.details.room.type">[]</wicket:message>: 
+																	</td>
+																	<td style="color: #0896ff; padding-left: 10px;">
+																		<wicket:container wicket:id="reserve_edit">
+																			<select wicket:id="roomtype" class="form-control" required="required" style="width: 160px;">
+																				<option>Choice One</option>
+																			</select>
+																		</wicket:container>
+																		<wicket:container wicket:id="reserve_add">
+																			<span wicket:id="roomtype_label"></span>
+																		</wicket:container>
+																	</td>
+																	<td>
+																		<a wicket:id="delete" class="btn btn-danger btn-sm btn-outline" style="margin-left: 10px;"> <i class="fa fa-trash-o"></i>
+																		</a>
+																	</td>
+																</tr>
+															</table>
+														</th>
+														<th></th>
+														<th></th>
+													</tr>
+													<tr>
+														<td colspan="6">
+															<wicket:message key="touragents.newbooking.guest_details">[Guest details]</wicket:message>
+															<hr>
+														</td>
+													</tr>
+													<tr>
+														<th>
+															<wicket:message key="touragents.newbooking.title">[Title]</wicket:message>
+														</th>
+														<th>
+															<wicket:message key="touragents.accountant_details.last_name">[Last name]</wicket:message>
+														</th>
+														<th>
+															<wicket:message key="touragents.accountant_details.first_name">[First name]</wicket:message>
+														</th>
+														<th>
+															<wicket:message key="touragents.newbooking.citizenship">[Citizenship]</wicket:message>
+														</th>
+														<th></th>
+														<th></th>
+													</tr>
+													<tr wicket:id="guests">
+														<wicket:container wicket:id="guestdetails" />
+													</tr>
+													<tr>
+														<td colspan="6">
+															<br>
+															<div class="row">
+																<div class="col-md-6 mealoptions">
+																	<wicket:enclosure child="meal_options_cost_label">
+																	<div class="panel panel-default"> <!-- style="display: none;" -->
+																		<div class="panel-heading">
+																			<wicket:message key="meal_options">[Meal options]</wicket:message>
+																		</div>
+																		<div class="panel-body">
+																			<table>
+																				<tr>
+																					<td style="white-space: nowrap; padding-right: 40px;">
+																						<span style="color: green;"><strong><span data-mealoptions="cost">15000</span> <span
+																								wicket:id="meal_options_cost_label">[USD/day/person]</span></strong></span>
+																					</td>
+																					<td rowspan="2">
+																						<table>
+																							<tr>
+																							</tr>
+																							<tr>
+																								<td>
+																									<label for="lunch" class="checkbox-inline">
+																										<input data-mealoptions="lunch" type="checkbox" class="meal" value="1"/>
+																										<wicket:message key="meal_options.lunch">[Lunch]</wicket:message>
+																									</label>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									<label for="dinner" class="checkbox-inline">
+																										<input data-mealoptions="dinner" type="checkbox" class="meal" value="2"/>
+																										<wicket:message key="meal_options.dinner">[Dinner]</wicket:message>
+																									</label>
+																								</td>
+																							</tr>
+																						</table>
+																					</td>
+																				</tr>
+																				<tr>
+																					<td nowrap="nowrap">
+																						<label class="control-label">
+																							<span data-mealoptions="value" class="badge">BB</span>
+																						</label>
+																					</td>
+																				</tr>
+																			</table>
+																			<input type="hidden" value="0" data-mealoptions="type" wicket:id="meal_options">
+																		</div>
+																	</div>
+																	</wicket:enclosure>
+																</div>
+																<div class="col-md-6">
+																	<div class="panel panel-default">
+																		<div class="panel-heading">
+																			<wicket:message key="touragents.newbooking.additional_options">[Additional options]</wicket:message>
+																		</div>
+																		<div class="panel-body">
+																			<div>
+																				<label class="checkbox-inline" wicket:for="extra_bed_needed">
+																					<input type="checkbox" wicket:id="extra_bed_needed">
+																					<span><wicket:message key="touragents.newbooking.bed_needed">[Additional bed needed]</wicket:message></span>
+																				</label>
+																				<span style="color: green;"><strong wicket:id="extra_bed_cost_label"></strong></span>
+																			</div>
+																			<div>
+																				<label class="checkbox-inline" wicket:for="non_smokers">
+																					<input type="checkbox" wicket:id="non_smokers">
+																					<span><wicket:message key="touragents.newbooking.non_smokers_availability">[Room for non-smokers upon availability]</wicket:message></span>
+																				</label>
+																			</div>
+																			<div>
+																				<label class="checkbox-inline" wicket:for="city_view">
+																					<input type="checkbox" wicket:id="city_view">
+																					<span><wicket:message key="touragents.newbooking.city_view_availability">[Room with city view upon availability]</wicket:message></span>
+																				</label>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</td>
+													</tr>
+												</wicket:container>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+													<td colspan="2">
+														<a wicket:id="add" class="btn btn-success btn-sm btn-outline" style="margin-left: 10px;"> <i class="fa fa-plus"></i>
+														</a>
+													</td>
+												</tr>
+											</table>
+										</div>
+										<script type="text/javascript" wicket:id="jscript"></script>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default" wicket:id="reserve_details_container">
+					<div class="panel-heading">
+						<wicket:message key="hotels.reservation.details">[Reservation Details]</wicket:message>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-10">
+								<div class="form-group">
+									<label class="col-sm-4 control-label">
+										<wicket:message key="hotels.reservation.details.check_in">[Check IN]</wicket:message>
+									</label>
+									<div class="col-sm-8">
+										<wicket:container wicket:id="check_in" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" style="padding-top: 5px;">
+										<wicket:message key="hotels.reservation.details.check_out">[Check OUT]</wicket:message>
+									</label>
+									<div class="col-sm-8" style="padding-top: 5px;">
+										<wicket:container wicket:id="check_out" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<label class="col-sm-12 control-label" style="margin-top: 20px;">
+									<span class="badge" id="number_of_nights"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<wicket:message key="hotels.reservation.details.reservation.type">[Reservation type]</wicket:message>
+					</div>
+					<div class="panel-body">
+							<wicket:container wicket:id="reservation_type">
+								<div class="row">
+										<div class="col-md-3">
+											<label class="radio-inline" wicket:for="definite">
+												<input type="radio" wicket:id="definite">
+												<wicket:message key="hotels.reservation.details.reservation.type.definite">[Definite]</wicket:message>
+											</label>
+										</div>
+										<div class="col-md-9"></div>
+								</div>
+								<div class="row">
+									<div class="col-md-3">
+										<label class="radio-inline" wicket:for="tentative">
+											<input type="radio" wicket:id="tentative">
+											<span wicket:id="tentativeLabel">[Tentative]</span>
+										</label>
+									</div>
+									<div class="col-md-9"></div>
+								</div>
+							</wicket:container>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<wicket:message key="touragents.newbooking.payment_owner">[Payment Owner]</wicket:message>
+					</div>
+					<div class="panel-body">
+						<label class="checkbox-inline" wicket:for="payment_owner" wicket:message="title:touragents.newbooking.payment_owner.info">
+							<input type="checkbox" wicket:id="payment_owner">
+							<span><wicket:message key="touragents.newbooking.payment_owner">[Payment Owner]</wicket:message></span>
+						</label>
+						<div wicket:id="payment_owner_info">
+							4.3. Заказчик несет ответственность за соблюдение Гостем сроков оплаты и оплачивает соответствующие штрафы,
+							если таковые будут предъявлены Исполнителю Поставщиком, за незаезд Гостя или несвоевременную аннуляцию брони.
+							Стоимость дополнительных Услуг предоставляемых для бронирования в системе HOTELIOS и оказываемых в рамках настоящего Договора,
+							будет оплачиваться Заказчиком отдельно напрямую Исполнителю в порядке и сроке, установленном настоящим Договором.
+						</div>	
+					</div>
+				</div>	
+			</div>
+		</div>
+		<wicket:enclosure child="additional_option">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<wicket:message key="touragents.newbooking.additional_options">[Addiotional Option]</wicket:message>
+						</h4>
+					</div>
+					<div class="panel-body">
+						<div wicket:id="additional_option"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</wicket:enclosure>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title"><wicket:message key="touragents.newbooking.special_requests">[Special requests]</wicket:message></h4>
+					</div>
+					<div class="panel-body">
+						<textarea class="form-control" rows="3" wicket:id="ta_comments"
+							wicket:message="placeholder:touragents.newbooking.special_requests"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-right">
+					<button wicket:id="ready" class="btn btn-primary">
+						<i class="fa fa-check"></i>
+						<wicket:message key="button.ready">[Done]</wicket:message>
+					</button>
+					<a class="btn btn-default" wicket:id="cancel"><i class="fa fa-cancel"></i> <wicket:message key="button.cancel">[Cancel]</wicket:message></a>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" wicket:id="jscript2"></script>
+		<input type="hidden" value="0" id="breakfast_cost" wicket:id="breakfast_cost" data-mealoptions="breakfast">
+		<input type="hidden" value="0" id="lunch_cost" wicket:id="lunch_cost" data-mealoptions="lunch">
+		<input type="hidden" value="0" id="dinner_cost" wicket:id="dinner_cost" data-mealoptions="dinner">
+		<input type="hidden" wicket:message="value:meal_options.bb" id="bb">
+		<input type="hidden" wicket:message="value:meal_options.hb" id="hb">
+		<input type="hidden" wicket:message="value:meal_options.fb" id="fb">
+	</form>
+	<div wicket:id="dialog"></div>
+	<div class="row">
+		<div class="col-md-12">&nbsp;</div>
+	</div>
+	<script type="text/javascript">
+		var $selectedRoomType;
+		var $selectedRoomTypeValue;
+		$check_in = $('input[data-bind="check_in"]');
+		$check_out = $('input[data-bind="check_out"]');
+
+		var lunch = 0;
+		var breakfast = 0;
+		var dinner = 0;
+		
+		$(function() {
+			$check_in.on("change", function(e) {
+				calcNights();
+			});
+			$('select[data-bind="time"]',
+					$check_in.parentsUntil('div.form-group')).on("change",
+					function(e) {
+						calcNights();
+					});
+			$check_out.on("change", function(e) {
+				calcNights();
+			});
+			$('select[data-bind="time"]',
+					$check_out.parentsUntil('div.form-group')).on("change",
+					function(e) {
+						calcNights();
+					});
+		});
+
+		function calcNights() {
+			var from = moment($check_in.val(), "DD/MM/YYYY");
+			var to = moment($check_out.val(), "DD/MM/YYYY");
+
+			if (from.isValid() && to.isValid()) {
+				$('#number_of_nights').text(to.diff(from, 'day'));
+				if ($('#number_of_nights').text() < 0) {
+					to = moment(from).add(1, 'days');
+					$check_out.val(to.format("DD/MM/YYYY"));
+					$('#number_of_nights').text(to.diff(from, 'day'));
+				}
+				if ($('#number_of_nights').text() >= 0) {
+					mycallback($check_in.val()
+							+ " "
+							+ $('select[data-bind="time"]',
+									$check_in.parentsUntil('div.form-group'))
+									.val() + ":00:00", $check_out.val()
+							+ " "
+							+ $('select[data-bind="time"]',
+									$check_out.parentsUntil('div.form-group'))
+									.val() + ":00:00", $('#number_of_nights')
+							.text());
+				}
+			} else {
+				if (!from.isValid()) {
+					$parent = $check_in.parents('div.input-group');
+					if ($parent.length) {
+						var err_msg = document.createElement('span');
+						$(err_msg).addClass("error")
+								.text('Date is incorrect!!');
+						$parent.after($(err_msg));
+						$check_in.focus();
+						setTimeout(function() {
+							$(err_msg).remove();
+						}, 2000);
+					}
+				} else if (!to.isValid()) {
+					$parent = $check_out.parents('div.input-group');
+					if ($parent.length) {
+						var err_msg = document.createElement('span');
+						$(err_msg).addClass("error")
+								.text('Date is incorrect!!');
+						$parent.after($(err_msg));
+						$check_out.focus();
+						setTimeout(function() {
+							$(err_msg).remove();
+						}, 2000);
+					}
+				}
+			}
+		}
+
+		function changeMealOption() {
+			$('input.meal').change(function() {
+				$parent = $(this).parents('div.mealoptions');
+				var meal = 0;
+				$('input:checked.meal', $parent).each(function(index, element) {
+					$element = $(element)
+					meal += parseInt($element.val());
+				})
+				getMealOptionsValue(meal, $parent);
+			});
+		}
+
+		$(document).ready(function() {
+			changeMealOption();
+			
+			$('input:hidden[data-mealoptions]').each(function(){
+				$mealoption = parseFloat($(this).val());
+				if ($mealoption == 0.0) {
+					$('input:checkbox[data-mealoptions=' + $(this).attr('data-mealoptions') + ']').prop('disabled', true);
+				}
+			})
+
+			breakfast = parseFloat($('input:hidden#breakfast_cost').val());
+			lunch = parseFloat($('input:hidden#lunch_cost').val());
+
+			if (lunch == .0) {
+				$('input[data-mealoptios=lunch]').prop('disabled', true);
+			}
+
+			dinner = parseFloat($('input:hidden#dinner_cost').val());
+
+			if (dinner == .0) {
+				$('input[data-mealoptios=dinner]').prop('disabled', true);
+			}
+
+			$('span[data-mealoptions=cost]').text(breakfast);
+
+			getMealOptions();
+			calcNights();
+		});
+
+		function getMealOptionsValue(meal, parent) {
+			var st = '';
+			var cost = 0;
+			if (meal == 0) {
+				st = $('input:hidden#bb').val();
+				cost = breakfast;
+			} else if (meal == 1) {
+				st = $('input:hidden#hb').val();
+				cost = breakfast + lunch;
+			} else if (meal == 2) {
+				st = $('input:hidden#hb').val();
+				cost = breakfast + dinner;
+			} else if (meal == 3) {
+				st = $('input:hidden#fb').val();
+				cost = breakfast + lunch + dinner;
+			}
+			$('span[data-mealoptions=value]', parent).text(st);
+			$('span[data-mealoptions=cost]', parent).text(cost.toFixed(2));
+
+			$mealoptions = $('input[data-mealoptions=type]', parent);
+			$mealoptions.val(meal);
+
+			mealoptioncallback($mealoptions.attr('name'), $mealoptions.val(), $mealoptions.attr('data-guest'));
+		}
+
+		function getMealOptions() {
+			$('input[data-mealoptions=type]').each(function(index, element) {
+				$element = $(element);
+				$meal_options = $element.val();
+				$parent = $element.parents('div.mealoptions');
+				console.log($meal_options);
+				if ($meal_options == 1) {
+					$('input[data-mealoptions=lunch]', $parent).attr('checked', true);
+				} else if ($meal_options == 2) {
+					$('input[data-mealoptions=dinner]', $parent).prop('checked', true);
+				} else if ($meal_options == 3) {
+					$('input[data-mealoptions=lunch]', $parent).prop('checked', true);
+					$('input[data-mealoptions=dinner]', $parent).prop('checked', true);
+				}
+				getMealOptionsValue($meal_options, $parent);
+			});
+			changeMealOption();
+		}
+	</script>
+</wicket:panel>

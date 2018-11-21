@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Messages">
+	<insert id="insertMessages" parameterType="Message">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+		    SELECT NEXTVAL('messages_id_seq')
+		</selectKey>
+	    INSERT INTO messages (id, recipient, subject, content, attachment_name, attachment, initiator_user_id)
+	    VALUES (#{id}, #{recipient}, #{subject}, #{content}, #{attachment_name}, #{attachment}, #{initiator_user_id})
+	</insert>
+	
+	<update id="updateMessages" parameterType="Message">
+	    UPDATE messages 
+	       SET status = #{status},
+	           update_date = CURRENT_TIMESTAMP
+	     WHERE id = #{id}
+	</update>
+</mapper>

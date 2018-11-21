@@ -1,0 +1,230 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style>
+table.table tr th {
+	text-align: center;
+}
+</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<script src="js/number/jshashtable-3.0.js"></script>
+	<script src="js/number/jquery.numberformatter-1.2.4.min.js"></script>
+	<script type="text/javascript">
+		function fieldOnBlur(field) {
+			$(field).parseNumber({
+				format : "#,00",
+				locale : "ru"
+			});
+			$(field).formatNumber({
+				format : "#.00",
+				locale : "ru"
+			});
+			if ($(field).val() == ',00')
+				$(field).val('');
+		}
+
+		function fieldOnFocus(field) {
+			$(field).parseNumber({
+				format : "#,00",
+				locale : "ru"
+			});
+			if ($(field).val() == '0')
+				$(field).val('');
+		}
+	</script>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">
+					<span wicket:id="feedback">[feedback]</span>
+				</div>
+			</div>
+			<br>
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.rate.plane.name">[Name]</wicket:message>
+								<span style="color: #ff0000;">*</span>
+								<input type="text" class="form-control" wicket:id="name" wicket:message="placeholder:hotels.rate.plane.name">
+							</div>
+							<div class="col-md-6"></div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<label wicket:for="description">
+									<wicket:message key="hotels.rate.plane.description">[Description]</wicket:message>
+								</label>
+								<textarea class="form-control" wicket:id="description"
+									wicket:message="placeholder:hotels.rate.plane.description" rows="3"></textarea>
+							</div>
+							<div class="col-md-6"></div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">
+								<label wicket:for="internal">
+									<input type="checkbox" wicket:id="internal">
+									<wicket:message key="hotels.rate.plane.internal">[Internal Rate]</wicket:message>
+								</label>
+							</div>
+							<div class="col-md-10">
+								<button class="btn btn-primary" wicket:id="save">
+									<i class="fa fa-save"></i>
+									<wicket:message key="button.save">[Save]</wicket:message>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table wicket:id="container" class="table table-bordered table-condensed"
+								style="font-size: 12px;">
+								<wicket:container wicket:id="seasondetaillist">
+									<tr>
+										<th rowspan="5" style="vertical-align: middle;"><wicket:message key="hotels.rate.plane.room_type_or_season">[RoomType/Season]</wicket:message></th>
+										<th wicket:id="season" />
+									</tr>
+									<tr>
+										<th wicket:id="season_container">
+											<table>
+												<tr>
+													<td>
+														<div class="input-group date">
+															<input wicket:id="season_from" type="text" class="form-control date" wicket:message="placeholder:from"
+																required="required">
+														</div>
+													</td>
+													<td style="padding-left: 15px;">
+														<div class="input-group date">
+															<input wicket:id="season_to" type="text" class="form-control date" wicket:message="placeholder:to"
+																required="required">
+														</div>
+													</td>
+													<td style="padding-left: 15px;">
+														<a wicket:id="add" class="btn btn-info btn-sm btn-outline"> <i class="fa fa-plus"
+																wicket:message="title:actions.title.delete;alt:actions.title.add"></i>
+														</a> <a wicket:id="delete" class="btn btn-danger btn-sm btn-outline"> <i class="fa fa-trash"
+																wicket:message="title:actions.title.delete;alt:actions.title.delete"></i>
+														</a>
+													</td>
+												</tr>
+											</table>
+										</th>
+									</tr>
+									<tr>
+										<th wicket:id="individualHeader" colspan="2">
+											<wicket:message key="hotels.rate.plane.season.person.individual">[Individual]</wicket:message>
+										</th>
+										<th wicket:id="groupHeader" colspan="2">
+											<wicket:message key="hotels.rate.plane.season.person.group">[Group]</wicket:message>
+										</th>
+									</tr>
+									<tr>
+										<wicket:container wicket:id="persondetaillist">
+											<td wicket:id="person_number" colspan="2" style="text-align: center" />
+										</wicket:container>
+									</tr>
+									<tr>
+										<wicket:container wicket:id="persontypelist">
+											<td wicket:id="persontypeitem" style="text-align: center" />
+										</wicket:container>
+									</tr>
+									<tr wicket:id="roomtypelist" data-item="rate">
+										<td style="white-space: nowrap;">
+											<div style="margin: 0px; padding: 0px;">
+												<span wicket:id="roomtype"></span>
+												<a onclick="apply(this)" class="btn btn-xs btn-link" style="margin: 0px;">
+													<i class="fa fa-copy"></i>
+												</a>
+											</div>	
+										</td>
+										<wicket:container wicket:id="ratedetaillist">
+											<wicket:container wicket:id="ratedetail">
+												<td colspan="2"></td>
+											</wicket:container>
+										</wicket:container>
+									</tr>
+									<tr>
+										<td colspan="17" style="background-color: #EFEFEF;">&nbsp;</td>
+									</tr>
+								</wicket:container>
+							</table>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var arr = [];
+
+		function calcSeasonPeriod(obj) {
+			$source = $(obj);
+			$dest = $('input[from="' + $source.attr('to') + '"]');
+			if ($dest.length) {
+				var from = moment($source.val(), "DD/MM/YYYY");
+				if (from.isValid()) {
+					var to = from.add(1, 'd');
+					$dest.val(to.format('DD/MM/YYYY'));
+					var $from = $('input[data-bind="' + $dest.attr('id') + '"]');
+					if ($from.length && $from.val() == '') {
+						var from2 = moment($dest.val(), "DD/MM/YYYY");
+						if (from2.isValid()) {
+							var to2 = from2.add(1, 'd');
+							$from.val(to2.format('DD/MM/YYYY'));
+						}
+					}
+				} else {
+					$dest.val('');
+				}
+			}
+		}
+
+		function calcSeasonPeriodAll() {
+			$('input[to]').each(function(index) {
+				calcSeasonPeriod($(this));
+			});
+		}
+
+		function getter() {
+			$('input.date').each(function() {
+				arr[$(this).attr('id')] = $(this).val();
+			});
+			$('input.rate').each(function() {
+				arr[$(this).attr('name')] = $(this).val();
+			});
+		}
+
+		function setter() {
+			$('input.date').each(function() {
+				$(this).val(arr[$(this).attr('id')]);
+			});
+			$('input.rate').each(function() {
+				$(this).val(arr[$(this).attr('name')]);
+			});
+		}
+		
+	   $('input.rate').on("keypress", function (e) {
+		    if (e.which != 8 && e.which != 0 && ((e.which < 48 || e.which > 57) && e.which != 46)) {
+		        e.preventDefault();
+		    } else if (e.which == 46 && $(this).val().indexOf('.') > -1){
+		    	e.preventDefault();
+		    }
+	   });
+	   
+	   
+	   function apply(obj) {
+		   $link = $(obj);
+		   $parent = $link.parents('tr[data-item=rate]');
+		   if ($parent.length){
+			   $rate_first = $('input[data-item=rate]:first', $parent);
+			   $('input[data-item=rate]', $parent).not($rate_first).val($rate_first.val());
+		   }
+	   }
+	</script>
+</wicket:panel>

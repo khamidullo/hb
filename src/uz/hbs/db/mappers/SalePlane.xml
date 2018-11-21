@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.SalePlane">
+    <insert id="insertSalePlane" parameterType="SalePlane">
+        <selectKey order="BEFORE" resultType="long" keyProperty="id">
+            SELECT NEXTVAL('saleplanes_id_seq')
+        </selectKey>
+		INSERT INTO saleplanes(id, create_date, sale_date, sale, sale_uz, update_date, initiator_user_id, hotelsusers_id, roomtypes_id, person_number, is_group)
+        VALUES (#{id}, now(), #{sale_date}::date, #{sale}, #{sale_uz}, now(), #{initiator_user_id}, #{hotelsusers_id}, #{roomtypes_id}, #{person_number}, #{is_group})        
+    </insert>
+    
+    <update id="updateSalePlane" parameterType="SalePlane">
+        UPDATE saleplanes
+           SET sale = #{sale}, 
+               sale_uz = #{sale_uz}, 
+               update_date = now(), 
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+    </update>
+    
+    <update id="updateSalePlane2" parameterType="SalePlane">
+        UPDATE saleplanes
+           SET sale = #{sale}, 
+               sale_uz = #{sale_uz}, 
+               update_date = now(), 
+               initiator_user_id = #{initiator_user_id}
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND roomtypes_id = #{roomtypes_id}
+           AND person_number = #{person_number}
+           AND is_group = #{is_group}
+           AND sale_date::date = #{sale_date}::date
+    </update>
+    
+    <select id="selectIsExistsSalePlane" parameterType="SalePlane" resultType="boolean">
+        SELECT COUNT(*)         
+          FROM saleplanes
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND roomtypes_id = #{roomtypes_id}
+           AND person_number = #{person_number}
+           AND is_group = #{is_group}
+           AND sale_date::date = #{sale_date}::date
+    </select>
+    
+    <update id="updateSalePlaneChangeStatus" parameterType="SalePlane">
+        UPDATE saleplanes
+           SET status = #{status}, 
+               update_date = now(), 
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+    </update>
+    
+    <select id="selectSalePlaneByPeriod" parameterType="map" resultType="SalePlane">
+        SELECT DISTINCT COALESCE(s.sale_date,d.date) AS sale_date, s.hotelsusers_id, s.roomtypes_id
+          FROM get_date_list(#{date_from}::date, #{date_to}::date) d LEFT JOIN saleplanes s ON d.date = s.sale_date AND s.hotelsusers_id = #{hotelsusers_id}
+                                                                                                                    AND s.roomtypes_id = #{roomtypes_id}
+        ORDER BY 1 ASC                                                                                                             
+    </select>
+    
+    <select id="selectDiffMonth" parameterType="map" resultType="int">
+        SELECT months_between(#{date_to}::date, #{date_from}::date)
+    </select>
+    
+    <select id="selectSalePlane" parameterType="SalePlane" resultType="SalePlane">
+        SELECT id, create_date, sale_date, sale, sale_uz, update_date, initiator_user_id, 
+               hotelsusers_id, status, roomtypes_id, person_number, is_group
+          FROM saleplanes
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND roomtypes_id = #{roomtypes_id}
+           AND is_group = #{is_group}
+           AND person_number = #{person_number}
+           AND sale_date::date = #{sale_date}::date
+    </select>
+    
+    <select id="selectStatusIndicateSalePlane" parameterType="map" resultType="short">
+        SELECT SUM(CASE status WHEN true THEN 1 ELSE 0 END)/COUNT(*) 
+          FROM saleplanes
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND roomtypes_id = #{roomtypes_id}
+           AND is_group = #{is_group}
+           AND sale_date::date = #{sale_date}::date
+    </select>
+    
+    <select id="selectSalePlanePeriod" parameterType="map" resultType="SalePlane">
+        SELECT id, sale_date, sale, sale_uz
+          FROM saleplanes
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND roomtypes_id = #{roomtypes_id}
+           AND status = true
+           AND is_group = #{is_group}
+           AND person_number = #{person_number}
+           AND sale_date::date = #{sale_date}::date
+           AND sale_date BETWEEN #{check_in}::date AND #{check_out}::date
+    </select>
+</mapper>    

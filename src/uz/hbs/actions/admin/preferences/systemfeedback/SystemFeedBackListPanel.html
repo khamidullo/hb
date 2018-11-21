@@ -1,0 +1,59 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<wicket:message key="system.feedback.title">[Feedbacks]</wicket:message>
+					</h3>
+				</div>
+				<div class="panel-body" wicket:id="container">
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0">
+							<thead>
+								<tr>
+									<th>
+										<wicket:message key="id">[ID]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.login">[Login]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="system.feedback.subject">[Subject]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="system.feedback.comment">[Comment]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.create_date">[Created]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.status">[Active]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="operations">[Operation]</wicket:message>
+									</th>
+								</tr>
+							</thead>
+							<tr wicket:id="systemFeedbacks">
+								<td wicket:id="id"></td>
+								<td wicket:id="login"></td>
+								<td wicket:id="subject"></td>
+								<td wicket:id="comment"></td>
+								<td wicket:id="create_date"></td>
+								<td wicket:id="status"></td>
+								<td wicket:id="operations"></td>
+							</tr>
+						</table>
+						<div style="float: right">
+							<ul wicket:id="systemFeedbacksNavigator" style="padding: 0; margin: 10px 0 0 0">
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div wicket:id="dialog"></div>
+	<div wicket:id="feedback"></div>
+</wicket:panel>

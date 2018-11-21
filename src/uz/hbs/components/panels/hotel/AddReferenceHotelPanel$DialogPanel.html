@@ -1,0 +1,44 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">&nbsp;</div>
+	</div>
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<span wicket:id="feedback">[feedback]</span>
+			<form wicket:id="form" class="well">
+				<div class="row">
+					<div class="col-md-12">
+						<wicket:message key="hotels.reference.name">[Name]</wicket:message>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<input wicket:id="name" type="text" class="form-control" wicket:message="placeholder:hotels.reference.name">
+					</div>
+				</div>
+				<br>
+				<wicket:enclosure child="filter_flag">
+				<div class="row">
+					<div class="col-md-12">
+						<label class="checkbox-inline" wicket:for="filter_flag">
+							<input wicket:id="filter_flag" type="checkbox">
+							<span><wicket:message key="hotels.reference.use_in_search">[Use in search]</wicket:message></span>
+						</label>
+					</div>
+				</div>
+				</wicket:enclosure>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<button class="btn btn-primary" wicket:id="save">
+							<i class="fa fa-save"></i>
+							<wicket:message key="button.save">[Save]</wicket:message>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+</wicket:panel>

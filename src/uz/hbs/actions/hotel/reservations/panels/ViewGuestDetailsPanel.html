@@ -1,0 +1,181 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" wicket:id="guestlist">
+		<div class="panel panel-default">
+			<div class="panel-heading" role="tab" wicket:id="collapseHeadingContainer">
+				<h4 class="panel-title">
+					<a role="button" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" wicket:id="collapseLink">
+						<span wicket:id="guest"></span>: <span wicket:id="name"></span>
+					</a>
+				</h4>
+			</div>
+			<div class="panel-collapse collapse in" role="tabpanel" wicket:id="collapseBodyContainer">
+				<div class="panel-body">
+					<table class="table table-bordered table-hover table-condensed table-striped">
+						<tr wicket:id="relationship_container">
+							<td><wicket:message key="hotels.guest.details.relationship">[RelationShip]</wicket:message>:</td>
+							<td wicket:id="relationship"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.date_and_place_of_birth">[Date And Place of Birth]</wicket:message>:</td>
+							<td wicket:id="date_and_place_of_birth"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.gender">[Gender]</wicket:message>:</td>
+							<td wicket:id="gender"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.nationality">[Nationality]</wicket:message>:</td>
+							<td wicket:id="nationality"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.passport.number">[Passport]</wicket:message>:</td>
+							<td wicket:id="passport_number"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.passport.date_of_issue">[Date of Issue]</wicket:message></td>
+							<td wicket:id="passport_date_of_issue"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.passport.issue_place">[Issue Place]</wicket:message>:</td>
+							<td wicket:id="passport_issue_place"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.address">[Address]</wicket:message>:</td>
+							<td wicket:id="address"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.country">[Country]</wicket:message>:</td>
+							<td wicket:id="country"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.region">[Region]</wicket:message>:</td>
+							<td wicket:id="region"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.city">[City]</wicket:message>:</td>
+							<td wicket:id="city"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.email">[Email Address]</wicket:message>:</td>
+							<td wicket:id="email"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.company">[Company]</wicket:message>:</td>
+							<td wicket:id="company"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.purpose_of_arrival">[Purpose of arrival]</wicket:message>:</td>
+							<td wicket:id="purpose_of_arrival"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.occupation">[Occupation]</wicket:message>:</td>
+							<td wicket:id="occupation"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.visa.number">[Visa Number]</wicket:message>:</td>
+							<td wicket:id="visa_number"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.visa.valid.from">[Visa Valid From]</wicket:message>:</td>
+							<td wicket:id="visa_valid_from"/>
+						</tr>
+						<tr>
+							<td><wicket:message key="hotels.guest.details.visa.valid.till">[Visa Valid To]</wicket:message>:</td>
+							<td wicket:id="visa_valid_to"/>
+						</tr>
+					</table>				
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 
+	<div class="row" wicket:id="guestlist">
+		<div class="col-md-12">
+			<table class="table table-bordered table-hover table-condensed table-striped">
+				<tr>
+					<th colspan="2" wicket:id="guest"></th>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.guest.name">[Guest]</wicket:message>:</td>
+					<td wicket:id="name"/>
+				</tr>
+				<tr wicket:id="relationship_container">
+					<td><wicket:message key="hotels.guest.details.relationship">[RelationShip]</wicket:message>:</td>
+					<td wicket:id="relationship"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.date_and_place_of_birth">[Date And Place of Birth]</wicket:message>:</td>
+					<td wicket:id="date_and_place_of_birth"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.gender">[Gender]</wicket:message>:</td>
+					<td wicket:id="gender"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.nationality">[Nationality]</wicket:message>:</td>
+					<td wicket:id="nationality"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.passport.number">[Passport]</wicket:message>:</td>
+					<td wicket:id="passport_number"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.passport.date_of_issue">[Date of Issue]</wicket:message></td>
+					<td wicket:id="passport_date_of_issue"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.passport.issue_place">[Issue Place]</wicket:message>:</td>
+					<td wicket:id="passport_issue_place"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.address">[Address]</wicket:message>:</td>
+					<td wicket:id="address"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.country">[Country]</wicket:message>:</td>
+					<td wicket:id="country"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.region">[Region]</wicket:message>:</td>
+					<td wicket:id="region"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.city">[City]</wicket:message>:</td>
+					<td wicket:id="city"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.email">[Email Address]</wicket:message>:</td>
+					<td wicket:id="email"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.company">[Company]</wicket:message>:</td>
+					<td wicket:id="company"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.purpose_of_arrival">[Purpose of arrival]</wicket:message>:</td>
+					<td wicket:id="purpose_of_arrival"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.occupation">[Occupation]</wicket:message>:</td>
+					<td wicket:id="occupation"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.visa.number">[Visa Number]</wicket:message>:</td>
+					<td wicket:id="visa_number"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.visa.valid.from">[Visa Valid From]</wicket:message>:</td>
+					<td wicket:id="visa_valid_from"/>
+				</tr>
+				<tr>
+					<td><wicket:message key="hotels.guest.details.visa.valid.till">[Visa Valid To]</wicket:message>:</td>
+					<td wicket:id="visa_valid_to"/>
+				</tr>
+			</table>
+		</div>
+	</div>
+	 -->
+	<script>
+		$('.collapse').collapse();
+	</script>
+</wicket:panel>

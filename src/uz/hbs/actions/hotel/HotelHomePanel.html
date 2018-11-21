@@ -1,0 +1,96 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12" style="margin-bottom: 15px;">
+			<table style="width: 100%">
+				<tr>
+					<td rowspan="2" style="width: 290px; background: #29166E; color: #ffffff; padding: 10px; vertical-align: top;">
+						<div>
+							<img src="img/logo.png" style="max-height: 80px;" wicket:message="alt:company,title:company">
+						</div>
+<!-- 						<div>
+							<span style="font-size: 52px;">200-25-00</span><br> <span>круглосуточная служба поддержки</span>
+						</div>
+ -->						<br>
+						<div>
+							<strong><wicket:message key="hotels.details.address">[Address]</wicket:message>: </strong><wicket:message key="company.address">[Tashkent, Gagarin st., 66]</wicket:message>
+						</div>
+						<br>
+						<div>
+							<strong><wicket:message key="phone">[Phone]</wicket:message>:</strong> (+998 71) 200-25-00
+						</div>
+						<br>
+						<div>
+							<strong>E-mail:</strong> <span style="text-decoration: underline;">info@hotelios.uz</span>
+						</div>
+						<br>
+						<div>
+							<ul class="list-unstyled">
+								<li><wicket:message key="company.working_hours">[Офис открыт ежедневно с 09:00 до 18:00]</wicket:message></li>
+								<li><wicket:message key="company.working_hours_short">[В субботу до 14:00]</wicket:message></li>
+								<li><wicket:message key="company.working_hours_not_working">[Воскресенье - выходной]</wicket:message></li>
+							</ul>
+						</div>
+						<br> <br>
+						<div>
+							<strong><wicket:message key="company.requisites.title">[Реквизиты]</wicket:message>:</strong> <wicket:message key="company.requisites">[ООО "BOOKING SYSTEM" в АИКБ "Ипак Йули" Чиланзар ф-л р/с 20 208 000 700 437 926 001
+							МФО 01067 ИНН 303205650 ОКОНХ 84500]</wicket:message>
+						</div>
+					</td>
+					<td style="padding: 30px;" valign="top">
+						<div class="row">
+							<div class="col-md-12">
+								<a wicket:id="saleLink" href="#" class="btn btn-success btn-circle btn-lg"
+									style="width: 100%; text-transform: uppercase;"><wicket:message key="hotels.room_rates.list">[Список тарифных планов]</wicket:message></a>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<a wicket:id="roomsLink" href="#" class="btn btn-success btn-circle btn-lg"
+									style="width: 100%; text-transform: uppercase;"><wicket:message key="hotels.room.availability">[Доступные номера]</wicket:message></a>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<div style="padding: 70px 0; font-size: 24px">
+									<ul class="list-unstyled">
+										<li>
+											<wicket:message key="reservation.total">[Всего броней]</wicket:message>: <span wicket:id="reservationsCount" style="font-weight: bold">[129]</span>
+										</li>
+										<li>
+											<wicket:message key="reservation.definite.total">[На гарантированной основе]</wicket:message>: <span wicket:id="reservationsDefiniteCount" style="font-weight: bold">[11]</span>
+										</li>
+										<li>
+											<wicket:message key="reservation.tentative.total">[На не гарантированной основе]</wicket:message>: <span wicket:id="reservationsTentativeCount" style="font-weight: bold">[79]</span>
+										</li>
+										<li>
+											<hr>
+										</li>
+										<li>
+											<wicket:message key="reservation.cancelled.total">[Отмененных]</wicket:message>: <span wicket:id="reservationsCanceledCount" style="font-weight: bold">[19]</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding: 10px; background-color: #4D485C; color: #ffffff">
+						<div>
+							ID: <span wicket:id="login">[hot-0001-001]</span> <span wicket:id="hotel">[(ООО Dedeman)]</span>. <span
+								wicket:id="contractDetails">[Контракт №45 от 03.05.2015]</span> (<a href="#"
+								style="color: #ffffff; text-decoration: underline; font-weight: bold;"><wicket:message key="view">[просмотреть]</wicket:message></a>)
+						</div>
+						<br>
+						<div>
+							<wicket:message key="reservation.pending_invoice.total">[Ожидающие оплаты счета]</wicket:message>: <span wicket:id="pendingPayments" style="text-decoration: underline;">11</span>
+						</div>
+						<!-- <div>Бухгалтерия ООО "Booking System" +998 97 490-49-01</div> -->
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</wicket:panel>

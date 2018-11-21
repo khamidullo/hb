@@ -1,0 +1,137 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<form wicket:id="form">
+		<div class="row">
+			<div class="col-md-12">
+				<div wicket:id="dialog"></div>
+			</div>
+		</div>
+		<wicket:enclosure child="navigatorLabel1">
+			<div class="row">
+				<div class="col-md-12">
+					<table style="width: 100%;">
+						<tr>
+							<td wicket:id="navigatorLabel1" style="white-space: nowrap; font-weight: bold;">
+								[Showing from 1 to 3 from 6]
+							</td>
+							<td style="text-align: right; white-space: nowrap;">
+								<ul wicket:id="navigator1" style="margin: 3px 0 0 0; padding: 0"></ul>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<hr style="border-top: 1px dashed #779bca;">
+		</wicket:enclosure>
+		<div class="row" wicket:id="repeater">
+			<div class="col-md-12" style="margin: 0px;">
+				<div class="row">
+					<div class="col-md-3">
+						<img class="img-thumbnail" wicket:id="img" width="200" height="200">
+					</div>
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-10">
+								<h3 style="margin-top: 0px; margin-bottom: 0px;">
+									<span wicket:id="name" style="color: #0896ff">[Hotel name]</span> <span wicket:id="stars"></span>
+								</h3>
+								<a wicket:id="showOnMapLink" href="#" data-toggle="tooltip" data-placement="right"><i class="fa fa-map-marker" style="color: #CB4034"></i> <span wicket:id="regionName">[Tashkent]</span></a>
+								<!-- <span wicket:id="address">[Address]</span> -->
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-1">
+								<!-- <div class="well2 well-sm text-center">
+							<span class="badge">8.6</span> <strong>TA rating</strong> (15206 total)
+						</div> -->
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<p class="bg-info" style="padding: 2px 3px; margin: 2px 0px;" wicket:id="recommended">[Recommended for 2
+									adults, 1 child]</p>
+								<table class="table2">
+									<tr>
+										<td style="color: #0896ff">
+											<span wicket:id="adults" style="font-size: 11px; color: #003580"></span> <strong wicket:id="roomType">Basic Triple room</strong>
+										</td>
+										<td rowspan="3" style="padding-left: 10px; white-space: nowrap; text-align: right; vertical-align: top;">
+											<p wicket:id="priceForNightsLabel" class="bg-warning" style="font-weight: bold; color: #003580; padding: 5px;">Цена за 5 дней</p>
+											<div wicket:id="roomRate" style="font-weight: bold; color: #003580; padding-bottom: 10px;">[UZS 1 222155]</div>
+											<div wicket:id="roomAvgRate" style="font-weight: bold; color: #003580; padding-bottom: 10px;">[UZS 1 222155]</div>
+											<!-- <input wicket:id="book" type="submit" class="btn btn-success" value="Book"> -->
+											<a href="#" wicket:id="moreOptionsLink" class="btn btn-primary btn-outline"><span
+												wicket:id="moreOptionsLabel">[More information]</span></a>
+										</td>
+									</tr>
+									<tr>
+										<td style="font-size: 12px; font-weight: bold; color: #339900">
+											<ul class="nav nav-pills">
+												<li role="presentation" wicket:id="freeCancelation">FREE cancellation</li>
+												<li role="presentation" wicket:id="breakfastIncluded">Breakfast included</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-success" wicket:id="nearbyPlaces">
+											<ul class="list-inline">
+												<li>
+													<i class="fa fa-codepen fa-lg"></i>
+													26 m<sup>2</sup>
+												</li>
+												<li>
+													<i class="fa fa-empire fa-lg"></i>
+													Air condition
+												</li>
+												<li>
+													<i class="fa fa-desktop fa-lg"></i>
+													Flat screen TV
+												</li>
+												<li>
+													<i class="fa fa-signal fa-lg"></i>
+													Wi-Fi
+												</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="text-right"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<hr style="border-top: 1px dashed #779bca;">
+					</div>
+				</div>
+			</div>
+		</div>
+		<wicket:enclosure child="navigatorLabel2">
+			<div class="row">
+				<div class="col-md-12">
+					<table style="width: 100%;">
+						<tr>
+							<td wicket:id="navigatorLabel2" style="white-space: nowrap; font-weight: bold;">
+								[Showing from 1 to 3 from 6]
+							</td>
+							<td style="text-align: right; white-space: nowrap;">
+								<ul wicket:id="navigator2" style="margin: 3px 0 0 0; padding: 0"></ul>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<hr style="border-top: 1px dashed #779bca;">
+		</wicket:enclosure>
+		<wicket:enclosure child="noDataFound">
+			<div class="row">
+				<div class="col-md-12">
+					<div wicket:id="noDataFound" class="well well-small" style="text-align: center; font-weight: bold;"></div>
+				</div>
+			</div>
+		</wicket:enclosure>
+	</form>
+</wicket:panel>

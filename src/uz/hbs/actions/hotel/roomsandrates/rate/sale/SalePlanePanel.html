@@ -1,0 +1,182 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style>
+input[type=checkbox].status {
+	display: none;
+}
+
+input[type=checkbox].status+span {
+	position: absolute;
+	display: block;
+	background: radial-gradient(45%, circle, rgb(152, 152, 152) 0%,
+		rgba(176, 176, 176, 0.6) 100%);
+	background: -webkit-radial-gradient(45%, circle, rgb(152, 152, 152) 0%,
+		rgba(176, 176, 176, 0.6) 100%);
+	width: 21px;
+	height: 21px;
+	vertical-align: middle;
+	border: 1px solid #004562;
+	border-radius: 100%;
+	padding: 0px;
+}
+
+input[type=checkbox].status+span::after {
+	position: absolute;
+	display: block;
+	background: radial-gradient(45%, circle, rgb(255, 0, 0) 0%,
+		rgb(88, 0, 0) 100%);
+	background: -webkit-radial-gradient(45%, circle, rgb(255, 0, 0) 0%,
+		rgb(88, 0, 0) 100%);
+	width: 15px;
+	height: 15px;
+	content: "";
+	vertical-align: middle;
+	border: 1px solid #004562;
+	border-radius: 100%;
+	z-index: 12;
+	left: 2px;
+	top: 2px;
+	margin: 0px;
+	box-sizing: padding-box;
+}
+
+input[type=checkbox].status:checked+span::after {
+	position: absolute;
+	display: block;
+	background: radial-gradient(45%, circle, rgb(0, 255, 0) 0%,
+		rgb(0, 88, 0) 100%);
+	background: -webkit-radial-gradient(45%, circle, rgb(0, 255, 0) 0%,
+		rgb(0, 88, 0) 100%);
+	width: 15px;
+	height: 15px;
+	content: "";
+	vertical-align: middle;
+	border: 1px solid #004562;
+	border-radius: 100%;
+	z-index: 12;
+	left: 2px;
+	top: 2px;
+	margin: 0px;
+	box-sizing: padding-box;
+}
+</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">
+					<div wicket:id="feedback"></div>
+				</div>
+			</div>
+			<form wicket:id="searchform">
+				<div class="row">
+					<div class="col-md-12">
+						<table>
+							<tr>
+								<td>
+									<div class="input-group date">
+										<input type="text" class="form-control" data-date-format="DD/MM/YYYY" wicket:id="datefrom"
+											wicket:message="placeholder:from" maxlength="10" />
+									</div>
+								</td>
+								<td style="padding-left: 15px;">
+									<div class="input-group date">
+										<input type="text" class="form-control" data-date-format="DD/MM/YYYY" wicket:id="dateto"
+											wicket:message="placeholder:to" maxlength="10" />
+									</div>
+								</td>
+								<td style="padding-left: 15px;">
+									<button class="btn btn-primary btn-outline" wicket:id="search">
+										<i class="fa fa-search"></i>
+										<wicket:message key="button.search">[Search]</wicket:message>
+									</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</form>
+			<hr>
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-8">
+						<div class="table-responsive">
+							<table class="table table-bordered table-condensed">
+								<tr>
+									<th rowspan="2" style="text-align: center;" wicket:id="roomtype" />
+									<th colspan="2" style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.season.person.individual">[Individual]</wicket:message>
+									</th>
+									<th colspan="2" style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.season.person.group">[Group]</wicket:message>
+									</th>
+								</tr>
+								<tr>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident.no">[No Resident]</wicket:message>
+	
+									</th>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident">[Resident]</wicket:message>
+	
+									</th>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident.no">[No Resident]</wicket:message>
+	
+									</th>
+									<th style="text-align: center;">
+										<wicket:message key="hotels.rate.plane.person.resident">[Resident]</wicket:message>
+	
+									</th>
+								</tr>
+								<tr wicket:id="personlist">
+									<td wicket:id="person_number" />
+									<wicket:container wicket:id="salelist">
+										<td style="padding: 0">
+											<input wicket:id="sale" type="text" required="required" wicket:message="placeholder:hotels.rate.plane.sale"
+												class="form-control input-sm sale">
+										</td>
+										<td style="padding: 0">
+											<input wicket:id="sale_uz" type="text" wicket:message="placeholder:hotels.rate.plane.sale"
+												class="form-control input-sm sale">
+										</td>
+									</wicket:container>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="overflow: auto;" wicket:id="calendar">
+					<div class="col-md-12">
+						<div class="row" wicket:id="rows">
+							<div class="col-md-4" wicket:id="cols">
+								<wicket:container wicket:id="container">[container]</wicket:container>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+							<button class="btn btn-primary" wicket:id="apply">
+								<wicket:message key="button.apply">[Apply]</wicket:message>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div wicket:id="dialog"></div>
+		</div>
+	</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('input.sale').on("keypress", function (e) {
+		    if (e.which != 8 && e.which != 0 && ((e.which < 48 || e.which > 57) && e.which != 46)) {
+		        e.preventDefault();
+		    } else if (e.which == 46 && $(this).val().indexOf('.') > -1){
+		    	e.preventDefault();
+		    }
+	   });	
+	})
+</script>	
+</wicket:panel>

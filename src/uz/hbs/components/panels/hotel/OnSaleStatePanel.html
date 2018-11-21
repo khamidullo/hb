@@ -1,0 +1,68 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style>
+		.onsalestate {
+		    position: relative; width: 100px;
+		    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+		}
+		
+		.onsalestate-checkbox {
+		    display: none;
+		}
+		
+		.onsalestate-label {
+		    display: block; overflow: hidden; cursor: pointer;
+		    border: 2px solid #999999; border-radius: 13px;
+		}
+		
+		.onsalestate-inner {
+		    display: block; width: 200%; margin-left: -100%;
+		    -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s;
+		    -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s;
+		}
+		
+		.onsalestate-inner:before, .onsalestate-inner:after {
+		    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 30px;
+		    font-size: 10px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+		    -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+		}
+		
+		.onsalestate-inner:before {
+		    content: "Can Sale";
+		    padding-left: 5px;
+		    background-color: #34A7C1; color: #FFFFFF;
+		}
+		
+		.onsalestate-inner:after {
+		    content: "Under Repair";
+		    padding-right: 5px;
+		    background-color: #CCCCCC; color: #A70000;
+		    text-align: right;
+		}
+		
+		.onsalestate-switch {
+		    display: block; width: 13px; margin: 8.5px;
+		    background: #F7F0F0;
+		    border: 2px solid #999999; border-radius: 13px;
+		    position: absolute; top: 0; bottom: 0; right: 65px;
+		    -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
+		    -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s; 
+		}
+		
+		.onsalestate-checkbox:checked + .onsalestate-label .onsalestate-inner {
+		    margin-left: 0;
+		}
+		
+		.onsalestate-checkbox:checked + .onsalestate-label .onsalestate-switch {
+		    right: 0px; 
+		}	
+	</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="onsalestate">
+	    <input type="checkbox" class="onsalestate-checkbox" wicket:id="state">
+	    <label class="onsalestate-label" wicket:for="state">
+	        <span class="onsalestate-inner"></span>
+	        <span class="onsalestate-switch"></span>
+	    </label>
+	</div>
+</wicket:panel>

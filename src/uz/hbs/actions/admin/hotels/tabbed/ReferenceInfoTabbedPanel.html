@@ -1,0 +1,185 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<script src="js/number/jshashtable-3.0.js"></script>
+	<script src="js/number/jquery.numberformatter-1.2.4.min.js"></script>
+	<script type="text/javascript">
+		function fieldOnBlur(field) {
+			$(field).parseNumber({
+				format : "#,00",
+				locale : "ru"
+			});
+			$(field).formatNumber({
+				format : "#.00",
+				locale : "ru"
+			});
+			if ($(field).val() == ',00')
+				$(field).val('');
+		}
+
+		function fieldOnFocus(field) {
+			$(field).parseNumber({
+				format : "#,00",
+				locale : "ru"
+			});
+			if ($(field).val() == '0')
+				$(field).val('');
+		}
+	</script>
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<form wicket:id="form">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-right" style="margin-bottom: 10px;">
+					<button class="btn btn-primary" wicket:id="next">
+						<wicket:message key="tabbed.save_and_next">[Save and continue]</wicket:message>
+						<i class="fa fa-forward"></i>
+					</button>
+					<button class="btn btn-success" wicket:id="save">
+						<wicket:message key="button.save">[Save]</wicket:message>
+						<i class="fa fa-save"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.reference_info.self_payment_possibility">[Self payment possibility]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:container wicket:id="self_payment_possibility">
+									<div class="radio">
+										<label wicket:for="self_payment_possible">
+											<input type="radio" wicket:id="self_payment_possible">
+											<wicket:message key="yes">[Yes]</wicket:message>
+										</label>
+									</div>
+									<div class="radio">
+										<label wicket:for="self_payment_impossible">
+											<input type="radio" wicket:id="self_payment_impossible">
+											<wicket:message key="no">[No]</wicket:message>
+										</label>
+									</div>
+								</wicket:container>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.reference_info.number_of_floors">[Number of floors]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.reference_info.how_many_floors">[How many floors]</wicket:message>
+								:
+								<input type="text" class="form-control" wicket:id="floors"
+									wicket:message="placeholder:hotels.reference_info.how_many_floors">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<wicket:message key="hotels.reference_info.how_many_rooms">[How many rooms]</wicket:message>
+								:
+								<input wicket:id="rooms" type="text" class="form-control" wicket:message="placeholder:hotels.reference_info.how_many_rooms">
+		
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<wicket:message key="hotels.reference_info.room_types">[Room types]</wicket:message>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						<wicket:container wicket:id="roomtype_container" />
+					</div>
+				</div>
+				<wicket:message key="hotels.reference_info.room_types.eg">[E.g.: Executive One-Bedroom, Grand Deluxe and etc.]</wicket:message>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<wicket:message key="hotels.reference_info.room_conditions">[Room conditions]</wicket:message>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6">
+						<wicket:container wicket:id="condition_container" />
+					</div>
+					<div class="col-md-6"></div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<wicket:message key="hotels.reference_info.equipment_in_rooms">[Equipment in rooms]</wicket:message>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						<wicket:message key="hotels.reference_info.equipment_in_rooms.eg">[List of standard room equipments. In the next step you'll select and assign equipment to rooms. To add more select +Add more]</wicket:message>
+						<div class="row" wicket:id="equipment_container">
+							<div class="col-md-12" wicket:id="equipmentsPalette"></div>
+						</div>
+						<a wicket:id="add_equipment"><strong><i class="fa fa-plus"></i> <wicket:message key="add_another">[Add another]</wicket:message></strong></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<wicket:container wicket:id="meal_options" />
+	</form>
+	<div wicket:id="dialog"></div>
+	<a id="toTop" href="#"> <i class="fa fa-chevron-left fa-rotate-90"
+			style="margin: 8px 15px 10px 16px; color: #888888"></i>
+	</a>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			moveTop();
+		});
+		
+		var data = [];
+		
+		function before(){
+			$('select[data-item=selected]').children('option').each(function(){
+				data[$(this).val()] = $(this).text();
+			});
+		}
+		
+		function after(){
+			$recorder = $('input[data-item=recorder]');
+			$('select[data-item=available]').children().each(function(){
+				var val = data[$(this).val()];
+				if (val != undefined) {
+					var option = new Option(val, $(this).val());
+					$('select[data-item=selected]').append($(option));
+					$recorder.val($recorder.val() + ',' + $(this).val());
+					$(this).remove();
+				}
+			});
+		}
+	</script>
+</wicket:panel>

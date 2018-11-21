@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.RoomManagement">
+	<insert id="insertRoom" parameterType="Room">
+	    <selectKey order="BEFORE" resultType="long" keyProperty="id">
+	        SELECT NEXTVAL('rooms_id_seq')
+	    </selectKey>
+	    INSERT INTO rooms(id, hotelsusers_id, roomtypes_id, room_number, room_floor, bed_type, initiator_user_id, clean_state, onsale_state)
+        VALUES (#{id}, #{hotelsusers_id}, #{roomtypes_id}, #{room_number}, #{room_floor}, #{bed_type.id}, #{initiator_user_id}, 0, 0)
+	</insert>
+	
+	<update id="updateRoom" parameterType="Room">
+	    UPDATE rooms
+	       SET room_number = #{room_number},
+	           room_floor = #{room_floor}, 
+	           bed_type = #{bed_type.id}, 
+	           initiator_user_id = #{initiator_user_id},
+	           update_date = now()::timestamp(0)
+         WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteRoom" parameterType="long">
+	    DELETE FROM rooms WHERE id = #{id}
+	</delete>
+	
+	<update id="updateRoomTypeRoomNumber" parameterType="int">
+	    UPDATE hotelsroomtypes
+	       SET number_of_rooms = number_of_rooms - 1
+	     WHERE roomtypes_id = #{roomtypes_id}  
+	</update>
+    
+    <select id="selectRoomManagementList" parameterType="map" resultType="Room">
+			SELECT r.id, room_number, room_floor, 
+	               r.clean_state as "clean_state.id", 
+	               r.onsale_state as "onsale_state.id", 
+	               r.room_state as "room_state.id",
+	               rt.name as roomtype,
+	               r.update_date 
+	          FROM rooms r, roomtypes rt
+	         WHERE hotelsusers_id = #{hotelsusers_id}
+	           AND roomtypes_id = rt.id
+	         <if test="clean_state != null">
+	             AND clean_state = #{clean_state.id}
+	         </if>  
+	         <if test="onsale_state != null">
+	             AND onsale_state = #{onsale_state.id}
+	         </if>  
+	         <if test="room_rate != null">
+	             AND r.roomratesplanes_id = #{room_rate.id}
+	         </if>  
+	         <if test="room_state != null">
+	             AND r.room_state = #{room_state.id}
+	         </if>
+	         <if test="room_number != null">
+	             AND room_number = #{room_number}
+	         </if>
+	          <trim prefix="ORDER BY">
+				<if test="sortField != null">
+					${sortField} ${sortOrder}
+				</if>
+			</trim>
+			 LIMIT #{limit} OFFSET #{offset}
+    </select>
+    
+    <select id="selectRoomManagementListCount" parameterType="map" resultType="long">
+        SELECT COUNT(*)
+          FROM rooms r, roomtypes rt
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND roomtypes_id = rt.id
+         <if test="clean_state != null">
+             AND clean_state = #{clean_state.id}
+         </if>  
+         <if test="onsale_state != null">
+             AND onsale_state = #{onsale_state.id}
+         </if>  
+         <if test="room_rate != null">
+             AND r.roomratesplanes_id = #{room_rate.id}
+         </if>  
+         <if test="number_of_room != null">
+             AND room_number = #{room_number}
+         </if>
+	     <if test="room_state != null">
+	         AND r.room_state = #{room_state.id}
+	     </if>
+    </select>
+    
+    <update id="updateCleanState" parameterType="Room">
+        UPDATE rooms
+           SET clean_state = #{clean_state.id},
+	           update_date = now()::timestamp(0)
+         WHERE id= #{id}  
+    </update>
+    
+    <update id="updateOnSaleState" parameterType="Room">
+        UPDATE rooms
+           SET onsale_state = #{onsale_state.id},
+	           update_date = now()::timestamp(0)
+         WHERE id= #{id}  
+    </update>
+    
+    <update id="updateRoomRatePlane" parameterType="Room">
+        UPDATE rooms
+           SET roomratesplanes_id = #{room_rate.id},
+	           update_date = now()::timestamp(0)
+         WHERE id= #{id}  
+    </update>
+    
+    <select id="selectRoomById" parameterType="long" resultType="Room">
+        SELECT r.id, r.room_number, r.room_floor, 
+	           r.clean_state as "clean_state.id", 
+	           r.onsale_state as "onsale_state.id", 
+	           r.room_state as "room_state.id"
+	      FROM rooms r
+	     WHERE r.id = #{id}        
+    </select>
+    
+    <delete id="deleteRoomByRoomTypeId" parameterType="int">
+    	DELETE FROM rooms WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteRoomEquipmentByRoomTypeId" parameterType="int">
+    	DELETE FROM roomsequipments WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteHotelRoomTypeByRoomTypeId" parameterType="int">
+    	DELETE FROM hotelsroomtypes WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteHotelConditionByRoomTypeId" parameterType="int">
+    	DELETE FROM hotelsroomsconditions WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteRatePlanDetailByRoomTypeId" parameterType="int">
+    	DELETE FROM rateplanedetails WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteSalePlanByRoomTypeId" parameterType="int">
+    	DELETE FROM saleplanes WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteReservationRoomByRoomTypeId" parameterType="int">
+    	DELETE FROM reservationrooms WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteRoomTypeUploadFileByRoomTypeId" parameterType="int">
+    	DELETE FROM roomtypesuploadedfiles WHERE roomtypes_id = #{id}
+    </delete>
+    
+    <delete id="deleteRoomtypeByRoomtypeId" parameterType="int">
+    	DELETE FROM roomtypes WHERE id = #{id}
+    </delete>
+    
+    <select id="selectRoomTypeDescription" resultType="String" parameterType="int">
+    	SELECT rt.description
+    	  FROM roomtypes rt
+    	 WHERE rt.id = #{id} 
+    </select>
+</mapper>

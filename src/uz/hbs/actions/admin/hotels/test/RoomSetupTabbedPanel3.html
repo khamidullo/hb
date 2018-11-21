@@ -1,0 +1,115 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<br />
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-right" style="margin-bottom: 10px;">
+					<a class="btn btn-primary" wicket:id="next">
+						<wicket:message key="tabbed.save_and_next">[Save and continue]</wicket:message>
+						<i class="fa fa-forward"></i>
+					</a>
+					<a class="btn btn-success" wicket:id="save">
+						<wicket:message key="button.save">[Save]</wicket:message>
+						<i class="fa fa-save"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div wicket:id="tabbed"></div>
+		
+		<script type="text/javascript">
+			// file input style changer
+			$(document)
+					.on(
+							'change',
+							'.btn-file :file',
+							function() {
+								var $input = $(this);
+								var numFiles = $input.get(0).files ? $input
+										.get(0).files.length : 1;
+								var label = $input.val().replace(/\\/g, '/')
+										.replace(/.*\//, '');
+								$input.trigger('fileselect',
+										[ numFiles, label ]);
+							});
+
+			$(document).ready(
+					function() {
+						$('.btn-file :file').on(
+								'fileselect',
+								function(event, numFiles, label) {
+									var input = $(this).parents('.input-group')
+											.find(':text');
+									var log = numFiles > 1 ? numFiles
+											+ ' files selected' : label;
+									if (input.length) {
+										input.val(log);
+									}
+								});
+					});
+		</script>
+	<script src="js/number/jshashtable-3.0.js"></script>
+	<script src="js/number/jquery.numberformatter-1.2.4.min.js"></script>
+	<script type="text/javascript">
+		function fieldOnBlur(field) {
+			$(field).parseNumber({
+				format : "#,00",
+				locale : "ru"
+			});
+			$(field).formatNumber({
+				format : "#.00",
+				locale : "ru"
+			});
+		}
+
+		function fieldOnFocus(field) {
+			$(field).parseNumber({
+				format : "#,00",
+				locale : "ru"
+			});
+		}
+
+		$('#myTab3 a').click(function(e) {
+			e.preventDefault();
+			$(this).tab('show');
+		})
+
+		function isfullInput(parent) {
+			var $parent = $(parent);
+			var result = true;
+			$(':required', $parent).each(function(index, element) {
+				var $element = $(element);
+				if ($element.val() == '') {
+					result = false;
+					return result;
+				}
+			});
+			return result;
+		}
+
+		function checkFullInput(obj) {
+			var $tab = $('a[href="#' + $(obj).attr('id') + '"]');
+			if (!isfullInput($(obj))) {
+				$tab.css('color', 'red');
+			} else {
+				$tab.css('color', 'black');
+			}
+		}
+
+		$(document).ready(function() {
+			$('div.tab-pane').each(function(index) {
+				checkFullInput($(this));
+			});
+
+			$(':required').each(function(index) {
+				$(this).on('change', function() {
+					checkFullInput($(this).parents('div.tab-pane'));
+				})
+			});
+		})
+	</script>
+</wicket:panel>

@@ -1,0 +1,23 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<br>
+<div class="panel panel-default" style="margin-bottom: 0">
+	<div class="panel-body">
+		<table class="table table-bordered table-hover table-condensed table-striped">
+			<thead>
+				<tr>
+					<th><wicket:message key="datetime">[date & time]</wicket:message></th>
+					<th><wicket:message key="users.type">[type]</wicket:message></th>
+					<th><wicket:message key="users.status">[status]</wicket:message></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="list">
+					<td wicket:id="datetime"/>
+					<td wicket:id="type"/>
+					<td wicket:id="status"/>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</wicket:panel>

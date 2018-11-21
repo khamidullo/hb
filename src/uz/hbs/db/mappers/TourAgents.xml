@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.TourAgents">
+    <resultMap type="TourAgent" id="resultMapTourAgents">
+        <result property="users_id" column="users_id" />
+        <result property="addresses_id" column="ad_id" />
+        <result property="status" column="status" />
+        <result property="name" column="name" />
+        <result property="display_name" column="display_name" />
+        <result property="primary_phone" column="primary_phone" />
+        <result property="secondary_phone" column="secondary_phone" />
+        <result property="email" column="email" />
+        <result property="license_id" column="lcl_doc_number" />
+        <result property="cert_id" column="lcc_doc_number" />
+        <result property="corp" column="corp" />
+        <association property="accountants" javaType="Accountant">
+            <result property="users_id" column="users_id" />
+            <result property="first_name" column="ac_first_name" />
+            <result property="middle_name" column="ac_middle_name" />
+            <result property="last_name" column="ac_last_name" />
+            <result property="contact_number" column="ac_contact_number" />
+            <result property="contact_email" column="ac_contact_email" />
+        </association>
+        <association property="addresses" javaType="Address">
+            <result property="id" column="ad_id" />
+            <result property="countries.id" column="ad_countries_id" />
+            <result property="countries.name" column="ad_countries_name" />
+            <result property="regions.id" column="ad_regions_id" />
+            <result property="regions.name" column="ad_regions_name" />
+            <result property="cities.id" column="ad_cities_id" />
+            <result property="cities.name" column="ad_cities_name" />
+            <result property="address" column="ad_address" />
+            <result property="address_en" column="ad_address_en" />
+            <result property="address_uz" column="ad_address_uz" />
+        </association>
+        <association property="banks_primary" javaType="Bank">
+            <result property="users_id" column="users_id" />
+            <result property="name" column="bp_name" />
+            <result property="address" column="bp_address" />
+            <result property="account_number" column="bp_account_number" />
+            <result property="correspondent_account" column="bp_correspondent_account" />
+            <result property="identification_code" column="bp_identification_code" />
+            <result property="type.id" column="bp_type" />
+        </association>
+        <association property="banks_secondary" javaType="Bank">
+            <result property="users_id" column="users_id" />
+            <result property="name" column="bs_name" />
+            <result property="address" column="bs_address" />
+            <result property="account_number" column="bs_account_number" />
+            <result property="correspondent_account" column="bs_correspondent_account" />
+            <result property="identification_code" column="bs_identification_code" />
+            <result property="type.id" column="bs_type" />
+        </association>
+        <association property="managers" javaType="Manager">
+            <result property="users_id" column="users_id" />
+            <result property="first_name" column="m_first_name" />
+            <result property="middle_name" column="m_middle_name" />
+            <result property="last_name" column="m_last_name" />
+            <result property="contact_number" column="m_contact_number" />
+            <result property="contact_email" column="m_contact_email" />
+        </association>
+	</resultMap>
+    
+	<select id="selectTourAgentsList" parameterType="map" resultType="TourAgent">
+		SELECT ta.users_id, 
+			   ta.display_name, 
+			   u.name, 
+			   ct.name AS city, 
+			   ta.primary_phone, 
+			   u.email 
+		  FROM users u, touragents ta
+		       LEFT JOIN addresses a ON ta.addresses_id = a.id
+		       LEFT JOIN cities ct ON a.cities_id = ct.id
+		 WHERE u.id = ta.users_id
+		   AND u.id <![CDATA[>]]> 0
+		  <if test="users_id != null">
+		   AND ta.users_id = #{users_id} 
+		  </if>
+		  <if test="display_name != null">
+		   AND LOWER(ta.display_name) LIKE '%' || LOWER(#{display_name}) || '%' 
+		  </if>
+		  <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		  </if>
+		  <if test="city != null">
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{city}) || '%' 
+		  </if>
+		  <if test="primary_phone != null">
+		   AND ta.primary_phone = #{primary_phone} 
+		  </if>
+		  <if test="email != null">
+		   AND u.email = #{email} 
+		  </if>
+		<trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectTourAgentsCount" parameterType="map" resultType="long">
+		SELECT COUNT(*) 
+		  FROM users u, touragents ta
+		       LEFT JOIN addresses a ON ta.addresses_id = a.id
+		       LEFT JOIN cities ct ON a.cities_id = ct.id
+		 WHERE u.id = ta.users_id
+		   AND u.id <![CDATA[>]]> 0
+		  <if test="users_id != null">
+		   AND ta.users_id = #{users_id} 
+		  </if>
+		  <if test="display_name != null">
+		   AND LOWER(ta.display_name) LIKE '%' || LOWER(#{display_name}) || '%' 
+		  </if>
+		  <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		  </if>
+		  <if test="city != null">
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{city}) || '%' 
+		  </if>
+		  <if test="primary_phone != null">
+		   AND ta.primary_phone = #{primary_phone} 
+		  </if>
+		  <if test="email != null">
+		   AND u.email = #{email} 
+		  </if>
+	</select>
+
+	<select id="selectTourAgents" parameterType="TourAgent" resultMap="resultMapTourAgents">
+		SELECT ta.users_id,
+			   u.status, 
+			   u.name, 
+			   ta.display_name, 
+			   ta.primary_phone, 
+			   ta.secondary_phone, 
+			   u.email,
+			   ac.first_name AS ac_first_name,
+			   ac.middle_name AS ac_middle_name,
+			   ac.last_name AS ac_last_name,
+			   ac.contact_number AS ac_contact_number,
+			   ac.contact_email AS ac_contact_email,
+			   ad.id AS ad_id,
+			   ad.countries_id AS ad_countries_id,
+			   (SELECT ct.name FROM countries ct WHERE ct.id = ad.countries_id) AS ad_countries_name,
+			   ad.regions_id AS ad_regions_id,
+			   (SELECT r.name FROM regions r WHERE r.id = ad.regions_id) AS ad_regions_name,
+			   ct.id AS ad_cities_id,
+			   ct.name AS ad_cities_name,
+			   ad.address AS ad_address,
+			   ad.address_en AS ad_address_en,
+			   ad.address_uz AS ad_address_uz,
+			   ad.latitude AS ad_latitude,
+			   ad.longitude AS ad_longitude,
+			   bp.name AS bp_name,
+			   bp.address AS bp_address,
+			   bp.account_number AS bp_account_number,
+			   bp.correspondent_account AS bp_correspondent_account,
+			   bp.identification_code AS bp_identification_code,
+			   bp.type AS bp_type,
+			   bs.name AS bs_name,
+			   bs.address AS bs_address,
+			   bs.account_number AS bs_account_number,
+			   bs.correspondent_account AS bs_correspondent_account,
+			   bs.identification_code AS bs_identification_code,
+			   bs.type AS bs_type,
+			   lcl.doc_number AS lcl_doc_number,
+			   lcc.doc_number AS lcc_doc_number,
+			   m.first_name AS m_first_name,
+			   m.middle_name AS m_middle_name,
+			   m.last_name AS m_last_name,
+			   m.contact_number AS m_contact_number,
+			   m.contact_email AS m_contact_email,
+			   CASE WHEN SUBSTR(u.login, 0, POSITION('-' IN u.login)) = 'corp' THEN true ELSE false END AS corp
+		  FROM users u, touragents ta
+			   LEFT JOIN accountants ac ON ac.users_id = ta.users_id
+			   LEFT JOIN addresses ad ON ad.id = ta.addresses_id
+			   LEFT JOIN cities ct ON ad.cities_id = ct.id
+			   LEFT JOIN banks bp ON bp.users_id = ta.users_id AND bp.type = 1
+			   LEFT JOIN banks bs ON bs.users_id = ta.users_id AND bs.type = 2
+			   LEFT JOIN licensesandcerts lcl ON lcl.users_id = ta.users_id AND lcl.type = 1
+			   LEFT JOIN licensesandcerts lcc ON lcc.users_id = ta.users_id AND lcc.type = 2
+			   LEFT JOIN managers m ON m.users_id = ta.users_id
+		 WHERE u.id = ta.users_id
+		   AND u.id <![CDATA[>]]> 0
+		   AND ta.users_id = #{users_id}
+	</select>
+		
+	<insert id="insertTourAgents" parameterType="TourAgent">
+	    INSERT INTO touragents (users_id, addresses_id, display_name, primary_phone, secondary_phone, creator_user_id)
+	    VALUES (#{users_id}, #{addresses_id}, #{display_name}, #{primary_phone}, #{secondary_phone}, #{creator_user_id})
+	</insert>
+	
+	<update id="updateTourAgents" parameterType="TourAgent">
+	    UPDATE touragents 
+		   SET display_name = #{display_name},
+		       primary_phone = #{primary_phone},
+		       secondary_phone = #{secondary_phone}
+		 WHERE users_id = #{users_id}	       	
+	</update>
+	
+	<insert id="insertBanks" parameterType="Bank">
+	    INSERT INTO banks (users_id, name, address, account_number, correspondent_account, identification_code, type)
+	    VALUES (#{users_id}, #{name}, #{address}, #{account_number}, #{correspondent_account}, #{identification_code}, #{type.id})
+	</insert>
+	
+	<update id="updateBanks" parameterType="Bank">
+	    UPDATE banks 
+	       SET name = #{name}, 
+	           address = #{address}, 
+	           account_number = #{account_number}, 
+	           correspondent_account = #{correspondent_account}, 
+	           identification_code = #{identification_code},
+	           update_date = CURRENT_TIMESTAMP
+	     WHERE users_id = #{users_id}
+	       AND type = #{type.id}
+	</update>
+	
+	<insert id="insertAccountants" parameterType="Accountant">
+	    INSERT INTO accountants (users_id, first_name, middle_name, last_name, contact_number, contact_email)
+	    VALUES (#{users_id}, #{first_name}, #{middle_name}, #{last_name}, #{contact_number}, #{contact_email})
+	</insert>
+	
+	<update id="updateAccountants" parameterType="Accountant">
+	    UPDATE accountants
+	       SET first_name = #{first_name}, 
+	           middle_name = #{middle_name},
+	           last_name = #{last_name}, 
+	           contact_number = #{contact_number},
+	           contact_email = #{contact_email},
+	           update_date = CURRENT_TIMESTAMP
+	     WHERE users_id = #{users_id}
+	</update>
+	
+	<insert id="insertManagers" parameterType="Manager">
+	    INSERT INTO managers (users_id, first_name, middle_name, last_name, contact_number, contact_email)
+	    VALUES (#{users_id}, #{first_name}, #{middle_name}, #{last_name}, #{contact_number}, #{contact_email})
+	</insert>
+	
+	<update id="updateManagers" parameterType="Accountant">
+	    UPDATE managers
+	       SET first_name = #{first_name}, 
+	           middle_name = #{middle_name},
+	           last_name = #{last_name}, 
+	           contact_number = #{contact_number},
+	           contact_email = #{contact_email},
+	           update_date = CURRENT_TIMESTAMP
+	     WHERE users_id = #{users_id}
+	</update>
+	
+	<insert id="insertLicensesandcerts" parameterType="LicenseAndCert">
+	    INSERT INTO licensesandcerts (users_id, doc_number, file_name, content, mime_type, type)
+	    VALUES (#{users_id}, #{doc_number}, #{file_name}, #{content}, #{mime_type}, #{type.id})
+	</insert>
+	
+	<update id="updateLicensesandcerts" parameterType="LicenseAndCert">
+	    UPDATE licensesandcerts
+	     <set>
+	           update_date = CURRENT_TIMESTAMP,
+	           doc_number = #{doc_number},
+	         <if test="file_name != null">
+	           file_name = #{file_name}, 
+	         </if>
+	         <if test="content != null">
+	           content = #{content}, 
+	         </if>
+	         <if test="mime_type != null">
+	           mime_type = #{mime_type},
+	         </if>
+	     </set>
+	     WHERE users_id = #{users_id}
+	       AND type = #{type.id}
+	</update>
+	
+	<select id="selectManagers" resultType="Manager" parameterType="long">
+		SELECT users_id, 
+			   first_name, 
+			   middle_name, 
+			   last_name, 
+			   contact_number, 
+			   contact_email 
+		  FROM managers
+		 WHERE users_id = #{users_id}
+	</select>
+
+	<select id="selectHoteliosCorpTA" resultType="ReservationTemplate" parameterType="string">
+		SELECT tu.name AS ta_name,
+			   tu.email AS ta_email,
+			   tu.phone_number AS ta_phone,
+			   au.login AS touragency_login,
+			   ata.display_name AS touragency_name,
+			   ata.primary_phone || ', ' || ata.secondary_phone AS touragency_phone,
+			   (SELECT ct.name ||', '|| ad.address 
+				  FROM addresses ad LEFT JOIN cities ct ON ad.cities_id = ct.id
+				 WHERE ad.id = ata.addresses_id
+			   ) AS touragency_address
+		  FROM users tu, 
+		  	   users au, 
+		  	   touragents ata
+		 WHERE au.id = tu.workusers_id
+		   AND tu.login = #{corp_ta_login}
+		   AND au.id = ata.users_id
+	</select>
+</mapper>

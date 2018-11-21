@@ -1,0 +1,94 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<span wicket:id="feedback">[Feedback]</span>
+	</div>
+</div>	
+<div class="row">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-8">
+						<form wicket:id="form">
+							<table class="table">
+								<tr>
+									<td>
+										<wicket:message key="additional.service.manage.show.from">[From]</wicket:message>
+									</td>
+									<td>
+										<div class="input-group">
+											<input wicket:id="datefrom" type="text" class="form-control" required="required">
+										</div>	
+									</td>
+									<td>
+										-
+									</td>
+									<td>
+										<wicket:message key="additional.service.manage.show.to">[To]</wicket:message>
+									</td>
+									<td>
+										<div class="input-group">
+											<input wicket:id="dateto" type="text" class="form-control" required="required">
+										</div>	
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<wicket:message key="additional.service.manage.show.fullname">[FullName]</wicket:message>
+									</td>
+									<td colspan="3">
+										<input wicket:id="fullname" type="text" class="form-control">
+									</td>
+									<td>
+										<button class="btn btn-primary" wicket:id="show">
+											<i class="fa fa-search"></i>
+											<wicket:message key="additional.service.manage.show">[Show]</wicket:message>
+										</button>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table" wicket:id="container_info">
+				 	<tr>
+				 		<td>
+				 			<wicket:message key="additional.service.manage.taxi.departure">[Taxi]</wicket:message> - <span wicket:id="departure_taxi"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="additional.service.manage.taxi.arrival">[Taxi]</wicket:message> - <span wicket:id="arrival_taxi"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="additional.service.manage.hall.cip">[CIP Hall]</wicket:message> - <span wicket:id="cip_hall"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="additional.service.manage.hall.green">[Green Hall]</wicket:message> - <span wicket:id="green_hall"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="additional.service.manage.insurance">[Insurance]</wicket:message> - <span wicket:id="insurance"></span>
+				 		</td>
+				 		<td>
+				 			<wicket:message key="additional.service.manage.total">[Total]</wicket:message> - <span wicket:id="total"></span>
+				 		</td>
+				 	</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div style="margin-bottom: 20px;">
+	<div class="row" wicket:id="container">
+		<div class="col-md-12">
+			<form wicket:id="filterForm">
+				<table class="table table-bordered table-hover table-condensed table-striped" wicket:id="table"></table>
+			</form>
+		</div>
+	</div>
+</div>
+<div wicket:id="dialog"></div>
+</wicket:panel>

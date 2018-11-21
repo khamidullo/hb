@@ -1,0 +1,158 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<form wicket:id="form">
+				<div class="well well-sm">
+				<table style="width: 100%">
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="hotels.reservation.details.reservation.id"></wicket:message>: 
+						</th>
+						<td colspan="3">
+							<input wicket:id="reservations_id" type="text" class="form-control">
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">
+							<table style="width: 100%">
+								<tr>
+									<td width="50%"><hr></td>
+									<th><wicket:message key="or"></wicket:message></th>
+									<td width="50%"><hr></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="hotels.reservation.details.create_date">[Create date]</wicket:message>: 
+						</th>
+						<td>
+							<div class="input-group">
+								<input wicket:id="created_from" type="text" class="form-control">
+							</div>
+						</td>
+						<th align="center">&nbsp;</th>
+						<td>
+							<div class="input-group">
+								<input wicket:id="created_to" type="text" class="form-control">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="hotels.reservation.report.reservation.check_in">[Check-in]</wicket:message>: 
+						</th>
+						<td>
+							<div class="input-group">
+								<input wicket:id="checkin_from" type="text" class="form-control">
+							</div>
+						</td>
+						<th align="center">&nbsp;</th>
+						<td>
+							<div class="input-group">
+								<input wicket:id="checkin_to" type="text" class="form-control">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="hotels.reservation.report.reservation.check_out">[From]</wicket:message>: 
+						</th>
+						<td>
+							<div class="input-group">
+								<input wicket:id="checkout_from" type="text" class="form-control">
+							</div>
+						</td>
+						<th align="center">&nbsp;</th>
+						<td>
+							<div class="input-group">
+								<input wicket:id="checkout_to" type="text" class="form-control">
+							</div>
+						</td>
+					</tr>
+					<wicket:enclosure>
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="hotels.reservation.details.tour_agent"></wicket:message>: 
+						</th>
+						<td colspan="3">
+							<select wicket:id="tourAgent" class="form-control">
+								<option>[TourAgent]</option>
+							</select>
+						</td>
+<!-- 						<td wicket:id="addt_serv_container">
+							<a wicket:id="addt_serv" class="btn btn-link"><i class="fa fa-gear"></i></a>
+						</td> -->
+ 					</tr>
+ 					</wicket:enclosure>
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="hotels.details.city"></wicket:message>: 
+						</th>
+						<td colspan="3">
+							<wicket:container wicket:id="city" class="form-control"></wicket:container>
+						</td>
+					</tr>
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="touragents.newbooking.hotel"></wicket:message>
+						</th>
+						<td colspan="3">
+							<select wicket:id="hotel" class="form-control">
+								<option>[Hotel]</option>
+							</select>
+						</td>
+					</tr>
+					<wicket:enclosure>
+					<tr>
+						<th style="white-space: nowrap;">
+							<wicket:message key="hotels.guest.details.guest.name.last"></wicket:message>: 
+						</th>
+						<td colspan="3">
+							<input wicket:id="last_name" type="text" class="form-control">
+						</td>
+					</tr>
+					</wicket:enclosure>
+					<tr>
+						<td colspan="4" style="text-align: center;">
+							<hr>
+							<button class="btn btn-primary" wicket:id="submit">
+								<i class="fa fa-search"></i>
+								<wicket:message key="search">[Search]</wicket:message>
+							</button>
+						</td>
+					</tr>
+				</table>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-5"></div>
+	</div>
+	<div style="margin-bottom: 20px;">
+		<div class="row" wicket:id="container">
+			<div class="col-md-12">
+				<form wicket:id="filterForm">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover table-condensed table-striped" wicket:id="table"></table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div style="margin-bottom: 20px;">
+		<div class="row">
+			<div class="col-md-12">
+				<a wicket:id="export" class="btn btn-success btn-outline"> <i class="fa fa-file-excel-o"></i> <wicket:message
+						key="export">Export</wicket:message>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div wicket:id="dialog"></div>
+</wicket:panel>

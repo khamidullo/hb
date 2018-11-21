@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="en">
+<head>
+<title wicket:id="title">MyApp</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+<!-- Bootstrap core CSS -->
+<!-- <link href="css/bootstrap.css" rel="stylesheet" /> -->
+<link href="css/bootswatch.css" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="css/sticky-footer-navbar.css" rel="stylesheet" />
+<link href="css/mystyle.css" rel="stylesheet" />
+
+<!-- FontAwesome -->
+<link href="css/font-awesome.css" rel="stylesheet" />
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<!-- Fixed navbar -->
+	<div wicket:id="header" class="navbar navbar-inverse navbar-fixed-top" role="navigation">[header navbar]</div>
+	<div wicket:id="debug"></div>
+	<!-- Begin page content -->
+	<div class="container" style="background-color: #ffffff; margin-top: 60px; margin-bottom: 60px;">
+		<div class="row" wicket:id="breadCrumbContainer">
+			<div class="col-md-12">
+				<ol style="margin-bottom: 8px;" wicket:id="breadCrumbBar"></ol>
+			</div>
+		</div>
+		<wicket:child>
+			[Child page/panel]
+		</wicket:child>
+	</div>
+
+	<div wicket:id="userFeedbackPanel"></div>
+
+	<wicket:container wicket:id="footer">
+	</wicket:container>
+
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="js/bootstrap.js"></script>
+	<script src="js/bootswatch/bootswatch.js"></script>
+	<script src="js/twitter-bootstrap-hover-dropdown.js"></script>
+	<script src="js/moment.js"></script>
+	<script src="js/moment/locale/ru.js"></script>
+	<script src="js/hb.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+
+		function hideFeedback(id, timeOutValue) {
+			$feedback = $('#' + id);
+			var timeOut = timeOutValue;
+			if ($feedback.length) {
+				$('div.alert', $feedback).each(function(){
+					var $alert = $(this);
+					setTimeout(function(){$alert.fadeOut(timeOutValue);}, timeOut);
+					timeOut += timeOutValue;
+				});
+			}				
+		}
+	</script>
+</body>
+</html>

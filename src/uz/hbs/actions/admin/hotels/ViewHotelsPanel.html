@@ -1,0 +1,114 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<wicket:message key="hotels.view_title">[View hotel]</wicket:message>
+			</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.manager">[Hotel manager]</wicket:message></strong>:
+					<wicket:container wicket:id="manager" />
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.legal.name">[Hotel/organization legal name]</wicket:message></strong>:
+					<wicket:container wicket:id="legal_name" />
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.corporate.email">[Corporate email address]</wicket:message></strong>:
+					<wicket:container wicket:id="corporate_email" />
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.primary.contact">[Primary contact number]</wicket:message></strong>:
+					<wicket:container wicket:id="primary_phone" />
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.manager.accountant">[Accountant]</wicket:message></strong>:
+					<wicket:container wicket:id="accountant" />
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.phone">[phone]</wicket:message></strong>:
+					<wicket:container wicket:id="accountant_phone" />
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.manager.reservation_dep">[Reservation department]</wicket:message></strong>:
+					<wicket:container wicket:id="reservation_dep" />
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5">
+					<strong><wicket:message key="hotels.phone">[Phone]</wicket:message></strong>:
+					<wicket:container wicket:id="reservation_dep_phone" />
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-5">
+					<strong><wicket:message key="touragents.contract">[Contract]</wicket:message></strong>: <span wicket:id="contract_type">[Contract type]</span>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5">
+					<strong><wicket:message key="touragents.contract.number">[Contract number]</wicket:message></strong>: <span wicket:id="contract_number">[Contract number]</span>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-md-5">
+					<strong><wicket:message key="touragents.contract.date">[Date]</wicket:message></strong>: <span wicket:id="contract_date">[Contract date]</span>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5">
+					<strong><wicket:message key="touragents.contract.commission">[Commission]</wicket:message></strong>: <span wicket:id="commission_value">[Commission value]</span>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			<hr>
+			<div class="row" wicket:id="status_container">
+				<div class="col-md-5">
+					<strong><wicket:message key="users.status">[Status]</wicket:message></strong>: <span wicket:id="status">[status]</span>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-6"></div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-5">
+					<a wicket:id="statuslink" class="btn btn-primary btn-outline"> <i class="fa fa-pencil"></i> <wicket:message
+							key="hotels.status.change">[Change status]</wicket:message>
+					</a>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5"></div>
+				<div class="col-md-1"></div>
+			</div>
+		</div>
+	</div>
+<!-- 	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<wicket:message key="users.list">[Users list]</wicket:message>
+			</h3>
+		</div>
+		<div wicket:id="userListPanel" class="panel-body">
+		</div>
+	</div>
+ -->
+ 	<div wicket:id="dialog"></div>
+</wicket:panel>

@@ -1,0 +1,38 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div wicket:id="container">
+		<table class="table table-bordered table-hover table-striped table-condensed">
+			<thead>
+				<tr>
+					<th>
+						<wicket:message key="hotels.details.nearbyplaces.name">[Name]</wicket:message>
+					</th>
+					<th>
+						<wicket:message key="hotels.details.nearbyplaces.type">[Type]</wicket:message>
+					</th>
+					<th>
+						<wicket:message key="hotels.details.nearbyplaces.value">[Value]</wicket:message>
+					</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="list">
+					<td wicket:id="name" />
+					<td wicket:id="type" />
+					<td wicket:id="value" />
+					<td>
+						<a wicket:id="remove" class="btn btn-xs btn-danger btn-outline" wicket:message="title:actions.title.delete"> <i
+								class="fa fa-trash-o fa-fw"></i>
+						</a> <a wicket:id="edit" class="btn btn-xs btn-success btn-outline" wicket:message="title:actions.title.edit"> <i
+								class="fa fa-edit fa-fw"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div style="font-weight: bold;">
+		<a wicket:id="append"><i class="fa fa-plus"></i> <wicket:message key="add_another">[Add Other]</wicket:message></a>
+	</div>
+	<br>
+</wicket:panel>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Preferences">
+	<select id="selectCountriesList" parameterType="map" resultType="Country">
+		SELECT c.id, c.name 
+		  FROM countries c
+		<where>
+		 <if test="id != null">
+		   AND c.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND c.name = #{name} 
+		 </if>
+		</where>
+	    <trim prefix="ORDER BY">
+		 <if test="sortField != null">
+			${sortField} ${sortOrder}
+		 </if>
+		</trim>
+	</select>
+	
+	<select id="selectNationalityList" parameterType="string" resultType="Nationality">
+		SELECT c.code, 
+		       c.name
+		  FROM countries c
+		<where>
+		    <if test="value != null">
+		        c.code = #{value}
+		    </if>
+		</where>
+		ORDER BY c.name
+	</select>
+	
+	<select id="selectNationalityNameByCode" parameterType="string" resultType="string">
+		SELECT c.name
+		  FROM countries c
+		 WHERE c.code = #{value} 
+	</select>
+	
+	<select id="selectRegionsList" parameterType="map" resultType="Region">
+		SELECT r.id, r.name, r.countries_id 
+		  FROM regions r
+		<where>
+		 <if test="id != null">
+		   AND r.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND r.name = #{name} 
+		 </if>
+		 <if test="countries_id != null">
+		   AND r.countries_id = #{countries_id} 
+		 </if>
+		</where>
+	    <trim prefix="ORDER BY">
+		 <if test="sortField != null">
+			${sortField} ${sortOrder}
+		 </if>
+		</trim>
+	</select>
+	
+	<select id="selectRegionById" parameterType="integer" resultType="Region">
+		SELECT r.id, r.name, r.countries_id 
+		  FROM regions r
+		 WHERE r.id = #{id} 
+	</select>
+	
+	<select id="selectCitiesList" parameterType="map" resultType="City">
+		SELECT ct.id, ct.name, ct.countries_id, ct.regions_id 
+		  FROM cities ct
+		<where>
+		 <if test="id != null">
+		   AND ct.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{name}) || '%'
+		 </if>
+		 <if test="countries_id != null">
+		   AND ct.countries_id = #{countries_id} 
+		 </if>
+		 <if test="regions_id != null">
+		   AND ct.regions_id = #{regions_id} 
+		 </if>
+		</where>
+	    <trim prefix="ORDER BY">
+		 <if test="sortField != null">
+			${sortField} ${sortOrder}
+		 </if>
+		</trim>
+	</select>
+	
+	<select id="selectCitiesNameList" parameterType="string" resultType="string">
+		SELECT DISTINCT ct.name 
+		  FROM hotelsdetails hd, addresses ad, cities ct
+		 WHERE hd.addresses_id = ad.id
+		   AND ad.cities_id = ct.id
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{name}) || '%'
+		 LIMIT 20
+	</select>
+	
+	<select id="selectCitiesNameListForHotel" parameterType="string" resultType="City">
+		SELECT ct.countries_id, 
+			   ct.regions_id, 
+			   ct.id, 
+			   r.name AS region_name, 
+			   ct.name
+		  FROM regions r, cities ct
+		 WHERE r.id = ct.regions_id
+		   AND EXISTS (SELECT * 
+		                 FROM hotelsdetails hd, addresses ad 
+					    WHERE hd.addresses_id = ad.id
+						  AND ad.cities_id = ct.id)
+		 ORDER BY r.name, ct.name
+	</select>
+	
+	<select id="selectCitiesRegionByName" parameterType="string" resultType="int">
+		SELECT DISTINCT ct.regions_id 
+		  FROM hotelsdetails hd, addresses ad, cities ct
+		 WHERE hd.addresses_id = ad.id
+		   AND ad.cities_id = ct.id
+		   AND LOWER(ct.name) LIKE '%' || LOWER(#{name}) || '%'
+		 LIMIT 1
+	</select>
+	
+	<select id="selectAvailableRoomService" resultType="Service">
+	    SELECT id, name, 'false' AS filter_flag 
+  		  FROM servicesinrooms
+  		 ORDER BY name
+	</select>
+	
+	<select id="selectAutoCompleteService" resultType="String">
+	    SELECT name
+  		  FROM servicesinrooms
+  		 WHERE LOWER(name) LIKE '%' || LOWER(#{value}) || '%' 
+	</select>
+	
+	<insert id="insertService" parameterType="Service">
+	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
+	        SELECT NEXTVAL('servicesinrooms_id_seq')
+	    </selectKey>
+	    INSERT INTO servicesinrooms(id, name)
+        VALUES (#{id}, #{name})
+	</insert>
+	
+	<update id="updateService" parameterType="Service">
+	    UPDATE servicesinrooms
+	       SET name = #{name}
+	     WHERE id = #{id}  
+	</update>
+	
+	<delete id="deleteService" parameterType="int">
+	    DELETE FROM servicesinrooms WHERE id = #{id}
+	</delete>
+	
+	<select id="selectEquipments" parameterType="map" resultType="Equipment">
+	    SELECT e.id, e.name, e.filter_flag
+	      FROM equipments e
+	    <where>
+		 <if test="id != null">
+		   AND e.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND e.name = #{name} 
+		 </if>
+	     <if test="filter_flag != null">
+	       AND e.filter_flag = #{filter_flag}
+	     </if>
+	    </where>
+	     ORDER BY e.name 
+	</select>
+	
+	<insert id="insertEquipment" parameterType="Equipment">
+	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
+	        SELECT NEXTVAL('equipments_id_seq')
+	    </selectKey>
+	    INSERT INTO equipments(id, name)
+        VALUES (#{id}, #{name})
+    </insert>
+    
+	<update id="updateEquipment" parameterType="Equipment">
+	    UPDATE equipments
+	     <set>
+	       <if test="name != null">
+	           name = #{name},
+	       </if>
+	       <if test="filter_flag != null">
+	           filter_flag = #{filter_flag},
+	       </if>
+	     </set>
+	     WHERE id = #{id}  
+	</update>
+	
+	<delete id="deleteEquipment" parameterType="int">
+	    DELETE FROM equipments WHERE id = #{id}
+	</delete>
+    
+	<select id="selectAutoCompleteEquipment" resultType="String">
+	    SELECT name
+  		  FROM equipments
+  		 WHERE LOWER(name) LIKE '%' || LOWER(#{value}) || '%' 
+	</select>
+			
+	<update id="updateFacility" parameterType="Facility">
+	    UPDATE facilities
+	     <set>
+	        <if test="name != null">
+	           name = #{name},
+	        </if>
+	        <if test="filter_flag != null">
+	           filter_flag = #{filter_flag},
+	        </if>
+	     </set>
+	     WHERE id = #{id}  
+	</update>
+	
+	<delete id="deleteFacility" parameterType="int">
+	    DELETE FROM facilities WHERE id = #{id}
+	</delete>
+	
+	<select id="selectFacilities" resultType="Facility">
+	    SELECT id, name, filter_flag
+	      FROM facilities
+	     ORDER BY name
+	</select>
+	
+	<select id="selectAutoCompleteFacility" resultType="string" parameterType="string">
+	    SELECT name
+	      FROM facilities
+	     WHERE LOWER(name) LIKE '%' || #{value} || '%'
+	</select>
+	
+	<update id="updatePricesRange" parameterType="PricesRange">
+		UPDATE pricesrange 
+		   SET start_price = #{start_price},
+		       end_price = #{end_price}
+	</update>
+</mapper>

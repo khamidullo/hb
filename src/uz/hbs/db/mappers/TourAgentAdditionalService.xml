@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.AdditionalServiceDetail">
+    <insert id="insertAdditionalServiceDetail" parameterType="AdditionalServiceDetail">
+        <selectKey order="BEFORE" resultType="long" keyColumn="id" keyProperty="id">
+            SELECT NEXTVAL('additionalservicedetails_id_seq')
+        </selectKey>
+        INSERT INTO additionalservicedetails(id, additionalserviceorders_id, create_date, update_date, 
+            									service_type, air_numb, air_time, train_numb, train_time, guest, 
+            									transport_type, air_class, air_service_type, 
+            									air_service_value, air_terminal, location_type, location_value, 
+            									taxi_order, taxi_order_cost, taxi_order_car, taxi_order_time, phone_number, destination,
+            									creator_user_id, initiator_user_id)
+        VALUES (#{id}, #{additionalserviceorders_id}, now(), now(),
+            	#{service_type}, #{air_numb}, #{air_time}, #{train_numb}, #{train_time}, #{guest},
+            	#{transport_type}, #{air_class}, #{air_service_type}, 
+            	#{air_service_value}, #{air_terminal}, #{location_type}, #{location_value}, 
+            	#{taxi_order}, #{taxi_order_cost}, #{taxi_order_car}, #{taxi_order_time}, #{phone_number}, #{destination},
+            	#{creator_user_id}, #{initiator_user_id})
+    </insert>
+    
+    <update id="updateAdditionalServiceDetailById" parameterType="AdditionalServiceDetail">
+        UPDATE additionalservicedetails
+           SET service_type = #{service_type}, 
+               air_numb = #{air_numb}, 
+               air_time = #{air_time}, 
+               train_numb = #{train_numb}, 
+               train_time = #{train_time}, 
+               guest = #{guest},
+               transport_type = #{transport_type}, 
+               air_class = #{air_class}, 
+               air_service_type = #{air_service_type}, 
+               air_service_value = #{air_service_value}, 
+               air_terminal = #{air_terminal}, 
+               location_type = #{location_type}, 
+               location_value = #{location_value}, 
+               taxi_order = #{taxi_order}, 
+               taxi_order_cost = #{taxi_order_cost}, 
+               taxi_order_car = #{taxi_order_car}, 
+               taxi_order_time = #{taxi_order_time}, 
+               phone_number = #{phone_number},
+               destination = #{destination},
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}        
+    </update>
+    
+    <update id="updateAdditionalServiceDetail" parameterType="AdditionalServiceDetail">
+        UPDATE additionalservicedetails
+           SET service_type = #{service_type}, 
+               air_numb = #{air_numb}, 
+               air_time = #{air_time}, 
+               train_numb = #{train_numb}, 
+               train_time = #{train_time},
+               guest = #{guest}, 
+               transport_type = #{transport_type}, 
+               air_class = #{air_class}, 
+               air_service_type = #{air_service_type}, 
+               air_service_value = #{air_service_value}, 
+               air_terminal = #{air_terminal}, 
+               location_type = #{location_type}, 
+               location_value = #{location_value}, 
+               taxi_order = #{taxi_order}, 
+               taxi_order_cost = #{taxi_order_cost}, 
+               taxi_order_car = #{taxi_order_car}, 
+               taxi_order_time = #{taxi_order_time}, 
+               phone_number = #{phone_number},
+               destination = #{destination},
+               initiator_user_id = #{initiator_user_id}
+         WHERE additionalserviceorders_id = #{additionalserviceorders_id}
+           AND service_type = #{service_type}        
+    </update>
+    
+    <select id="selectAllAdditionalServiceDetail" resultType="AdditionalServiceDetail">
+        SELECT t.*
+          FROM additionalservicedetails t
+    </select>
+    
+    <select id="selectAdditionalServiceDetailById" resultType="AdditionalServiceDetail" parameterType="long">
+        SELECT t.*
+          FROM additionalservicedetails t
+         WHERE t.id = #{id} 
+    </select>
+    
+    <select id="selectAdditionalServiceDetailList" resultType="AdditionalServiceDetail" parameterType="map">
+        SELECT t.*
+          FROM additionalservicedetails t
+         WHERE t.creator_user_id = #{creator_user_id}
+           AND t.additionalserviceorders_id = #{additionalserviceorders_id}
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+    </select>
+    
+    <select id="selectAdditionalServiceDetailListCount" resultType="long" parameterType="map">
+        SELECT COUNT(*)
+          FROM additionalservicedetails t
+         WHERE t.creator_user_id = #{creator_user_id}
+           AND t.additionalserviceorders_id = #{additionalserviceorders_id}
+    </select>
+    
+    <select id="selectAdditionalServiceDetail" resultType="AdditionalServiceDetail" parameterType="map">
+        SELECT t.id, 
+        	   t.create_date, 
+        	   t.update_date, 
+			   t.service_type, 
+			   t.air_numb, 
+			   t.air_time, 
+			   t.train_numb, 
+			   t.train_time,
+			   t.guest,
+			   t.transport_type, 
+			   t.air_class, 
+			   t.air_service_type, 
+			   t.air_service_value, 
+			   t.air_terminal, 
+			   t.location_type, 
+			   t.location_value, 
+			   t.taxi_order, 
+			   t.taxi_order_cost, 
+			   t.taxi_order_car, 
+			   t.taxi_order_time, 
+			   t.phone_number, 
+			   t.destination
+          FROM additionalservicedetails t, additionalserviceorders o
+         WHERE o.reservations_id = #{reservations_id}
+           AND t.additionalserviceorders_id = o.id 
+           AND t.service_type = #{service_type}        
+    </select>
+    
+    <select id="selectAdditionalServiceDetailByOrderId" resultType="AdditionalServiceDetail" parameterType="map">
+        SELECT t.id, 
+        	   t.create_date,
+        	   t.update_date, 
+			   t.service_type, 
+			   t.air_numb, 
+			   t.air_time, 
+			   t.train_numb, 
+			   t.train_time,
+			   t.guest, 
+			   t.transport_type, 
+			   t.air_class, 
+			   t.air_service_type, 
+			   t.air_service_value, 
+			   t.air_terminal, 
+			   t.location_type, 
+			   t.location_value, 
+			   t.taxi_order, 
+			   t.taxi_order_cost, 
+			   t.taxi_order_car, 
+			   t.taxi_order_time, 
+			   t.phone_number, 
+			   t.destination,
+			   (SELECT COUNT(*) FROM guests g WHERE g.additionalservicedetails_id = t.id) AS person
+          FROM additionalservicedetails t
+         WHERE t.additionalserviceorders_id = #{additionalserviceorders_id} 
+           AND t.service_type = #{service_type}        
+    </select>
+    
+    <delete id="deleteAdditionalServiceDetail" parameterType="AdditionalServiceDetail">
+        DELETE FROM additionalservicedetails t
+         WHERE additionalserviceorders_id = #{additionalserviceorders_id}
+           AND service_type = #{service_type}        
+    </delete>
+    
+    <select id="selectCurrentAdditionalServicePrice" resultType="AdditionalServicePrice">
+        SELECT id, create_date, arrival, arrival_air_green_hall, arrival_air_vip_hall, 
+		       departure, departure_air_green_hall, departure_air_vip_hall, email_send_request_insurance,
+		       insurance, email_send_request, email_send_request_green, email_send_request_vip, 
+		       initiator_user_id
+		  FROM additionalserviceprices p1
+		 WHERE p1.create_date = (SELECT MAX(p1.create_date) FROM additionalserviceprices p1) 
+    </select>
+    
+    <insert id="insertAdditionalServiceOrderPrice" parameterType="AdditionalServicePrice">
+        <selectKey order="BEFORE" resultType="int" keyProperty="id">
+            SELECT NEXTVAL('additionalserviceprices_id_seq')
+        </selectKey>
+        INSERT INTO additionalserviceprices(id, create_date, arrival, arrival_air_green_hall, arrival_air_vip_hall, 
+								            departure, departure_air_green_hall, departure_air_vip_hall, 
+								            insurance, email_send_request, email_send_request_green, email_send_request_vip, 
+								            email_send_request_insurance, initiator_user_id)
+        VALUES (#{id}, now(), #{arrival}, #{arrival_air_green_hall}, #{arrival_air_vip_hall}, 
+		        #{departure}, #{departure_air_green_hall}, #{departure_air_vip_hall}, 
+		        #{insurance}, #{email_send_request}, #{email_send_request_green}, #{email_send_request_vip}, 
+		        #{email_send_request_insurance}, #{initiator_user_id})
+    </insert>
+    
+    <insert id="insertInsurance" parameterType="Insurance">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="long">
+            SELECT NEXTVAL('guests_id_seq')
+        </selectKey>
+         INSERT INTO insurances(id, create_date, update_date, status, creator_user_id, additionalserviceorders_id, 
+					            first_name, last_name, birth_date, nationality, passport_number, 
+					            passport_issue_date, period_from_date, 
+					            period_to_date, initiator_user_id, email_sequence)
+         VALUES (#{id}, now(), now(), 0, #{creator_user_id}, #{additionalserviceorders_id}, 
+	            #{first_name}, #{last_name}, #{birth_date}, #{nationality.code}, #{passport_number}, 
+	            #{passport_issue_date}, #{period_from_date}, 
+	            #{period_to_date}, #{initiator_user_id}, NEXTVAL('insurance_email_seq'))
+    </insert>
+    
+    <update id="updateInsurance" parameterType="Insurance">
+        UPDATE insurances
+           SET first_name = #{first_name},
+               last_name = #{last_name},
+               birth_date = #{birth_date},
+               nationality = #{nationality.code},
+               passport_number = #{passport_number},
+               passport_issue_date = #{passport_issue_date},
+               period_from_date = #{period_from_date},
+               period_to_date = #{period_to_date},
+               update_date = #{update_date},
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}        
+    </update>
+    
+    <delete id="deleteInsuranceById" parameterType="long">
+        DELETE FROM insurances WHERE id = #{id}
+    </delete>
+    
+    <delete id="deleteInsuranceByCreatorUserId" parameterType="long">
+        DELETE FROM insurances WHERE creator_user_id = #{creator_user_id}
+    </delete>
+    
+    <delete id="deleteInsuranceByReserveId" parameterType="long">
+        DELETE FROM insurances WHERE additionalserviceorders_id = #{additionalserviceorders_id}
+    </delete>
+    
+    <select id="selectInsuranceById" resultType="Insurance" parameterType="long">
+         SELECT i.id, 
+         		i.create_date, 
+         		i.update_date, 
+         		i.status, 
+         		i.creator_user_id, 
+         		i.additionalserviceorders_id, 
+	            i.first_name, 
+	            i.last_name, 
+	            i.birth_date, 
+	            i.nationality AS "nationality.code", 
+	            i.passport_number, 
+	            i.passport_issue_date, 
+	            i.period_from_date, 
+	            i.period_to_date, 
+	            i.initiator_user_id
+	       FROM insurances i
+	      WHERE id = #{id}         
+    </select>
+    
+    <select id="selectInsuranceByOrderId" resultType="Insurance" parameterType="long">
+         SELECT i.id, 
+         		i.create_date, 
+         		i.update_date, 
+         		i.status, 
+         		i.creator_user_id, 
+         		i.additionalserviceorders_id, 
+	            i.first_name, 
+	            i.last_name, 
+	            i.birth_date, 
+	            i.nationality AS "nationality.code", 
+	            i.passport_number, 
+	            i.passport_issue_date, 
+	            i.period_from_date, 
+	            i.period_to_date, 
+	            i.initiator_user_id
+	       FROM insurances i
+	      WHERE additionalserviceorders_id = #{additionalserviceorders_id}         
+    </select>
+    
+    <select id="selectInsuranceListByReserveId" resultType="Insurance" parameterType="long">
+         SELECT i.id, 
+         	    i.create_date, 
+         	    i.update_date,
+         	    i.birth_date,
+         	    i.status, 
+         	    i.creator_user_id, 
+         	    i.additionalserviceorders_id, 
+	            i.first_name, 
+	            i.last_name, 
+	            i.nationality AS "nationality.code", 
+	            i.passport_number, 
+	            i.passport_issue_date, 
+	            i.period_from_date, 
+	            i.period_to_date, 
+	            i.initiator_user_id
+	       FROM insurances i, additionalserviceorders aso
+	      WHERE i.additionalserviceorders_id = aso.id
+	        AND aso.reservations_id = #{reservations_id}
+	      ORDER BY id    
+    </select>
+    
+    <select id="selectInsuranceList" resultType="Insurance" parameterType="map">
+         SELECT i.id, 
+         	    i.create_date, 
+         	    i.update_date, 
+         	    i.status, 
+         		i.creator_user_id, 
+         		i.additionalserviceorders_id, 
+	            i.first_name, 
+	            i.last_name, 
+	            i.nationality AS "nationality.code", 
+	            c.name AS "nationality.name", 
+	            i.birth_date,
+	            i.passport_number, 
+	            i.passport_issue_date, 
+	            i.period_from_date, 
+	            i.period_to_date, 
+	            i.initiator_user_id, 
+	            i.creator_user_id, 
+	            i.initiator_user_id
+	       FROM insurances i LEFT JOIN countries c ON i.nationality = c.code
+	      WHERE creator_user_id = #{creator_user_id}
+	        AND additionalserviceorders_id = #{additionalserviceorders_id}
+	      <if test="first_name != null">
+	          AND first_name = #{first_name}
+	      </if> 
+	      <if test="last_name != null">
+	          AND last_name = #{last_name}
+	      </if> 
+	      <if test="passport_number">
+	          AND passport_number = #{passport_number}
+	      </if> 
+	      <if test="nationality != null">
+	          AND nationality = #{nationality.code}
+	      </if> 
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+    </select>
+    
+    <select id="selectInsuranceListCount" resultType="long" parameterType="map">
+         SELECT COUNT(*)
+	       FROM insurances
+	      WHERE creator_user_id = #{creator_user_id}
+	        AND additionalserviceorders_id = #{additionalserviceorders_id}
+	      <if test="first_name != null">
+	          AND first_name = #{first_name}
+	      </if> 
+	      <if test="last_name != null">
+	          AND last_name = #{last_name}
+	      </if> 
+	      <if test="passport_number">
+	          AND passport_number = #{passport_number}
+	      </if> 
+	      <if test="nationality != null">
+	          AND nationality = #{nationality.code}
+	      </if> 
+    </select>
+    
+    <insert id="insertGuestForAdditionalService" parameterType="Guest">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="long">
+            SELECT NEXTVAL('guests_id_seq')
+        </selectKey>
+        INSERT INTO guests(id, create_date, update_date, first_name, last_name, nationality, guest_index, additionalservicedetails_id, person_title, initiator_user_id)
+        VALUES (#{id}, now(), now(), #{first_name}, #{last_name}, #{nationality.code}, #{guest_index}, #{additionalservicedetails_id}, #{person_title.title}, #{initiator_user_id})
+    </insert>
+    
+    <update id="updateGuestForAdditionalService" parameterType="Guest">
+        UPDATE guests
+           SET first_name = #{first_name},
+               last_name = #{last_name},
+               nationality = #{nationality.code}
+         WHERE id = #{id}      
+    </update>
+    
+    <select id="selectGuestForAdditionalService" resultType="Guest" parameterType="long">
+        SELECT id, create_date, update_date, first_name, last_name, nationality AS "nationality.code", guest_index
+          FROM guests
+         WHERE additionalservicedetails_id = #{additionalservicedetails_id}  
+    </select>
+    
+    <delete id="deleteGuestTAAdditionalServiceById" parameterType="long">
+        DELETE FROM guests WHERE id = #{id}
+    </delete>
+    
+    <delete id="deleteGuestTAAdditionalServiceByAddtServOrderId" parameterType="long">
+        DELETE FROM guests WHERE additionalserviceorders_id = #{additionalserviceorders_id}
+    </delete>
+    
+    <insert id="insertAdditionalServiceOrder" parameterType="AdditionalServiceOrder">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="long">
+            SELECT NEXTVAL('additionalserviceorders_id_seq')
+        </selectKey>
+        INSERT INTO additionalserviceorders(id, creator_user_id, create_date, update_date, initiator_user_id, arrival_date, departure_date, reservations_id, total)
+        VALUES (#{id}, #{creator_user_id}, now(), now(), #{initiator_user_id}, #{arrival_date}, #{departure_date}, #{reservations_id}, #{total})
+    </insert>
+    
+    <update id="updateAdditionalServiceOrder" parameterType="AdditionalServiceOrder">
+        UPDATE additionalserviceorders
+           SET update_date = now(),
+               arrival_date = #{arrival_date},
+               departure_date = #{departure_date},
+               initiator_user_id = #{initiator_user_id}
+         WHERE reservations_id = #{reservations_id}      
+    </update>
+    
+    <update id="updateAdditionalServiceOrderById" parameterType="AdditionalServiceOrder">
+        UPDATE additionalserviceorders
+           SET update_date = now(),
+               total = #{total},
+               arrival_date = #{arrival_date},
+               departure_date = #{departure_date},
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}      
+    </update>
+    
+    <select id="selectAdditionalServiceOrderList" parameterType="map" resultType="AdditionalServiceOrder">
+        SELECT a.id, a.creator_user_id, a.create_date, a.update_date, a.initiator_user_id, a.arrival_date, a.departure_date, a.reservations_id, a.status,
+               CASE (SELECT COUNT(*) FROM insurances i WHERE i.additionalserviceorders_id = a.id) WHEN 0 THEN false ELSE true END as insurance,
+		       (SELECT STRING_AGG(DISTINCT(t.fullname),'<![CDATA[<br>]]>')
+		          FROM (SELECT COALESCE(g.first_name||' '||g.last_name,d.guest) AS fullname
+	                      FROM additionalservicedetails d LEFT JOIN guests g ON g.additionalservicedetails_id = d.id  
+	                     WHERE d.additionalserviceorders_id = a.id
+	                     UNION
+	                    SELECT i.first_name||' '||i.last_name AS fullname
+	                      FROM insurances i
+	                     WHERE i.additionalserviceorders_id = a.id) AS t) AS fullname, a.total
+          FROM additionalserviceorders a
+         WHERE 
+         <if test="creator_user_id != null">
+         	a.creator_user_id = #{creator_user_id}
+         </if> 
+        <if test="touragent_id != null ">
+        	EXISTS (SELECT * FROM users u WHERE a.creator_user_id = u.id AND u.workusers_id = #{touragent_id})
+        </if>  
+        <if test="id != null">
+            AND a.id = #{id}
+        </if> 
+        <if test="reservations_id != null">
+            AND a.reservations_id = #{reservations_id}
+        </if> 
+        <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+    </select>
+    
+    <select id="selectAdditionalServiceOrderListCount" parameterType="map" resultType="long">
+        SELECT COUNT(*)
+          FROM additionalserviceorders a
+         WHERE 
+         <if test="creator_user_id != null">
+         	a.creator_user_id = #{creator_user_id}
+         </if> 
+        <if test="touragent_id != null ">
+        	EXISTS (SELECT * FROM users u WHERE a.creator_user_id = u.id AND u.workusers_id = #{touragent_id})
+        </if>  
+        <if test="id != null">
+            AND a.id = #{id}
+        </if> 
+        <if test="reservations_id != null">
+            AND a.reservations_id = #{reservations_id}
+        </if> 
+    </select>
+    
+    <select id="selectAdditionalServiceIdByReserveId" parameterType="long" resultType="long">
+    	SELECT o.id
+    	  FROM additionalserviceorders o
+    	 WHERE o.reservations_id = #{reservations_id} 
+    </select>
+    
+    <select id="selectAdditionalServiceManageList" parameterType="map" resultType="AdditionalServiceManage">
+		SELECT o.id,
+		       ta.display_name AS touragent,
+		       o.create_date,
+		       o.arrival_date,
+		       o.departure_date,
+		       o.total,
+		       o.status,
+		       (SELECT STRING_AGG(DISTINCT(t.fullname),'<![CDATA[,<br>]]>')
+				  FROM (SELECT COALESCE(g.first_name||' '||g.last_name,d.guest) AS fullname
+			              FROM additionalservicedetails d LEFT JOIN guests g ON g.additionalservicedetails_id = d.id  
+			             WHERE d.additionalserviceorders_id = o.id
+			             UNION
+			            SELECT i.first_name||' '||i.last_name AS fullname
+			              FROM insurances i
+			             WHERE i.additionalserviceorders_id = o.id) AS t) AS guest,
+		       (SELECT STRING_AGG(DISTINCT(t.servicetype),'<![CDATA[,<br>]]>')
+				  FROM (SELECT CASE WHEN transport_type = 0 AND taxi_order = true THEN 'ARRIVAL_AIR_TAXI'
+							        WHEN transport_type = 1 AND taxi_order = true THEN 'ARRIVAL_TRAIN_TAXI' END servicetype
+						  FROM additionalservicedetails d 
+						 WHERE d.additionalserviceorders_id = o.id
+						   AND d.service_type = 0
+						UNION   
+						SELECT CASE WHEN air_service_type = 0 THEN 'ARRIVAL_AIR_GREEN_HALL'
+							        WHEN air_service_type = 1 THEN 'ARRIVAL_AIR_VIP_HALL' END servicetype
+						  FROM additionalservicedetails d 
+						 WHERE d.additionalserviceorders_id = o.id
+						   AND d.service_type = 0
+						   AND d.transport_type = 0
+						UNION
+						SELECT CASE WHEN transport_type = 0 and taxi_order = true THEN 'DEPARTURE_AIR_TAXI'
+							        WHEN transport_type = 1 and taxi_order = true THEN 'DEPARTURE_TRAIN_TAXI' END servicetype
+						  FROM additionalservicedetails d 
+						 WHERE d.additionalserviceorders_id = o.id
+						   AND d.service_type = 1   
+						UNION   
+						SELECT CASE WHEN air_service_type = 0 THEN 'DEPARTURE_AIR_GREEN_HALL'
+							        WHEN air_service_type = 1 THEN 'DEPARTURE_AIR_VIP_HALL' END servicetype
+						  FROM additionalservicedetails d 
+						 WHERE d.additionalserviceorders_id = o.id
+						   AND d.service_type = 1
+						   AND d.transport_type = 0
+						UNION
+						SELECT CASE WHEN COUNT(*) > 0 THEN 'INSURANCE' END servicetype
+						  FROM insurances i
+						 WHERE i.additionalserviceorders_id = o.id) AS t) AS servicetype
+		  FROM additionalserviceorders o JOIN users u ON o.creator_user_id = u.id
+		                                 JOIN touragents ta ON u.workusers_id = ta.users_id
+		<where>
+			<if test="datefrom != null">
+			    AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+			</if>
+			<if test="dateto != null">
+			    AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+			</if>
+			<if test="touragent != null">
+				AND LOWER(ta.display_name) LIKE '%'||LOWER(#{touragent})||'%'
+			</if>
+			<if test="create_date != null">
+			    AND o.create_date::date = #{create_date}::date
+			</if>
+			<if test="arrival_date != null">
+			    AND o.arrival_date::date = #{arrival_date}::date
+			</if>
+			<if test="guest != null">
+				AND EXISTS(SELECT *
+				             FROM (SELECT g.first_name||' '||g.last_name AS fullname
+						             FROM additionalservicedetails d LEFT JOIN guests g ON g.additionalservicedetails_id = d.id  
+						            WHERE d.additionalserviceorders_id = o.id
+						            UNION
+						           SELECT i.first_name||' '||i.last_name AS fullname
+						             FROM insurances i
+						            WHERE i.additionalserviceorders_id = o.id) AS t
+						     WHERE LOWER(t.fullname) LIKE '%'||LOWER(#{guest})||'%')
+			</if>
+			<if test="fullname != null">
+				AND EXISTS(SELECT *
+				             FROM (SELECT g.first_name||' '||g.last_name AS fullname
+						             FROM additionalservicedetails d LEFT JOIN guests g ON g.additionalservicedetails_id = d.id  
+						            WHERE d.additionalserviceorders_id = o.id
+						             UNION
+						           SELECT i.first_name||' '||i.last_name AS fullname
+						             FROM insurances i
+						            WHERE i.additionalserviceorders_id = o.id) AS t
+						     WHERE LOWER(t.fullname) LIKE '%'||LOWER(#{fullname})||'%')
+			</if>
+			<if test="total != null">
+				AND o.total = #{total}
+			</if>
+			<if test="service_type != null">
+			    AND
+				 <choose>
+				      <when test="service_type.id == 1"> <!-- ARRIVAL_AIR_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 0 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 2"> <!-- ARRIVAL_TRAIN_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 1
+				                    AND d1.service_type = 0 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 3"> <!-- DEPARTURE_AIR_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 1 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 4"> <!-- DEPARTURE_TRAIN_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 1
+				                    AND d1.service_type = 1 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 5"> <!-- ARRIVAL_AIR_GREEN_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 0 
+				                    AND d1.air_service_type = 0)
+				      </when>
+				      <when test="service_type.id == 6"> <!-- ARRIVAL_AIR_CIP_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 0 
+				                    AND d1.air_service_type = 1)
+				      </when>
+				      <when test="service_type.id ==7"> <!-- DEPARTURE_AIR_GREEN_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 1 
+				                    AND d1.air_service_type = 0)
+				      </when>
+				      <when test="service_type.id == 8"> <!-- DEPARTURE_AIR_CIP_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 1 
+				                    AND d1.air_service_type = 1)
+				      </when>
+				      <when test="service_type.id == 9"> <!-- INSURANCE -->
+				         EXISTS (SELECT * 
+				                   FROM insurances i1
+				                  WHERE i1.additionalserviceorders_id = o.id)
+				      </when>
+				 </choose>     				
+			</if>
+		</where>
+        <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+    </select>
+    
+    <select id="selectAdditionalServiceManageListCount" parameterType="map" resultType="long">
+		SELECT COUNT(*)
+		  FROM additionalserviceorders o JOIN users u ON o.creator_user_id = u.id
+		                                 JOIN touragents ta ON u.workusers_id = ta.users_id
+		<where>
+			<if test="datefrom != null">
+			    AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+			</if>
+			<if test="dateto != null">
+			    AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+			</if>
+			<if test="touragent != null">
+				AND LOWER(ta.display_name) LIKE '%'||LOWER(#{touragent})||'%'
+			</if>
+			<if test="create_date != null">
+			    AND o.create_date::date = #{create_date}::date
+			</if>
+			<if test="arrival_date != null">
+			    AND o.arrival_date::date = #{arrival_date}::date
+			</if>
+			<if test="guest != null">
+				AND EXISTS(SELECT *
+				             FROM (SELECT g.first_name||' '||g.last_name AS fullname
+						             FROM additionalservicedetails d LEFT JOIN guests g ON g.additionalservicedetails_id = d.id  
+						            WHERE d.additionalserviceorders_id = o.id
+						            UNION
+						           SELECT i.first_name||' '||i.last_name AS fullname
+						             FROM insurances i
+						            WHERE i.additionalserviceorders_id = o.id) AS t
+						     WHERE LOWER(t.fullname) LIKE '%'||LOWER(#{guest})||'%')
+			</if>
+			<if test="fullname != null">
+				AND EXISTS(SELECT *
+				             FROM (SELECT g.first_name||' '||g.last_name AS fullname
+						             FROM additionalservicedetails d LEFT JOIN guests g ON g.additionalservicedetails_id = d.id  
+						            WHERE d.additionalserviceorders_id = o.id
+						             UNION
+						           SELECT i.first_name||' '||i.last_name AS fullname
+						             FROM insurances i
+						            WHERE i.additionalserviceorders_id = o.id) AS t
+						     WHERE LOWER(t.fullname) LIKE '%'||LOWER(#{fullname})||'%')
+			</if>
+			<if test="total != null">
+				AND o.total = #{total}
+			</if>
+			<if test="service_type != null">
+			    AND
+				 <choose>
+				      <when test="service_type.id == 1"> <!-- ARRIVAL_AIR_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 0 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 2"> <!-- ARRIVAL_TRAIN_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 1
+				                    AND d1.service_type = 0 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 3"> <!-- DEPARTURE_AIR_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 1 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 4"> <!-- DEPARTURE_TRAIN_TAXI -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 1
+				                    AND d1.service_type = 1 
+				                    AND d1.taxi_order = true)
+				      </when>
+				      <when test="service_type.id == 5"> <!-- ARRIVAL_AIR_GREEN_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 0 
+				                    AND d1.air_service_type = 0)
+				      </when>
+				      <when test="service_type.id == 6"> <!-- ARRIVAL_AIR_CIP_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 0 
+				                    AND d1.air_service_type = 1)
+				      </when>
+				      <when test="service_type.id == 7"> <!-- DEPARTURE_AIR_GREEN_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 1 
+				                    AND d1.air_service_type = 0)
+				      </when>
+				      <when test="service_type.id == 8"> <!-- DEPARTURE_AIR_CIP_HALL -->
+				         EXISTS (SELECT * 
+				                   FROM additionalservicedetails d1
+				                  WHERE d1.additionalserviceorders_id = o.id
+				                    AND d1.transport_type = 0
+				                    AND d1.service_type = 1 
+				                    AND d1.air_service_type = 1)
+				      </when>
+				      <when test="service_type.id == 9"> <!-- INSURANCE -->
+				         EXISTS (SELECT * 
+				                   FROM insurances i1
+				                  WHERE i1.additionalserviceorders_id = o.id)
+				      </when>
+				 </choose>     				
+			</if>
+		</where>
+    </select>
+    
+    <select id="selectAdditionalServiceManageCount" parameterType="map" resultType="int">
+		 <choose>
+		      <when test="service_type == 1"> <!-- ARRIVAL_AIR_TAXI -->
+		         SELECT COUNT(*) 
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 0
+                    AND d1.service_type = 0 
+                    AND d1.taxi_order = true
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		      </when>
+		      <when test="service_type == 2"> <!-- ARRIVAL_TRAIN_TAXI -->
+		         SELECT COUNT(*)
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 1
+                    AND d1.service_type = 0 
+                    AND d1.taxi_order = true
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		      </when>
+		      <when test="service_type == 3"> <!-- DEPARTURE_AIR_TAXI -->
+		         SELECT COUNT(*) 
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 0
+                    AND d1.service_type = 1 
+                    AND d1.taxi_order = true
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		                    
+		      </when>
+		      <when test="service_type == 4"> <!-- DEPARTURE_TRAIN_TAXI -->
+		         SELECT COUNT(*) 
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 1
+                    AND d1.service_type = 1 
+                    AND d1.taxi_order = true
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		                    
+		      </when>
+		      <when test="service_type == 5"> <!-- ARRIVAL_AIR_GREEN_HALL -->
+		         SELECT COUNT(*) 
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 0
+                    AND d1.service_type = 0 
+                    AND d1.air_service_type = 0
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		      </when>
+		      <when test="service_type == 6"> <!-- ARRIVAL_AIR_CIP_HALL -->
+		         SELECT COUNT(*) 
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 0
+                    AND d1.service_type = 0 
+                    AND d1.air_service_type = 1
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		                    
+		      </when>
+		      <when test="service_type ==7"> <!-- DEPARTURE_AIR_GREEN_HALL -->
+		         SELECT COUNT(*) 
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 0
+                    AND d1.service_type = 1 
+                    AND d1.air_service_type = 0
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		      </when>
+		      <when test="service_type == 8"> <!-- DEPARTURE_AIR_CIP_HALL -->
+		         SELECT COUNT(*)
+                   FROM additionalservicedetails d1
+                  WHERE d1.transport_type = 0
+                    AND d1.service_type = 1 
+                    AND d1.air_service_type = 1
+                    AND EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE d1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		      </when>
+		      <when test="service_type == 9"> <!-- INSURANCE -->
+		         SELECT COUNT(*)
+                   FROM insurances i1
+                  WHERE EXISTS (SELECT * 
+                                  FROM additionalserviceorders o
+                                 WHERE i1.additionalserviceorders_id = o.id
+								<if test="datefrom != null">
+								   AND o.create_date::date <![CDATA[>=]]> #{datefrom}::date
+								</if>
+								<if test="dateto != null">
+								   AND o.create_date::date <![CDATA[<=]]> #{dateto}::date
+								</if>)
+		      </when>
+		 </choose>     				
+    </select>
+    
+    <select id="selectTourAgentNameAndLoginByOrderId" parameterType="long" resultType="string">
+    	SELECT ta.display_name||' - '||u.login
+    	  FROM touragents ta, users u, additionalserviceorders o
+    	 WHERE o.id = #{id}
+    	   AND u.id = o.creator_user_id
+    	   AND u.workusers_id = ta.users_id  
+    </select>
+    
+    <select id="selectTourAgentOperatorNameAndPhoneByOrderId" parameterType="long" resultType="string">
+    	SELECT u.name||' - '||ta.primary_phone
+    	  FROM touragents ta, users u, additionalserviceorders o
+    	 WHERE o.id = #{id}
+    	   AND u.id = o.creator_user_id
+    	   AND u.workusers_id = ta.users_id  
+    </select>
+    
+	<select id="selectAdditionalServiceOrdersLogs" parameterType="long" resultType="ReservationLog">
+	    SELECT l.create_date, l.description, u.name AS author
+	      FROM additionalserviceorderlogs l, users u
+	     WHERE l.initiator_user_id = u.id
+	       AND l.additionalserviceorders_id = #{value} 
+	</select>
+	
+	<select id="selectAdditionalServiceOrderById" parameterType="long" resultType="AdditionalServiceOrder">
+		SELECT o.*
+		  FROM additionalserviceorders o
+		 WHERE o.id = #{id} 
+	</select>
+	
+	<select id="selectCreatorEmail" parameterType="long" resultType="string">
+		SELECT COALESCE(u.email,u2.email) AS email
+		  FROM users u JOIN additionalserviceorders o ON u.id = o.creator_user_id
+		               JOIN users u2 ON u2.id = u.workusers_id
+		 WHERE o.id = #{id}
+	</select>
+	
+    <update id="updateStatusOfAdditionalServiceOrderById" parameterType="map">
+        UPDATE additionalserviceorders
+           SET update_date = now(),
+               status = #{new_status},
+               initiator_user_id = #{initiator_user_id}
+         WHERE id = #{id}
+           AND status = #{status}
+    </update>
+	
+</mapper>    

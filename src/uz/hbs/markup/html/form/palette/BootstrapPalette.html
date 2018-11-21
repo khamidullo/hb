@@ -1,0 +1,72 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<input type="hidden" wicket:id="recorder" data-item="recorder"/>
+	<table style="width: 100%;">
+		<tr>
+			<th>
+				<span wicket:id="availableHeader">[available header]</span>
+			</th>
+			<td colspan="3">&nbsp;</td>
+			<th>
+				<span wicket:id="selectedHeader">[selected header]</span>
+			</th>
+		</tr>
+		<tr>
+			<td width="48%">
+				<select wicket:id="choices" class="form-control" style="height: 100%" data-item="available">
+				</select>
+			</td>
+			<td>&nbsp;</td>
+			<td style="padding: 15px 0">
+				<table>
+					<tr>
+						<td>
+							<button type="button" wicket:id="addButton" class="btn btn-default-2" style="width: 50px; margin: 2px;">
+								<i class="fa fa-angle-right fa-2x"></i>
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button type="button" wicket:id="removeButton" class="btn btn-default-2" style="width: 50px; margin: 2px;">
+								<i class="fa fa-angle-left fa-2x"></i>
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button type="button" wicket:id="moveUpButton" class="btn btn-default-2" style="width: 50px; margin: 2px;">
+								<i class="fa fa-angle-up fa-2x"></i>
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button type="button" wicket:id="moveDownButton" class="btn btn-default-2" style="width: 50px; margin: 2px;">
+								<i class="fa fa-angle-down fa-2x"></i>
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button type="button" wicket:id="addAllButton" class="btn btn-default-2" style="width: 50px; margin: 2px;">
+								<i class="fa fa-angle-double-right fa-2x"></i>
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button type="button" wicket:id="removeAllButton" class="btn btn-default-2" style="width: 50px; margin: 2px;">
+								<i class="fa fa-angle-double-left fa-2x"></i>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td>&nbsp;</td>
+			<td width="48%">
+				<select wicket:id="selection" class="form-control" style="height: 100%" data-item="selected">
+				</select>
+			</td>
+		</tr>
+	</table>
+</wicket:panel>

@@ -1,0 +1,384 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style type="text/css">
+		.sort_order {
+			display: none;
+		}
+		
+		.sort_order + label i#sort_asc   {
+			display: block;
+		}
+		
+		.sort_order + label   {
+			cursor: pointer;
+		}
+		
+		.sort_order + label  i#sort_desc   {
+			display: none;
+		}
+		
+		.sort_order:checked + label i#sort_asc   {
+			display: none;
+		}
+		
+		.sort_order:checked + label  i#sort_desc   {
+			display: block;
+		}
+	</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div wicket:id="feedback"></div>
+		</div>
+	</div>
+	<form wicket:id="form" class="form-horizontal" role="form">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong style="color: #666666"><wicket:message key="touragents.newbooking.select_destination">[Select destination]</wicket:message></strong>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:message key="hotels.details.city">[City]</wicket:message>
+ 								<wicket:container wicket:id="city" class="form-control"></wicket:container>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:message key="touragents.newbooking.check_in_date">[Check-in date]</wicket:message>
+								<div class="input-group" style="position: static;" id="fromDateGroup">
+									<input wicket:id="fromDate" type="text" class="form-control" id="fromDateId">
+									<select wicket:id="fromTime" id="fromTimeId" required="required" class="form-control" style="min-width: 80px;">
+										<option>[13:00]</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:message key="touragents.newbooking.check_out_date">[Check-out date]</wicket:message>
+								<div class="input-group" style="position: static;" id="toDateGroup">
+									<input wicket:id="toDate" type="text" class="form-control" id="toDateId">
+									<select wicket:id="toTime" id="toTimeId" required="required" class="form-control" style="min-width: 80px;">
+										<option>[13:00]</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="pull-right" style="padding: 15px 0 0 0">
+									<strong><span id="nightsLabel" class="badge" style="font-size: 16px; padding: 5px 10px;">[1]</span> <span id="nightsSuffixLabel">[night]</span></strong>
+									
+									<input wicket:id="nights" type="hidden" id="nightsId">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div wicket:id="resident">
+									<label wicket:for="resident" class="radio-inline">
+										<input wicket:id="resident" type="radio">
+										<wicket:message key="hotels.reservation.details.resident">[Resident]</wicket:message>
+									</label>
+									<label wicket:for="no_resident" class="radio-inline">
+										<input wicket:id="no_resident" type="radio">
+										<wicket:message key="hotels.reservation.details.resident.no">[No Resident]</wicket:message>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div style="padding-top: 15px;"><wicket:message key="touragents.newbooking.rooms">[Rooms]</wicket:message></div>
+								<select wicket:id="rooms" class="form-control">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+									<option>...</option>
+								</select>
+							</div>
+						</div>
+						<div style="padding-top: 10px; border-bottom: 1px solid #cccccc;"></div>
+						<div class="row">
+							<div class="col-md-12" wicket:id="roomsListContainer">
+								<div wicket:id="roomsCountPanel"></div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<input wicket:id="submit" type="submit" wicket:message="value:search" class="btn btn-success btn-block">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong style="color: #666666"><wicket:message key="touragents.newbooking.filter_results_by">[Filter results by]</wicket:message></strong>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="msticker" style="margin-top: -10px;">
+									<wicket:message key="touragents.newbooking.price">[Price]</wicket:message>
+								</div>
+								<!-- <wicket:container wicket:id="pricesCheckGroup">
+									<div wicket:id="prices">
+										<label class="checkbox-inline" wicket:for="price" style="padding-top: 0;">
+											<input wicket:id="price" type="checkbox">
+											<span wicket:id="priceLabel"></span>
+										</label>
+									</div>
+								</wicket:container>-->
+								<div wicket:id="priceRangeContainer" style="margin-top: 10px;">
+									<span id="range_slider_anchor"></span>
+									<input wicket:id="range_from_value" id="range_from_value" type="hidden">
+									<input wicket:id="range_to_value" id="range_to_value" type="hidden">
+									<input wicket:id="range_min_value" id="range_min_value" type="hidden" value="0">
+									<input wicket:id="range_max_value" id="range_max_value" type="hidden" value="1000">
+									<input wicket:id="range_step_value" id="range_step_value" type="hidden" value="10">
+									<input wicket:id="range_prefix_value" id="range_prefix_value" type="hidden" value="$">
+									<div>
+										<b id="range_display_result"></b>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="msticker">
+									<wicket:message key="touragents.newbooking.hotel_class">[Hotel class]</wicket:message>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:container wicket:id="starsCheckGroup">
+									<div wicket:id="stars">
+										<label class="checkbox-inline" wicket:for="star" style="padding-top: 0;">
+											<input wicket:id="star" type="checkbox">
+											<span wicket:id="starLabel"></span>
+										</label>
+									</div>
+								</wicket:container>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="msticker">
+									<wicket:message key="touragents.newbooking.hotel_facility">[Hotel facility]</wicket:message>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:container wicket:id="hotelFacilitiesCheckGroup">
+									<div wicket:id="hotelFacilities">
+										<label class="checkbox-inline" wicket:for="hotelFacility" style="padding-top: 0;">
+											<input wicket:id="hotelFacility" type="checkbox">
+											<span wicket:id="hotelFacilityLabel"></span>
+										</label>
+									</div>
+								</wicket:container>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="msticker">
+									<wicket:message key="touragents.newbooking.room_facility">[Room facility]</wicket:message>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:container wicket:id="roomFacilitiesCheckGroup">
+									<div wicket:id="roomFacilities">
+										<label class="checkbox-inline" wicket:for="roomFacility" style="padding-top: 0;">
+											<input wicket:id="roomFacility" type="checkbox">
+											<span wicket:id="roomFacilityLabel"></span>
+										</label>
+									</div>
+								</wicket:container>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="msticker">
+									<wicket:message key="touragents.newbooking.near_by_places">[Room facility]</wicket:message>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:container wicket:id="roomNearByPlaceCheckGroup">
+									<div wicket:id="nearByPlaces">
+										<div class="row">
+											<div class="col-md-5">
+												<label class="checkbox-inline" wicket:for="nearByPlace" style="padding-top: 0;">
+													<input wicket:id="nearByPlace" type="checkbox">
+													<span wicket:id="nearByPlaceLabel"></span>
+												</label>
+											</div>
+											<div class="col-md-5">
+												<select class="form-control" wicket:id="nearByPlaceValue">
+													<option>1</option>
+												</select>
+											</div>
+											<div class="col-md-2">
+												<wicket:message key="touragents.newbooking.near_by_places.unit">(km.)</wicket:message>
+											</div>
+										</div>	
+									</div>
+								</wicket:container>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="msticker">
+									<wicket:message key="touragents.newbooking.booking_conditions">[Cancellation]</wicket:message>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input wicket:id="cancelation" type="checkbox">
+										<wicket:message key="touragents.newbooking.free_cancelation">Free cancellation</wicket:message>
+									</label>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-12">
+								<input wicket:id="filter" type="submit" wicket:message="value:filter" class="btn btn-success btn-block">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div class="row">
+					<div class="col-md-3">
+						<select wicket:id="changeCurrency" class="form-control">
+							<option>USD</option>
+							<option>UZS</option>
+						</select>
+					</div>
+					<div class="col-md-8">
+						<div class="form-group" style="margin-bottom: 2px;">
+							<label for="filter1" class="col-md-8 control-label">
+								<wicket:message key="touragents.newbooking.sort_results_by">[Sort results by]</wicket:message>
+							</label>
+							<div class="col-md-4">
+								<select class="form-control" wicket:id="sortResults" id="filter1">
+									<option>[Recomended]</option>
+									<option>[Price]</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<div class="form-group" style="margin-bottom: 2px;">
+							<div class="col-md-2">
+								<input type="checkbox" wicket:id="sortOrder" class="sort_order">
+								<label wicket:for="sortOrder">
+									<i class="fa fa-sort-amount-asc" id="sort_asc"></i>
+									<i class="fa fa-sort-amount-desc" id="sort_desc"></i>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr style="border-top: 1px dashed #779bca;">
+				<div wicket:id="resultContainer" class="row">
+					<div wicket:id="resultPanel" class="col-md-12"></div>
+				</div>
+			</div>
+		</div>
+		<script wicket:id="scriptNightsSuffix">
+			var nightsSuffix = {"1" : "night", "2" : "nights"}; 
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				calcNights(0);
+			});
+			$(function() {
+				$("input#fromDateId").on("change", function(e) {
+					calcNights(0);
+				});
+				$("input#toDateId").on("change", function(e) {
+					calcNights(1);
+				});
+			});
+			function calcNights(fromOrTo) {
+				var from = moment($("#fromDateId").val(), "DD/MM/YYYY");
+				var to = moment($("#toDateId").val(), "DD/MM/YYYY");
+				if (from.isValid() && to.isValid()) {
+					if (to.isBefore(from)) {
+						if (fromOrTo == 0) {
+							to = moment(from).add(1, "days");
+						} else {
+							from = moment(to).subtract(1, "days");
+						}
+						$("input#fromDateId").val(from.format("DD/MM/YYYY"));
+						$("input#toDateId").val(to.format("DD/MM/YYYY"));
+					} else if (to.isSame(from)) {
+						to.add(1, "days");
+					}
+					var diff = to.diff(from, "day");
+					$("#nightsId").val(diff);
+					$("#nightsLabel").html(diff);
+					jQuery.each(nightsSuffix, function (key, value) {
+						var n = diff > 5 ? 5 : diff;
+						if (key == n) {
+							$("#nightsSuffixLabel").html(value);
+						}
+					});
+				} else {
+					//invalid date
+				}
+			}
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				rangeCreator();
+			});
+
+			function rangeCreator() {
+				var $range_slider_anchor = $("#range_slider_anchor");
+				var $range_display_result = $("#range_display_result");
+				var range_prefix_value = $("#range_prefix_value").val() + " ";
+
+				$range_display_result.html(range_prefix_value
+						+ $('#range_min_value').val() + " - "
+						+ range_prefix_value + $('#range_max_value').val());
+
+				var track = function() {
+					var $this = $(this), from = $this.data("from"), to = $this
+							.data("to");
+
+					$range_display_result.html(range_prefix_value + from
+							+ " - " + range_prefix_value + to);
+					$("#range_from_value").val(from);
+					$("#range_to_value").val(to);
+				};
+
+				$range_slider_anchor.ionRangeSlider({
+					type : "double",
+					min : $('#range_min_value').val(),
+					max : $('#range_max_value').val(),
+					step : $('#range_step_value').val(),
+					force_edges : true,
+					grid : true,
+					grid_num : 3
+				});
+
+				$range_slider_anchor.on("change", track);
+			}
+		</script>
+
+	</form>
+</wicket:panel>

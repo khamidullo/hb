@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Contract">
+	<insert id="insertContract" parameterType="Contract">
+	    INSERT INTO contracts (users_id, contract_number, contract_type, commission_type, commission_value, contract_date)
+	    VALUES (#{users_id}, #{contract_number}, #{contract_type}, #{commission_type}, #{commission_value}, #{contract_date})
+	</insert>
+	
+	<update id="updateContract" parameterType="Contract">
+	    UPDATE contracts 
+	       SET contract_number = #{contract_number},
+	           contract_type = #{contract_type},
+	           commission_type = #{commission_type},
+	           commission_value = #{commission_value},
+	           contract_date = #{contract_date},
+	           update_date = CURRENT_TIMESTAMP
+	     WHERE users_id = #{users_id}
+	</update>
+	
+	<select id="selectContract" parameterType="long" resultType="Contract">
+	    SELECT c.users_id, 
+	    	   c.contract_number,
+	    	   c.contract_type,
+	    	   c.commission_type,
+	    	   c.commission_value,
+	    	   c.contract_date, 
+       		   c.create_date, 
+       		   c.update_date
+   		 FROM contracts c
+   		WHERE c.users_id = #{user_id} 
+	</select>
+</mapper>

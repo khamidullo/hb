@@ -1,0 +1,63 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div wicket:id="container">
+		<wicket:enclosure child="list">
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover table-striped table-condensed">
+					<thead>
+						<tr>
+							<th>
+								<wicket:message key="hotels.room_type.name">[Name]</wicket:message>
+							</th>
+							<th>
+								<wicket:message key="hotels.room_type.number_of_rooms">[Number Of Rooms]</wicket:message>
+							</th>
+							<th>
+								<wicket:message key="hotels.room_type.holding_capacity">[Holding Capacity]</wicket:message>
+							</th>
+							<th>
+								<wicket:message key="hotels.room_type.additional_bed">[Additional Bed]</wicket:message>
+							</th>
+							<th nowrap="nowrap">
+								<wicket:message key="hotels.room_type.room_area">[Room Area]</wicket:message>
+							</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr wicket:id="list">
+							<td wicket:id="name" nowrap="nowrap" />
+							<td>
+								<input type="number" class="form-control" wicket:id="number_of_rooms"
+									wicket:message="placeholder:hotels.room_type.number_of_rooms" required="required" />
+							</td>
+							<td>
+								<select wicket:id="holding_capacity" class="form-control">
+									<option>1</option>
+								</select>
+							</td>
+							<td>
+								<wicket:container wicket:id="additional_bed"></wicket:container>
+							</td>
+							<td>
+								<input type="text" class="form-control" wicket:id="room_area" onblur="fieldOnBlur(this);"
+									onfocus="fieldOnFocus(this);" wicket:message="placeholder:hotels.room_type.room_area" />
+							</td>
+							<td>
+								<a wicket:id="remove" class="btn btn-xs btn-danger btn-outline" wicket:message="title:actions.title.delete">
+									<i class="fa fa-trash-o fa-fw"></i>
+								</a> <a wicket:id="edit" class="btn btn-xs btn-success btn-outline" wicket:message="title:actions.title.edit"> <i
+										class="fa fa-edit fa-fw"></i>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</wicket:enclosure>
+		<div>
+			<a wicket:id="append"><strong> <i class="fa fa-plus"></i> <wicket:message key="add_another">[Add Other]</wicket:message></strong>
+			</a>
+		</div>
+		<br>
+	</div>
+</wicket:panel>

@@ -1,0 +1,104 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover table-condensed table-striped">
+					<thead>
+						<tr>
+							<th rowspan="3">
+								<a wicket:id="orderByName"> <wicket:message key="touragents.reservation.guest.service.name">[Service`s Name]</wicket:message>
+								</a>
+							</th>
+							<th colspan="10">
+								<wicket:message key="touragents.reservation.guest.service.report.last">[Last Period]</wicket:message>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="2">
+								<wicket:message key="report.last.month.1">[Month]</wicket:message>
+							</th>
+							<th colspan="2">
+								<wicket:message key="report.last.month.3">[3 Month]</wicket:message>
+							</th>
+							<th colspan="2">
+								<wicket:message key="report.last.month.6">[6 Month]</wicket:message>
+							</th>
+							<th colspan="2">
+								<wicket:message key="report.last.month.12">[Year]</wicket:message>
+							</th>
+							<th colspan="2">
+								<wicket:message key="report.last.month.period">[All Period]</wicket:message>
+							</th>
+						</tr>
+						<tr>
+							<th>
+								<a wicket:id="orderByAmount1"> <wicket:message key="report.amount">[Amount]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByCount1"> <wicket:message key="report.count">[Count]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByAmount3"> <wicket:message key="report.amount">[Amount]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByCount3"> <wicket:message key="report.count">[Count]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByAmount6"> <wicket:message key="report.amount">[Amount]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByCount6"> <wicket:message key="report.count">[Count]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByAmount12"> <wicket:message key="report.amount">[Amount]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByCount12"> <wicket:message key="report.count">[Count]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByAmount"> <wicket:message key="report.amount">[Amount]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByCount"> <wicket:message key="report.count">[Count]</wicket:message>
+								</a>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr wicket:id="list">
+							<td wicket:id="name" />
+							<td wicket:id="amount_1" />
+							<td wicket:id="count_1" />
+							<td wicket:id="amount_3" />
+							<td wicket:id="count_3" />
+							<td wicket:id="amount_6" />
+							<td wicket:id="count_6" />
+							<td wicket:id="amount_12" />
+							<td wicket:id="count_12" />
+							<td wicket:id="amount" />
+							<td wicket:id="count" />
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div style="margin-bottom: 20px;">
+		<div class="row">
+			<div class="col-md-12">
+				<a wicket:id="export" class="btn btn-success btn-outline"> <i class="fa fa-file-excel-o"></i> <wicket:message
+						key="export">Export</wicket:message>
+				</a>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

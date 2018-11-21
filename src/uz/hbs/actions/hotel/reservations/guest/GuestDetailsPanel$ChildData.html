@@ -1,0 +1,22 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 wicket:id="child" class="panel-title" style="font-weight: bold"></h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-4">
+					<input type="text" wicket:id="first_name" wicket:message="placeholder:hotels.guest.details.child.name.first" class="form-control">
+				</div>
+				<div class="col-md-4">
+					<input type="text" wicket:id="last_name" wicket:message="placeholder:hotels.guest.details.child.name.last" class="form-control">
+				</div>
+				<div class="col-md-4">
+					<div class="input-group">
+						<input type="text" class="form-control" wicket:id="date_of_birth" wicket:message="placeholder:hotels.guest.details.child.date_of_birth" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

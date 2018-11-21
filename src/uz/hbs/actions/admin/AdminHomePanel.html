@@ -1,0 +1,213 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+<style>
+.show-grid [class^="col-"] {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #eee;
+  background-color: rgba(86,61,124,.15);
+  border: 1px solid #ddd;
+  border: 1px solid rgba(86,61,124,.2);
+}
+</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<wicket:message key="system.reservations">[System reservations]</wicket:message>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0">
+							<thead>
+								<tr>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.type">[Type]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.total">[Total]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.reserved">[Reserved]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.checked.in">[Checked-in]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.checked.out">[Checked-out]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.no_show">[No show]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.cancelled">[Canceled]</wicket:message>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<wicket:message key="hotels.reservation.details.reservation.type.definite">[Definite]</wicket:message>
+									</td>
+									<td wicket:id="definiteCountList" class="text-center">
+										<span wicket:id="definiteCount">[0]</span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<wicket:message key="hotels.reservation.details.reservation.type.tentative">[Tentative]</wicket:message>
+									</td>
+									<td wicket:id="tentativeCountList" class="text-center">
+										<span wicket:id="tentativeCount">[0]</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<wicket:message key="system.reservations.b2c">[System reservations]</wicket:message>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0">
+							<thead>
+								<tr>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.type">[Type]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.total">[Total]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.reserved">[Reserved]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.checked.in">[Checked-in]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.checked.out">[Checked-out]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.no_show">[No show]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="hotels.reservation.details.reservation.status.cancelled">[Canceled]</wicket:message>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<wicket:message key="hotels.reservation.details.reservation.type.definite">[Definite]</wicket:message>
+									</td>
+									<td wicket:id="definiteApiCountList" class="text-center">
+										<span wicket:id="definiteApiCount">[0]</span>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<wicket:message key="hotels.reservation.details.reservation.type.tentative">[Tentative]</wicket:message>
+									</td>
+									<td wicket:id="tentativeApiCountList" class="text-center">
+										<span wicket:id="tentativeApiCount">[0]</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<wicket:message key="system.users">[System users]</wicket:message>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed" style="margin-bottom: 0">
+							<thead>
+								<tr>
+									<th>
+										<wicket:message key="users.type">[Type]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.total">[Total]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.status0">[New]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.status1">[Active]</wicket:message>
+									</th>
+									<th>
+										<wicket:message key="users.status2">[Disabled]</wicket:message>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td style="font-weight: bold;">
+										<a wicket:id="usersListLink"><wicket:message key="users">[Users]</wicket:message></a>
+									</td>
+									<td wicket:id="usersCountList" class="text-center">
+										<span wicket:id="usersCount">[0]</span>
+									</td>
+								</tr>
+								<tr>
+									<td style="font-weight: bold;">
+										<a wicket:id="hotelsListLink"><wicket:message key="users.type20">[Hotels]</wicket:message></a>
+									</td>
+									<td wicket:id="hotelsCountList" class="text-center">
+										<span wicket:id="hotelsCount">[0]</span>
+									</td>
+								</tr>
+								<tr>
+									<td style="font-weight: bold;">
+										<a wicket:id="tourAgenciesListLink"><wicket:message key="users.type30">[Tour agencies]</wicket:message></a>
+									</td>
+									<td wicket:id="tourAgenciesCountList" class="text-center">
+										<span wicket:id="tourAgenciesCount">[0]</span>
+									</td>
+								</tr>
+								<tr>
+									<td style="font-weight: bold;">
+										<a wicket:id="spectatorsListLink"><wicket:message key="users.type4">[Spectators]</wicket:message></a>
+									</td>
+									<td wicket:id="spectatorsCountList" class="text-center">
+										<span wicket:id="spectatorsCount">[0]</span>
+									</td>
+								</tr>
+								<tr>
+									<td style="font-weight: bold;">
+										<a wicket:id="apiUserListLink"><wicket:message key="users.type50">[API user]</wicket:message></a>
+									</td>
+									<td wicket:id="apiUserCountList" class="text-center">
+										<span wicket:id="apiUserCount">[0]</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<wicket:container wicket:id="systemFeedbackListPanel"></wicket:container>
+</wicket:panel>

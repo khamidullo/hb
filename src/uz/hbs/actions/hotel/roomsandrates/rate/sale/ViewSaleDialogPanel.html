@@ -1,0 +1,51 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-responsive">
+						<table class="table table-bordered table-condensed">
+							<tr>
+								<th rowspan="2" style="text-align: center;" wicket:id="roomtype" />
+								<th colspan="3" style="text-align: center;">
+									<wicket:message key="hotels.rate.plane.season.person.individual">[Individual]</wicket:message>
+								</th>
+								<th colspan="3" style="text-align: center;">
+									<wicket:message key="hotels.rate.plane.season.person.group">[Group]</wicket:message>
+								</th>
+							</tr>
+							<tr>
+								<th style="text-align: center;">
+									<wicket:message key="hotels.rate.plane.person.resident.no">[No Resident]</wicket:message>
+								</th>
+								<th style="text-align: center;">
+									<wicket:message key="hotels.rate.plane.person.resident">[Resident]</wicket:message>
+								</th>
+								<th style="text-align: center; width: 30px;">
+									<wicket:message key="hotels.rate.plane.sale.status">[status]</wicket:message>
+								</th>
+								<th style="text-align: center;">
+									<wicket:message key="hotels.rate.plane.person.resident.no">[No Resident]</wicket:message>
+								</th>
+								<th style="text-align: center;">
+									<wicket:message key="hotels.rate.plane.person.resident">[Resident]</wicket:message>
+								</th>
+								<th style="text-align: center; width: 30px;">
+									<wicket:message key="hotels.rate.plane.sale.status">[status]</wicket:message>
+								</th>
+							</tr>
+							<tr wicket:id="personlist">
+								<td wicket:id="person_number"></td>
+								<wicket:container wicket:id="salelist">
+									<td wicket:id="sale"></td>
+									<td wicket:id="sale_uz"></td>
+									<td wicket:id="status"></td>
+								</wicket:container>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

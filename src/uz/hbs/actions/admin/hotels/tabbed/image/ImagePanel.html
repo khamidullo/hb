@@ -1,0 +1,18 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="thumbnail" style="margin-top: 15px;">
+		<img wicket:id="img">
+		<label wicket:for="setDefault">
+			<input wicket:id="setDefault" type="checkbox" data-item="defaultImage">
+			<wicket:message key="hotels.image.default">[Default]</wicket:message>
+		</label>
+		
+		<div class="caption" style="padding-bottom: 0px;">
+			<p class="text-right">
+				<a wicket:id="delLink" class="btn btn-xs btn-danger btn-outline">
+					<i class="fa fa-trash-o fa-fw" wicket:message="title:actions.title.delete"></i>
+				</a>
+			</p>
+		</div>
+		<div class="text-center bg-info" wicket:id="caption">[Caption]</div>
+	</div>
+</wicket:panel>

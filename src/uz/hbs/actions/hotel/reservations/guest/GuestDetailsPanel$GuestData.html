@@ -1,0 +1,192 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 wicket:id="guest" class="panel-title" style="font-weight: bold"></h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<select wicket:id="roomtype" class="form-control" required="required">
+						<option>Choice One</option>
+					</select>
+					<input wicket:id="roomtypes_id" type="hidden">
+				</div>
+				<div class="col-md-6">
+					<select wicket:id="room" class="form-control" required="required">
+						<option>Choice One</option>
+					</select>
+					<input wicket:id="rooms_id" type="hidden">
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-8">
+					<table style="width: 100%">
+						<tr>
+							<td>
+								<select wicket:id="person_title" class="form-control" style="margin:0px; width: 80px;">
+									<option>Mrs</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" wicket:id="first_name" wicket:message="placeholder:hotels.guest.details.guest.name.first" class="form-control" style="margin: 0px;">
+							</td>
+							<td>
+								<input type="text" wicket:id="last_name" wicket:message="placeholder:hotels.guest.details.guest.name.last" class="form-control"  style="margin: 0px;">
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-4" wicket:id="relationship_container">
+					<input type="text" wicket:id="relationship" wicket:message="placeholder:hotels.guest.details.relationship" class="form-control">
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-4">
+					<input type="text" wicket:id="date_and_place_of_birth"
+						wicket:message="placeholder:hotels.guest.details.date_and_place_of_birth" class="form-control">
+				</div>
+				<div class="col-md-4">
+					<select wicket:id="gender" class="form-control" required="required">
+						<option>Choice One</option>
+					</select>
+				</div>
+				<div class="col-md-4">
+					<select wicket:id="nationality" class="form-control" required="required">
+						<option></option>
+					</select>
+				</div>
+			</div>
+			<hr>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<wicket:message key="hotels.guest.details.passport.data">[Passport Data]</wicket:message>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" wicket:id="passport_number" wicket:message="placeholder:hotels.guest.details.passport.number" class="form-control"  required="required">
+						</div>
+						<div class="col-md-6">
+							<div class="input-group date">
+								<input type="text" class="form-control" data-date-format="DD/MM/YYYY" wicket:id="passport_date_of_issue"
+									wicket:message="placeholder:hotels.guest.details.passport.date_of_issue" maxlength="10" />
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-12">
+							<input type="text" wicket:id="passport_issue_place"
+								wicket:message="placeholder:hotels.guest.details.passport.issue_place" class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<wicket:message key="hotels.guest.details.address.data">[Address Data]</wicket:message>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-6">
+							<select wicket:id="country" class="form-control" required="required">
+								<option>[Choice One]</option>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<select wicket:id="region" class="form-control">
+								<option>[Choice One]</option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" wicket:id="city" wicket:message="placeholder:hotels.guest.details.city" class="form-control">
+						</div>
+						<div class="col-md-6">
+							<input type="text" wicket:id="postal_index" wicket:message="placeholder:hotels.details.postal_index"
+								class="form-control">
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-12">
+							<input type="text" wicket:id="address" wicket:message="placeholder:hotels.guest.details.address"
+								class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<wicket:message key="hotels.guest.details.visa.data">[Visa Data]</wicket:message>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-3">
+							<select wicket:id="visa_type" wicket:message="placeholder:hotels.guest.details.visa.type" class="form-control">
+								<option></option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<input type="text" wicket:id="visa_number" wicket:message="placeholder:hotels.guest.details.visa.number"
+								class="form-control">
+						</div>
+						<div class="col-md-3">
+							<div class="input-group date">
+								<input type="text" class="form-control" wicket:id="visa_valid_from" wicket:message="placeholder:hotels.guest.details.visa.valid.from" />
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="input-group date">
+								<input type="text" class="form-control" wicket:id="visa_valid_to" wicket:message="placeholder:hotels.guest.details.visa.valid.till" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<wicket:message key="hotels.guest.details.other.data">[Other Data]</wicket:message>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-6">
+							<input type="email" wicket:id="email" wicket:message="placeholder:hotels.guest.details.email"
+								class="form-control">
+						</div>
+						<div class="col-md-6">
+							<input type="text" wicket:id="company" wicket:message="placeholder:hotels.guest.details.company"
+								class="form-control">
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" wicket:id="purpose_of_arrival"
+								wicket:message="placeholder:hotels.guest.details.purpose_of_arrival" class="form-control">
+						</div>
+						<div class="col-md-6">
+							<input type="text" wicket:id="source_of_reservation" wicket:message="placeholder:hotels.guest.details.source"
+								class="form-control">
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" wicket:id="occupation" wicket:message="placeholder:hotels.guest.details.occupation"
+								class="form-control">
+						</div>
+						<div class="col-md-6"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

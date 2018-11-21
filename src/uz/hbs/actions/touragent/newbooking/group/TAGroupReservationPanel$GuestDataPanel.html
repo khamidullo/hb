@@ -1,0 +1,33 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<td style="padding: 0 5px 5px 0;">
+		<select wicket:id="person_title" class="form-control" style="margin: 0px;">
+			<option>Mrs</option>
+		</select>
+	</td>
+	<td style="padding: 0 5px 5px 0;">
+		<input type="text" wicket:id="last_name" wicket:message="placeholder:hotels.guest.details.guest.name.last"
+			class="form-control" style="margin: 0px;" data-item="last-name">
+	</td>
+	<td style="padding: 0 5px 5px 0;">
+		<input type="text" wicket:id="first_name" wicket:message="placeholder:hotels.guest.details.guest.name.first"
+			class="form-control" style="margin: 0px;" data-item="first-name">
+	</td>
+	<td style="padding: 0 5px 5px 0;">
+		<select wicket:id="nationality" class="form-control" style="margin: 0px; width: 160px;" data-item="nationality">
+			<option>Mrs</option>
+		</select>
+		<input type="hidden" wicket:id="guest_index">
+	</td>
+	<td style="padding: 0 5px 5px 0;">
+		<select wicket:id="childAge" class="form-control" style="margin-left: 0px;">
+			<option>5</option>
+		</select>
+	</td>
+	<td style="padding: 0 5px 5px 0;">
+		<div style="margin-left: 0px;">
+			<a wicket:id="append" class="btn btn-sm btn-success btn-outline"> <i class="fa fa-user-plus"></i>
+			</a> <a wicket:id="delete" class="btn btn-sm btn-danger btn-outline"> <i class="fa fa-user-times"></i>
+			</a>
+		</div>
+	</td>
+</wicket:panel>

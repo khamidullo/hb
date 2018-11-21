@@ -1,0 +1,30 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12" wicket:id="feedback"></div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">
+									<wicket:message key="users.role">[Role management]</wicket:message>
+								</h3>
+							</div>
+							<div class="panel-body">
+								<wicket:container wicket:id="palette" />
+								<br>
+								<div class="pull-right">
+									<input wicket:id="submit" type="submit" class="btn btn-primary" wicket:message="value:save">
+								</div>
+							</div>
+							<div class="col-md-6"></div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</wicket:panel>

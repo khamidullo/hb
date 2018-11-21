@@ -1,0 +1,161 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<wicket:message key="touragents.reservation.guest.service.summary">[Additional Service]</wicket:message>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12"> 
+						<div class="row">
+							<div class="col-md-6">
+								<table class="table">
+									<tr>
+										<th><wicket:message key="touragents.reservation.guest.count">[Guest Count]</wicket:message>:</th>
+										<td wicket:id="guest_count"/>
+									</tr>
+									<tr>
+										<td><wicket:message key="touragents.reservation.guest.service.arrival.time">[Arrival Time]</wicket:message>:</td>
+										<td wicket:id="arrival_time"/>
+									</tr>
+									<tr>
+										<td><wicket:message key="touragents.reservation.guest.service.departure.time">[Departure Time]</wicket:message>:</td>
+										<td wicket:id="departure_time"/>
+									</tr>
+								</table>
+							</div>
+							<div class="col-md-6"></div>
+						</div>
+					<wicket:enclosure child="guestlist">	
+						<div class="row">
+							<div class="col-md-6">
+								<table class="table">
+								<wicket:container wicket:id="guestlist">
+									<tr>
+										<th colspan="2">
+											<wicket:message key="touragents.reservation.guest">[Guest]</wicket:message>
+											<span wicket:id="guest_index">[1]</span>
+										</th>
+									</tr>
+									<tr>
+										<td><wicket:message key="hotels.guest.details.guest.name.full">[Full Name]</wicket:message>:</td>
+										<td wicket:id="fullname"/>
+									</tr>
+									<tr>
+										<td><wicket:message key="hotels.guest.details.nationality">[Nationality]</wicket:message>:</td>
+										<td wicket:id="nationality"/>
+									</tr>
+								</wicket:container>	
+								</table>
+							</div>
+							<div class="col-md-6"></div>
+						</div>
+					</wicket:enclosure>
+					<wicket:enclosure child="other_additional_service_container">		
+						<div class="row">
+							<div class="col-md-6">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<wicket:message key="touragents.newbooking.additional_services">[Additional Service]</wicket:message>
+									</div>
+									<div class="panel-body">
+										<div class="table-responsive">
+											<table wicket:id="other_additional_service_container" class="table3">
+												<tr>
+													<th style="width: 250px;"><wicket:message key="name">[Name]</wicket:message></th>
+													<th><wicket:message key="quantity">[Quantity]</wicket:message></th>
+													<th><wicket:message key="days">[Days]</wicket:message></th>
+													<th><wicket:message key="amount">[Amount]</wicket:message></th>
+												</tr>
+												<tr wicket:id="list">
+													<td wicket:id="name"/>
+													<td wicket:id="quantity"/>
+													<td wicket:id="days"/>
+													<td wicket:id="amount"/>
+												</tr>
+												<tr>
+													<td colspan="2"></td>
+													<td style="border-top: 1px solid #ccdcee;"><wicket:message key="total">[Total]</wicket:message>:</td>
+													<td style="border-top: 1px solid #ccdcee; font-weight: bold;" wicket:id="total"></td>
+												</tr>
+											</table>
+										</div>
+						 			</div>
+								</div>
+							</div>
+							<div class="col-md-6"></div>
+						</div>
+					</wicket:enclosure>			
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="text-success" style="text-align: right; font-weight: bold; font-size: 18px;">
+							<wicket:message key="total.grand">[Grant Total]</wicket:message>:
+							<span wicket:id="grand_total"></span>
+						</div>
+					</div>
+					<div class="col-md-6"></div>
+				</div>
+				<form wicket:id="agreeform">
+					<div class="row">
+						<div class="col-md-12">
+							<span wicket:id="feedback">[Feedback]</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-10">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-12">
+											<label wicket:for="agree" class="checkbox-inline">
+												<input type="checkbox" wicket:id="agree">
+												<span><wicket:message key="touragents.reservation.guest.service.agree">[Terms and conditions]</wicket:message></span>
+											</label>
+										</div>
+									</div>	
+									<br>
+									<div class="row">
+										<div class="col-md-12">
+											<wicket:container wicket:id="cancellation_policy_container">
+												<p>
+													<strong style="color:red;"> Условия бронирования дополнительных услуг. </strong><br>
+													Бронирование дополнительных услуг производится согласно Договору п.3.4 в следующем порядке:<br> 
+													Услуги службы такси: не позднее, чем за 6 часов до прибытия гостей;<br>
+													 Услуги Зеленый коридор и СИП зал и страхование не позднее, чем за 48 часов до прибытия гостей.<br> 
+													Заказчик имеет право за 48 (сорок восемь) часов до момента оказания Услуг по прохождению через <br>
+													Зеленый коридор и СИП зал, и за 1 (один) час до наступления даты страхования Гостя вносить изменения <br>
+													или аннулировать Заявку без выплаты штрафов. При аннулировании/редактировании Заявки на оказание Услуг <br>
+													по страхованию Гостя и прохождению через Зеленый коридор и СИП зал в сроки, превышающие 48 (сорок восемь) часов, <br>
+													штрафы выплачиваются в полном размере, согласно стоимости заказанных Услуг.				
+												</p>			
+											</wicket:container>
+										</div>
+									</div>
+									<hr>
+									<div class="row">
+										<div class="col-md-6">
+											<button wicket:id="confirm" class="btn btn-primary">
+												<i class="fa fa-check"></i>
+												<wicket:message key="button.confirm">[Confirm]</wicket:message>
+											</button>
+											<button wicket:id="back" class="btn btn-primary">
+												<i class="fa fa-back"></i>
+												<wicket:message key="button.back">[Confirm]</wicket:message>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>			
+</wicket:panel>

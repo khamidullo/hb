@@ -1,0 +1,70 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<form wicket:id="form" class="well well-sm">
+				<div class="row">
+					<div class="col-md-12">
+						<wicket:message key="hotels.details.country">[Country]</wicket:message>
+						:
+						<select wicket:id="countries" class="form-control">
+							<option>Uzbekistan</option>
+						</select>
+					</div>
+				</div>
+				<div style="height: 10px;"></div>
+				<div class="row">
+					<div class="col-md-12">
+						<wicket:message key="hotels.details.region">[Region]</wicket:message>
+						:
+						<select wicket:id="regions" class="form-control">
+							<option>Tashkent</option>
+						</select>
+					</div>
+				</div>
+				<div style="height: 10px;"></div>
+				<div class="row">
+					<div class="col-md-12">
+						<wicket:message key="hotels.details.city">[City]</wicket:message>
+						:
+						<br>
+						<select wicket:id="cities" class="form-control">
+							<option>Tashkent</option>
+						</select>
+					</div>
+				</div>
+				<div style="height: 10px;"></div>
+				<div class="row">
+					<div class="col-md-12">
+						<button class="btn btn-primary" wicket:id="submit">
+							<wicket:message key="admin.reports.generate">[Generate]</wicket:message>
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-info" wicket:id="container">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<wicket:message key="admin.reports.old">[Old reports]</wicket:message>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<form wicket:id="filterForm">
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover table-condensed table-striped" wicket:id="table"></table>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="margin-bottom: 20px;"></div>
+</wicket:panel>

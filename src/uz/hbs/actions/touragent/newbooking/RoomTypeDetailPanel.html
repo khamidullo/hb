@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootswatch.css" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="css/sticky-footer-navbar.css" rel="stylesheet" />
+<link href="css/mystyle.css" rel="stylesheet" />
+
+<!-- FontAwesome -->
+<link href="css/font-awesome.css" rel="stylesheet" />
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body style="padding: 4px; margin: 0px; background-color: transparent;">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="row">
+						<div class="col-sm-12">
+							<div wicket:id="imageSlider" class="container-fluid" style="padding: 0"></div>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<strong><wicket:message key="hotels.reference_info.room_conditions">[Conditions]</wicket:message></strong>
+								</div>
+								<div class="panel-body" style="padding: 5px 10px;">
+									<span wicket:id="description">[Description]</span>	
+ 								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<strong><wicket:message key="hotels.reference_info.equipment_in_rooms">[Equipments]</wicket:message></strong>
+								</div>
+								<div wicket:id="equipmentPanel" class="panel-body" style="padding: 5px 10px;">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<hr>
+							<div class="pull-right">
+								<a wicket:id="closeLink" href="#" class="btn btn-default-2"><wicket:message key="button.close">[Close]</wicket:message></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

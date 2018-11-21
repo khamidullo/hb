@@ -1,0 +1,338 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4><wicket:message key="touragents.newbooking.rooms_details">[Detail]</wicket:message></h4>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-12">
+										<h3>
+											<span wicket:id="hotel_name">[Hotel Name]</span>
+										</h3>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-12">
+										<table style="font-weight: bold;">
+											<tr wicket:id="roomtypelist">
+												<td wicket:id="room_count"/>
+												<td>&nbsp;&nbsp;x&nbsp;&nbsp;</td>
+												<td wicket:id="roomtype"></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<table>
+											<tr>
+												<td><wicket:message key="touragents.newbooking.check_in">[CheckIN]</wicket:message>:</td>
+												<td>&nbsp;</td>
+												<td wicket:id="check_in"/>
+											</tr>
+											<tr>
+												<td><wicket:message key="touragents.newbooking.check_out">[CheckOUT]</wicket:message>:</td>
+												<td>&nbsp;</td>
+												<td wicket:id="check_out"/>
+											</tr>
+											<tr>
+												<td><wicket:message key="users.total">[Total]</wicket:message>:</td>
+												<td>&nbsp;</td>
+												<td><strong><span wicket:id="nights" class="badge"></span> <span wicket:id="nightsSuffixLabel">[night]</span></strong></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-12">
+										<table>
+											<tr>
+												<td><wicket:message key="touragents.newbooking.early_arrival">[early check-in]</wicket:message>:</td>
+												<td>&nbsp;</td>
+												<td wicket:id="check_in_early"/>
+											</tr>
+											<tr>
+												<td><wicket:message key="touragents.newbooking.late_check_out">[late check-out]</wicket:message>:</td>
+												<td>&nbsp;</td>
+												<td wicket:id="check_out_late"/>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-12">
+										<table>
+											<tr>
+												<td><wicket:message key="touragents.newbooking.adults">[Adults]</wicket:message>:</td>
+												<td>&nbsp;</td>
+												<td wicket:id="adults"/>
+											</tr>
+											<tr>
+												<td><wicket:message key="touragents.newbooking.children">[Children]</wicket:message>:</td>
+												<td>&nbsp;</td>
+												<td wicket:id="children"/>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-12">
+										<wicket:enclosure child="preferencelist">
+										<wicket:message key="preferences">[Preferences]</wicket:message>
+										<table>
+											<tr wicket:id="preferencelist">
+												<td wicket:id="name"/>
+											</tr>
+										</table>
+										</wicket:enclosure>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4><wicket:message key="hotels.reservation.summary.accommodation.price">[Price]</wicket:message></h4>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table-responsive">
+									<table wicket:id="roomtype_container" class="table3">
+										<tr style="border-bottom: 1px solid #ccdcee;">
+											<td style="font-weight: bold;"><wicket:message key="hotels.reservation.details.reservation.roomtype">[RoomType]</wicket:message></td>
+											<td><wicket:message key="quantity">[Quantity]</wicket:message></td>
+											<td wicket:id="nightsSuffixLabel">[Nights]</td>
+											<td><wicket:message key="hotels.reservation.amount">[Amount]</wicket:message></td>
+										</tr>
+										<tr wicket:id="list">
+											<td wicket:id="roomtype"/>
+											<td wicket:id="quantity"/>
+											<td wicket:id="nights"/>
+											<td style="font-weight: bold;" wicket:id="amount"/>
+										</tr>
+										<tr>
+											<td colspan="2"></td>
+											<td style="border-top: 1px solid #ccdcee;"><wicket:message key="total">[Total]</wicket:message>:</td>
+											<td style="border-top: 1px solid #ccdcee; font-weight: bold;" wicket:id="total"></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table-responsive">
+									<table wicket:id="children_container" class="table3" data-item="children">
+										<tr style="border-bottom: 1px solid #ccdcee;">
+											<td style="font-weight: bold;"><wicket:message key="touragents.newbooking.children">[Children]</wicket:message></td>
+											<td><wicket:message key="hotels.guest.details.child.age">[Age]</wicket:message></td>
+											<td><wicket:message key="touragents.newbooking.nights">[Nights]</wicket:message></td>
+											<td><wicket:message key="hotels.reservation.amount">[Amount]</wicket:message></td>
+										</tr>
+									<wicket:container wicket:id="reserveroomlist">
+										<tr>
+											<td colspan="4" wicket:id="room_index"/>
+										</tr>	
+										<tr wicket:id="list">
+											<td>
+												<span wicket:id="children"></span>
+											<wicket:enclosure child="info">
+												(<span wicket:id="info"></span>)
+											</wicket:enclosure>	
+											</td>
+											<td wicket:id="age"/>
+											<td wicket:id="nights"/>
+											<td style="font-weight: bold;" wicket:id="amount"/>
+										</tr>
+									</wicket:container>	
+										<tr>
+											<td colspan="2"></td>
+											<td style="border-top: 1px solid #ccdcee;"><wicket:message key="total">[Total]</wicket:message>:</td>
+											<td style="border-top: 1px solid #ccdcee; font-weight: bold;" wicket:id="total"></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table-responsive">
+									<table wicket:id="early_check_in_container" class="table3" data-item="early-check">
+										<tr style="border-bottom: 1px solid #ccdcee;">
+											<td style="font-weight: bold;"><wicket:message key="touragents.newbooking.early_arrival">[Early Check IN]</wicket:message></td>
+											<td><wicket:message key="quantity">[Quantiry]</wicket:message></td>
+											<td></td>
+											<td><wicket:message key="amount">[Amount]</wicket:message></td>
+										</tr>
+										<tr wicket:id="list">
+											<td wicket:id="roomtype"/>
+											<td wicket:id="quantity"/>
+											<td></td>
+											<td style="font-weight: bold;" wicket:id="amount"/>
+										</tr>
+										<tr>
+											<td colspan="2"></td>
+											<td style="border-top: 1px solid #ccdcee;"><wicket:message key="total">[Total]</wicket:message>:</td>
+											<td style="border-top: 1px solid #ccdcee; font-weight: bold;" wicket:id="total"></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table-responsive">
+									<table wicket:id="late_check_out_container" class="table3" data-item="late-check">
+										<tr style="border-bottom: 1px solid #ccdcee;">
+											<td style="font-weight: bold;"><wicket:message key="touragents.newbooking.late_check_out">[Late Check OUT]</wicket:message></td>
+											<td><wicket:message key="quantity">[Quantity]</wicket:message></td>
+											<td></td>
+											<td><wicket:message key="amount">[Amount]</wicket:message></td>
+										</tr>
+										<tr wicket:id="list">
+											<td wicket:id="roomtype"/>
+											<td wicket:id="quantity"/>
+											<td></td>
+											<td style="font-weight: bold;" wicket:id="amount"/>
+										</tr>
+										<tr>
+											<td colspan="2"></td>
+											<td style="border-top: 1px solid #ccdcee;"><wicket:message key="total">[Total]</wicket:message>:</td>
+											<td style="border-top: 1px solid #ccdcee; font-weight: bold;" wicket:id="total"></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="table-responsive">
+									<table wicket:id="additional_service_container" class="table3" data-item="additional">
+										<tr style="border-bottom: 1px solid #ccdcee;">
+											<td style="font-weight: bold;"><wicket:message key="touragents.newbooking.additional_service">[Add.Service]</wicket:message></td>
+											<td><wicket:message key="quantity">[Quantity]</wicket:message></td>
+											<td><wicket:message key="touragents.newbooking.nights">[Nights]</wicket:message></td>
+											<td><wicket:message key="amount">[Amount]</wicket:message></td>
+										</tr>
+										<tr wicket:id="list">
+											<td wicket:id="service"/>
+											<td wicket:id="quantity"/>
+											<td wicket:id="nights"/>
+											<td style="font-weight: bold;" wicket:id="amount"/>
+										</tr>
+										<tr>
+											<td colspan="2"></td>
+											<td style="border-top: 1px solid #ccdcee;"><wicket:message key="total">[Total]</wicket:message>:</td>
+											<td style="border-top: 1px solid #ccdcee; font-weight: bold;" wicket:id="total"></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<wicket:enclosure child="other_additional_service_container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<wicket:message key="touragents.newbooking.additional_services">[Additional Service]</wicket:message>
+							</div>
+							<div class="panel-body">
+								<div class="table-responsive">
+									<table wicket:id="other_additional_service_container" class="table3">
+										<tr>
+											<th style="width: 250px;"><wicket:message key="name">[Name]</wicket:message></th>
+											<th><wicket:message key="quantity">[Quantity]</wicket:message></th>
+											<th><wicket:message key="days">[Days]</wicket:message></th>
+											<th><wicket:message key="amount">[Amount]</wicket:message></th>
+										</tr>
+										<tr wicket:id="list">
+											<td wicket:id="name"/>
+											<td wicket:id="quantity"/>
+											<td wicket:id="days"/>
+											<td wicket:id="amount"/>
+										</tr>
+										<tr>
+											<td colspan="2"></td>
+											<td style="border-top: 1px solid #ccdcee;"><wicket:message key="total">[Total]</wicket:message>:</td>
+											<td style="border-top: 1px solid #ccdcee; font-weight: bold;" wicket:id="total"></td>
+										</tr>
+									</table>
+								</div>
+				 			</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				</wicket:enclosure>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-md-12">
+		<hr>
+		<div class="text-success" style="text-align: right; font-weight: bold; font-size: 18px;">
+		<wicket:message key="total.grand">[Grant Total]</wicket:message>:
+		<span wicket:id="grand_total"></span>
+		</div>
+	</div>
+</div>
+<form wicket:id="agreeform">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[Feedback]</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6"></div>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<label wicket:for="agree" class="checkbox-inline">
+						<input type="checkbox" wicket:id="agree">
+						<span><wicket:message key="touragents.newbooking.ta_agree_terms_and_conditions">[TA is informed and agree to the hotel booking terms and conditions]</wicket:message></span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<wicket:container wicket:id="cancellation_policy_container"/>
+		</div>
+	</div>
+<wicket:enclosure child="confirm">	
+	<div class="row">
+		<div class="col-md-6">
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<button wicket:id="confirm" class="btn btn-primary">
+						<i class="fa fa-check"></i>
+						<wicket:message key="button.confirm">[Confirm]</wicket:message>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:enclosure>	
+</form>
+</wicket:panel>

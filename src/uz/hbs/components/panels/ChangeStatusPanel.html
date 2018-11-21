@@ -1,0 +1,57 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row" style="margin-top: 15px;">
+		<div class="col-md-12">
+			<div class="well">
+				<span wicket:id="feedback">[Feedback]</span>
+				<form wicket:id="form">
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10">
+							<div class="table-responsive">
+								<table style="width: 100%">
+									<tr>
+										<td align="right">
+											<strong><wicket:message key="users.name">[Name]</wicket:message></strong>
+											:
+										</td>
+										<td>&nbsp;</td>
+										<td wicket:id="name" />
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td align="right">
+											<strong><wicket:message key="users.status">[Status]</wicket:message></strong>
+											:
+										</td>
+										<td>&nbsp;</td>
+										<td>
+											<select wicket:id="status" class="form-control">
+												<option>Choice One</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td></td>
+										<td>
+											<button wicket:id="submit" type="submit" class="btn btn-primary">
+												<i class="fa fa-save"></i>
+												<wicket:message key="button.save">[Save]</wicket:message>
+											</button>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="col-md-1"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

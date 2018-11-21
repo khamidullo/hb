@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" wicket:message="content:header.meta.description">
+<meta name="author" content="Hotelios.uz">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+<title><wicket:message key="header.title">[Title]</wicket:message></title>
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootswatch.min.css" rel="stylesheet" />
+
+<!-- Custom styles for this template -->
+<link href="css/signin.css" rel="stylesheet" />
+<link href="css/signin_animate.css" rel="stylesheet" />
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<!-- start Login box -->
+	<div class="container" id="login-block">
+		<form wicket:id="signInForm" class="form-signin" role="form">
+			<div style="position: fixed; top: 15px; right: 10px; clear: both;">
+				<div class="btn-group">
+					<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<img wicket:id="lang" />
+					</button>
+					<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<span class="caret"></span> <span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-right" role="menu">
+						<li wicket:id="langs">
+							<a wicket:id="langLink"><img wicket:id="langImg" align="left" />&nbsp;&nbsp;&nbsp;<span
+								wicket:id="langLabel">[English]</span></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+					<h3 class="animated bounceInDown">
+						<wicket:message key="signin.title">[Please sign-in]</wicket:message>
+					</h3>
+					<div class="login-box clearfix animated flipInY">
+						<div class="login-logo" style="padding-top: 35px;">
+							<img src="img/logo.png" alt="Company Logo" />
+						</div>
+						<hr />
+						<div class="login-form">
+							<div wicket:id="feedback" class="feedback" />
+							<div class="alert alert-error hide">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+							</div>
+							<input wicket:id="username" type="text" required autofocus autocomplete="off"
+								wicket:message="placeholder:signin.username" tabindex="1">
+							<input wicket:id="password" type="password" required autocomplete="off"
+								wicket:message="placeholder:signin.password" tabindex="2">
+							<div wicket:id="captchaBodyWrapper" class="captcha">
+								<a wicket:id="captchaLink"> <span wicket:id="captchaBody"> <img class="img" width="240" height="47"
+											wicket:message="alt:signin.captcha,title:signin.captcha.title" wicket:id="captchaImage" />
+								</span>
+								</a>
+							</div>
+							<span wicket:id="captchaInputWrapper"> <input id="captcha" wicket:id="captcha" maxlength="5" type="text"
+									tabindex="3" value="" autocomplete="off" required wicket:message="placeholder:signin.captcha" />
+							</span>
+							<button class="btn btn-red" tabindex="4" type="submit" wicket:id="signin">
+								<wicket:message key="signin.button">[Sign-in]</wicket:message>
+							</button>
+							<div class="login-links">
+								<a wicket:id="forgot_password" href="#"><wicket:message key="signin.forgot_password">[Forgot password?]</wicket:message></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- End Login box -->
+	<footer class="container">
+		<p id="footer-text">
+			<small wicket:id="copyRight">[Copyright &copy; 2015 <a href="http://company.com/">Company.</a>]
+			</small>
+		</p>
+	</footer>
+	<script src="js/bootstrap.min.js"></script>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-69675140-2', 'auto');
+		ga('send', 'pageview');
+	</script>
+<!-- Yandex.Metrika counter -->
+	<script type="text/javascript" >
+		(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter47547847 = new Ya.Metrika2({ id:47547847, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/tag.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks2");
+	</script>
+	<noscript><div><img src="https://mc.yandex.ru/watch/47547847?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" strict="true" name="XMLConfig" packages="uz.hbs" monitorInterval="5" verbose="true">
+	<Properties>
+		<Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+		<Property name="LOG_LEVEL_PATTERN">%5p</Property>
+		<Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} | ${LOG_LEVEL_PATTERN} [%t] %c - %m%n</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout charset="UTF-8">
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+		</Console>
+		<RollingFile name="FileLog" fileName="./logs/Hb.log" filePattern="logs/$${date:yyyy-MM}/Hb-%d{yyyy-MM-dd}.log.gz">
+			<PatternLayout charset="UTF-8">
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"/>
+			</Policies>
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="uz.hbs" level="debug" additivity="false">
+			<AppenderRef ref="FileLog" />
+			<AppenderRef ref="Console" />
+		</Logger>
+
+		<Logger name="uz.hbs.db.mappers" level="debug" additivity="false">
+			<AppenderRef ref="FileLog" />
+			<AppenderRef ref="Console" />
+		</Logger>
+
+		<Root level="info">
+			<AppenderRef ref="FileLog" level="info"/>
+			<AppenderRef ref="Console" level="info"/>
+		</Root>
+	</Loggers>
+</Configuration>

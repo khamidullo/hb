@@ -1,0 +1,505 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="./" style="margin-top: -5px;"><img align="left" src="img/logo2.png" wicket:message="title:company,alt:company" />&nbsp;</a>
+			<button class="collapsed navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+				<span class="sr-only">Hotelios</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse" id="navbar-main">
+			<ul class="nav navbar-nav">
+				<li wicket:id="admin.users" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-users"></i> <wicket:message
+							key="users">[List of users]</wicket:message> <b class="caret"></b> </a>
+					<ul class="dropdown-menu">
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.users.list" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message key="users.list">[List of users]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.users.add" href="#"> <i class="fa fa-plus"></i> &nbsp; <wicket:message key="users.add">[Add a user]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure child="">
+							<li>
+								<a wicket:id="admin.users.api.list" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message key="users.api.list">[List of API users]</wicket:message>
+								</a>
+							</li>
+							<li role="separator" class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li class="dropdown-header" style="font-weight: bold"><wicket:message key="roles">[Roles]</wicket:message> <i class="fa fa-angle-double-down"></i></li>
+							<li role="separator" class="divider"></li>
+							<li>
+								<a wicket:id="admin.roles.list" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message key="roles.list">[List of users]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.roles.add" href="#"> <i class="fa fa-plus"></i> &nbsp; <wicket:message key="roles.add">[Add a user]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+					</ul>
+				</li>
+				<li wicket:id="admin.hotels" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-h-square"></i>
+						<wicket:message key="hotels">[Hotels]</wicket:message> <b class="caret"></b> </a>
+					<ul class="dropdown-menu">
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.hotels.list" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="hotels.list">[List of hotels]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.hotels.add" href="#"> <i class="fa fa-plus"></i> &nbsp; <wicket:message key="hotels.add">[Add a hotel]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.hotels.preference" href="#"> <i class="fa fa-gears"></i> &nbsp; <wicket:message
+										key="hotels.preference">[Hotel Preference]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.hotels.b2c.list" href="#"> <i class="fa fa-usd" style="color: green"></i> &nbsp; <wicket:message
+										key="hotels.b2c.list">[Price for B2C]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.hotels.regions" tabindex="-1" href="#"> <i class="fa fa-flag-o" style="color: red"></i> &nbsp; <wicket:message
+										key="address.regions">[Regions]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.hotels.cities" tabindex="-1" href="#"> <i class="fa fa-fort-awesome" style="color: blue"></i> &nbsp; <wicket:message
+										key="address.cities">[Cities]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+					</ul>
+				</li>
+				<li wicket:id="admin.touragents" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-buysellads"></i>
+						<wicket:message key="touragents">[Tour agents]</wicket:message> <b class="caret"></b> </a>
+					<ul class="dropdown-menu">
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.touragents.list" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="touragents.list">[List of tour agents]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.touragents.add" href="#"> <i class="fa fa-plus"></i> &nbsp; <wicket:message
+										key="touragents.add">[Add a tour agent]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+					</ul>
+				</li>
+				<li wicket:id="admin.spectators" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-user-secret"></i>
+						<wicket:message key="spectators">[Spectators]</wicket:message> <b class="caret"></b> </a>
+					<ul class="dropdown-menu">
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.spectators.list" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="spectators.list">[List of spectators]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.spectators.add" href="#"> <i class="fa fa-plus"></i> &nbsp; <wicket:message
+										key="spectators.add">[Add a spectator]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+					</ul>
+				</li>
+				<li wicket:id="admin.reports" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"> <wicket:message key="reports">[Reports]</wicket:message>
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.by_reservations" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="report.title.report_by_reservations">[Report by reservations]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.by_reservations.b2c" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="report.title.report_by_reservations.b2c">[Report by reservations (B2C)]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.reservations" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="hotels.reservation.pending.title">[List of reservations]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.reservations.b2c" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="hotels.reservation.pending.title.b2c">[List of reservations (B2C)]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.additional_services.manage" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="admin.reports.additional_services.manage">[Additional services]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.additional_services" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="admin.reports.additional_services">[Additional services]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.clients" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="admin.reports.clients">[Clients]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.finance_annual" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="admin.reports.finance_annual">[Finance annual]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.finance_total" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="admin.reports.finance_total">[Finance total]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.hotels" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="admin.reports.hotels">[Hotels]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.hotels_for_analysis" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="admin.reports.hotels_for_analysis">[Hotels for analysis]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="admin.reports.volume_of_reservations" href="#"> <i class="fa fa-list"></i> &nbsp; <wicket:message
+										key="report.title.report_by_reservation_volume">[Volume of reservations]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+					</ul>
+				</li>
+				<wicket:container wicket:id="hotelInterface">
+					<wicket:enclosure>
+						<li>
+							<a wicket:id="hotel.reports.by_reservations" href="#"> <i class="fa fa-list"></i>&nbsp;<wicket:message
+									key="report.title.report_by_reservations">[Report by reservations]</wicket:message>
+							</a>
+						</li>
+						<li class="divider"></li>
+					</wicket:enclosure>
+					<li wicket:id="hotel.roomsandrates" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-newspaper-o"></i>&nbsp;<wicket:message
+								key="hotels.rooms_and_rates">[Rooms and rates]</wicket:message> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="hotel.roomsandrates.room_list" href="#"> <wicket:message
+											key="hotels.rooms_and_rates.room.list">[Room List]</wicket:message>
+									</a>
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="hotel.roomsandrates.availibility_room_list" href="#"> <wicket:message
+											key="hotels.rooms_and_rates.room.list.availibility">[Availibility Room List]</wicket:message></a>
+
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="hotel.roomsandrates.room_rate_sale" href="#"> <wicket:message
+											key="hotels.room_rates.list">[Room Rate And Sale]</wicket:message>
+									</a>
+								</li>
+							</wicket:enclosure>
+						</ul>
+					</li>
+					<wicket:enclosure>
+						<li>
+							<a wicket:id="hotel.info" href="#">
+								<i class="fa fa-info-circle"></i>
+								<wicket:message key="hotels.about.info">[Hotel Info]</wicket:message>
+							</a>
+						</li>
+						<li class="divider"></li>
+					</wicket:enclosure>
+				</wicket:container>
+				<wicket:container wicket:id="touragentInterface">
+					<wicket:enclosure>
+						<li>
+							<a wicket:id="touragent.newbooking" href="#"><i class="fa fa-lg fa-pencil-square"></i>&nbsp;<wicket:message
+									key="touragents.newbooking">[New booking]</wicket:message> </a>
+						</li>
+						<li class="divider"></li>
+					</wicket:enclosure>
+					<wicket:enclosure>
+						<li>
+							<a wicket:id="touragent.reservations" href="#"><i class="fa fa-table"></i>&nbsp;<wicket:message
+									key="touragents.reservations">[Reservations]</wicket:message> </a>
+						</li>
+						<li class="divider"></li>
+					</wicket:enclosure>
+					<li wicket:id="touragent.additional_services" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-list"></i>&nbsp;<wicket:message
+								key="additional_service.list">[Additional Services]</wicket:message> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="touragent.additional_services_add" href="#"><i class="fa fa-plus-circle"></i>&nbsp;<wicket:message
+											key="touragents.reservation.guest.service.order.title">[Order additional services]</wicket:message></a>
+
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="touragent.additional_services_list" href="#"><i class="fa fa-table"></i>&nbsp;<wicket:message
+											key="touragents.reservation.guest.service.order.list.title">[Additional services list]</wicket:message>
+									</a>
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+						</ul>
+					</li>
+					<li wicket:id="touragent.reports" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i class="fa fa-file-text-o"></i>&nbsp;<wicket:message
+								key="touragents.reports">[Reports]</wicket:message> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="touragent.reports.by_reservations" href="#"> <i class="fa fa-list"></i>&nbsp;<wicket:message
+											key="report.title.report_by_reservations">[Report by reservations]</wicket:message>
+									</a>
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="touragent.reports.reports" href="#"><i class="fa fa-file-text-o"></i>&nbsp;<wicket:message
+											key="touragents.reports">[Reports]</wicket:message>
+									</a>
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+						</ul>
+					</li>
+				</wicket:container>
+				<wicket:container wicket:id="spectatorInterface">
+					<wicket:enclosure>
+						<li>
+							<a wicket:id="spectator.reports" href="#"><i class="fa fa-file-text-o"></i>&nbsp;<wicket:message
+									key="touragents.reports">[Reports]</wicket:message> </a>
+						</li>
+						<li class="divider"></li>
+					</wicket:enclosure>
+				</wicket:container>
+				<wicket:container wicket:id="apiUserInterface">
+					<wicket:enclosure>
+						<li>
+							<a wicket:id="apiUser.reservations" href="#"><i class="fa fa-table"></i>&nbsp;<wicket:message
+									key="touragents.reservations">[Reservations]</wicket:message> </a>
+						</li>
+						<li class="divider"></li>
+					</wicket:enclosure>
+					<wicket:enclosure>
+						<li>
+							<a wicket:id="apiUser.reports" href="#"><i class="fa fa-file-text-o"></i>&nbsp;<wicket:message
+									key="touragents.reports">[Reports]</wicket:message> </a>
+						</li>
+						<li class="divider"></li>
+					</wicket:enclosure>
+				</wicket:container>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<wicket:container wicket:id="preferences">
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#" data-hover="dropdown"> <i class="fa fa-gears"></i>
+							<wicket:message key="preferences">[Preferences]</wicket:message> <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="preferences.price_range" tabindex="-1" href="#"> <i class="fa fa-money"></i> &nbsp; <wicket:message
+											key="pricerange">[Price range]</wicket:message>
+									</a>
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="preferences.additional_services" tabindex="-1" href="#"> <i class="fa fa-plus-circle"></i> &nbsp; <wicket:message
+											key="additional.service">[Additional services]</wicket:message>
+									</a>
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+							<wicket:enclosure>
+								<li>
+									<a wicket:id="preferences.recommended_sort" tabindex="-1" href="#"> <i class="fa fa-sort-amount-asc"></i> &nbsp; <wicket:message
+											key="touragents.hotel.sortable">[Additional services]</wicket:message>
+									</a>
+								</li>
+								<li class="divider"></li>
+							</wicket:enclosure>
+						</ul>
+					</li>
+				</wicket:container>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" data-hover="dropdown"> <i class="fa fa-user"></i> <span
+						wicket:id="user">[user info]</span> <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li wicket:id="user.name" class="dropdown-header"></li>
+						<li class="divider"></li>
+						<li class="dropdown-header" style="font-weight: bold"><wicket:message key="user.last_login">[Last log-in]</wicket:message></li>
+						<li wicket:id="user.lastLogin.time" class="dropdown-header"></li>
+						<li wicket:id="user.lastLogin.host" class="dropdown-header"></li>
+						<li class="divider"></li>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="settings" tabindex="-1" href="#"> <i class="fa fa-sliders" style="color: green"></i> &nbsp; <wicket:message
+										key="settings">[Settings]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="logout" tabindex="-1" href="#"> <i class="fa fa-power-off" style="color: red"></i> &nbsp; <wicket:message
+										key="logout">[Log-out]</wicket:message>
+								</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="homepage" tabindex="-1" href="#"><i class="fa fa-flag-o"></i> &nbsp; Old Home Page</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="fontawesome" tabindex="-1" href="#"><i class="fa fa-flag-o"></i> &nbsp; FontAwesome</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="bootstrap" tabindex="-1" href="#"><i class="fa fa-bomb"></i> &nbsp; Bootstrap samples</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="modal" tabindex="-1" href="#"><i class="fa fa-bomb"></i> &nbsp; Bootstrap modal window</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="test" tabindex="-1" href="#"><i class="fa fa-bug"></i> &nbsp; Test Page</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="test2" tabindex="-1" href="#"><i class="fa fa-bug"></i> &nbsp; Test Page 2</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="rowspan" tabindex="-1" href="#"><i class="fa fa-bug"></i> &nbsp; Rowspan</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+						<wicket:enclosure>
+							<li>
+								<a wicket:id="loading_indicator" tabindex="-1" href="#"><i class="fa fa-bug"></i> &nbsp; Loading indicator</a>
+							</li>
+							<li class="divider"></li>
+						</wicket:enclosure>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</wicket:panel>

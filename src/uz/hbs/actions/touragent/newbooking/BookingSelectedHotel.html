@@ -1,0 +1,321 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="row">
+				<div class="col-md-12">
+					<h2 style="margin-top: 0px;">
+						<span wicket:id="hotelName">[Hotel name]</span><br /> <span style="font-size: 18px;" wicket:id="starLabel"></span>
+					</h2>
+					<div class="panel panel-success" style="width: 90%">
+						<div class="panel-heading">
+							<wicket:message key="touragents.hotel_information">[Hotel information]</wicket:message>
+						</div>
+						<div class="panel-body">
+							<ul class="list-unstyled">
+								<li wicket:id="address">[Address]</li>
+								<li wicket:id="city">[City]</li>
+								<li wicket:id="region_name">[Region]</li>
+								<li wicket:id="country_name">[Country]</li>
+								<li>
+									<wicket:message key="touragents.contact_number">[Contact number]</wicket:message>
+									:
+									<wicket:container wicket:id="contact_number">[Contact number]</wicket:container>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-success" style="width: 90%">
+				<div class="panel-heading">
+					<wicket:message key="touragents.your_search">[Your search]</wicket:message>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<table style="width: 100%">
+								<tr>
+									<td nowrap="nowrap">
+										<wicket:message key="touragents.newbooking.check_in">[Check-in]</wicket:message>
+										: <strong wicket:id="checkIn">[07 May from 06:00]</strong> <br />
+										<wicket:message key="touragents.newbooking.check_out">[Check-out]</wicket:message>
+										: <strong wicket:id="checkOut">[10 May until 12:00]</strong> <br>
+										<wicket:message key="users.total">[Total]</wicket:message>
+										: <strong><span wicket:id="nightsLabel" class="badge" style="">[1]</span> <span wicket:id="nightsSuffixLabel">[night]</span></strong><br>
+										<span wicket:id="ageLabel">[Adults: 1, children: 0]</span>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="margin-bottom: 20px;">
+				<a wicket:id="newBookingLink" class="btn btn-success btn-outline" style="width: 90%;"><wicket:message key="touragents.newbooking.new_search">[New booking]</wicket:message></a>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div wicket:id="imageSlider" class="container-fluid" style="padding: 0"></div>
+		</div>
+	</div>
+	<ul class="nav nav-tabs" role="tablist" id="myTab">
+		<li class="active">
+			<a href="#rooms" role="tab" data-toggle="tab"><wicket:message key="touragents.newbooking.rooms">[Rooms]</wicket:message></a>
+		</li>
+		<li>
+			<a href="#details" role="tab" data-toggle="tab"><wicket:message key="touragents.newbooking.hotel_details">[Hotel details]</wicket:message></a>
+		</li>
+		<li>
+			<a href="#description" role="tab" data-toggle="tab"><wicket:message key="hotels.details.description">[Description]</wicket:message></a>
+		</li>
+	</ul>
+	<div class="tab-content show-tab-border">
+		<div class="tab-pane fade active in" id="rooms">
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-left">
+							<h4>
+								<wicket:message key="touragents.newbooking.available_rooms_period">[Available Rooms for the selected period]</wicket:message>
+							</h4>
+						</div>
+						<div class="pull-right">
+							<input wicket:id="submit" type="submit" class="btn btn-primary"
+								wicket:message="value:touragents.newbooking.reserve">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">&nbsp;</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<table class="table table-bordered table-condensed">
+								<thead>
+									<tr>
+										<th nowrap="nowrap">
+											<wicket:message key="hotels.reservation.details.room.type">[Room type]</wicket:message>
+										</th>
+										<th nowrap="nowrap">
+											<wicket:message key="hotels.reference_info.condition">[Condition]</wicket:message>
+										</th>
+										<th nowrap="nowrap">
+											<wicket:message key="touragents.newbooking.number_of_guests">[# of guests]</wicket:message>
+										</th>
+										<th nowrap="nowrap" wicket:id="priceForNightsTitle">[Price for 3 nights]</th>
+										<th nowrap="nowrap">
+											<wicket:message key="hotels.reservation.details.choose">[Choose]</wicket:message>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<wicket:container wicket:id="roomlist">
+										<tr>
+											<td colspan="5">
+												<h4 wicket:id="room_index">Номер 1</h4>
+											</td>
+										</tr>
+										<tr wicket:id="list">
+											<td wicket:id="column" style="text-align: left; vertical-align: top">
+												<a wicket:id="roomTypeLink" href="#">
+													<img wicket:id="roomTypeImg" class="thumbnail" width="100" align="left" style="margin-bottom: 5px">
+														<strong wicket:id="roomType" style="margin: 10px;"></strong>
+												</a>
+												<div wicket:id="dbed" style="float:right;">
+													<img wicket:id="double" alt="Double" src="/img/bed_type_double.png" width="24px;" height="24px;">
+													<img wicket:id="twin"   alt="Twin" src="/img/bed_type_twin.png" width="24px;" height="24px;">
+												</div>
+												<div wicket:id="equipment"></div>
+											</td>
+											<td style="vertical-align: top; color: #339900; white-space: nowrap;">
+												<span wicket:id="breakfastIncluded"></span> <span wicket:id="freeCancelation"></span>
+											</td>
+											<td style="vertical-align: top">
+												<span wicket:id="numberOfGuests"></span>
+												<wicket:enclosure child="withExtraBed">
+													<span wicket:id="withExtraBed">&nbsp;&nbsp;</span>
+													<i class="fa fa-hotel"></i>
+												</wicket:enclosure>
+											</td>
+											<td style="vertical-align: top">
+												<span wicket:id="priceForNights">[priceForNights]</span><br>
+												<span wicket:id="avgPriceForNights">[avgPriceForNights]</span>
+											</td>
+											<td>
+												<input wicket:id="check" type="checkbox">
+											</td>
+										</tr>
+									</wicket:container>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div wicket:id="dialog"></div>
+			</form>
+		</div>
+		<div class="tab-pane fade" id="details">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<strong><wicket:message key="hotels.details.facility_highlights">[Facility highlights]</wicket:message></strong>
+						</div>
+						<div class="panel-body" style="padding: 5px 10px;">
+							<ul class="list-inline" style="margin-bottom: 0;">
+								<li wicket:id="facilities" style="background-color: #F2F2F2; margin: 5px; padding: 5px 10px;">
+									<wicket:container wicket:id="name">[Name]</wicket:container>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<strong><wicket:message key="hotels.details.services_in_rooms">[Services in rooms]</wicket:message> </strong>
+						</div>
+						<div class="panel-body" style="padding: 5px 10px;">
+							<ul class="list-inline" style="margin-bottom: 0;">
+								<li wicket:id="services" style="background-color: #F2F2F2; margin: 5px; padding: 5px 10px;">
+									<wicket:container wicket:id="name">[Name]</wicket:container>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<wicket:enclosure child="nearbyplaces">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								<strong><wicket:message key="hotels.details.nearbyplaces">[Nearby places]</wicket:message> </strong>
+							</div>
+							<div class="panel-body" style="padding: 5px 10px;">
+								<ul class="list-inline" style="margin-bottom: 0;">
+									<li wicket:id="nearbyplaces" style="background-color: #F2F2F2; margin: 5px; padding: 5px 10px;">
+										<wicket:container wicket:id="name">[Name]</wicket:container>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</wicket:enclosure>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="panel panel-warning">
+								<div class="panel-heading">
+									<strong><wicket:message key="touragents.newbooking.check_in_times">[Check-in times]</wicket:message></strong>
+								</div>
+								<div class="panel-body">
+									<p>
+										<wicket:message key="hotels.reservation.check_in_period">[Check-in period]</wicket:message>
+										: <strong wicket:id="check_in_period">[14:00 - 23:59]</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.early_arrival">[Early arrival]</wicket:message>
+										: <strong wicket:id="earlyHalfArrival">[before 06:00]</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.early_arrival_charge">[Early arrival charge]</wicket:message>
+										: <strong wicket:id="earlyHalfArrivalCharge">[100% of room rate]</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.early_arrival">[Early arrival]</wicket:message>
+										: <strong wicket:id="earlyFullArrival">[before 06:00]</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.early_arrival_charge">[Early arrival charge]</wicket:message>
+										: <strong wicket:id="earlyFullArrivalCharge">[100% of room rate]</strong>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="panel panel-warning">
+								<div class="panel-heading">
+									<strong><wicket:message key="touragents.newbooking.check_out_times">[Check-out times]</wicket:message></strong>
+								</div>
+								<div class="panel-body">
+									<p>
+										<wicket:message key="hotels.reservation.check_out_period">[Check-out period]</wicket:message>
+										: <strong wicket:id="check_out_period">00:00 - 12:00</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.late_check_out">[Late check-out]</wicket:message>
+										: <strong wicket:id="lateHalfDeparture">[after 18:00]</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.late_check_out_charge">[Late check-out charge]</wicket:message>
+										: <strong wicket:id="lateHalfDepartureCharge">[100% of room rate]</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.late_check_out">[Late check-out]</wicket:message>
+										: <strong wicket:id="lateFullDeparture">[after 18:00]</strong>
+									</p>
+									<p>
+										<wicket:message key="touragents.newbooking.late_check_out_charge">[Late check-out charge]</wicket:message>
+										: <strong wicket:id="lateFullDepartureCharge">[100% of room rate]</strong>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-danger">
+						<div class="panel-heading">
+							<strong><wicket:message key="hotels.reservation.cancellation_policy">[Reservation cancellation policy]</wicket:message>
+							</strong>
+						</div>
+						<div class="panel-body">
+							<ul wicket:id="cancelation_policy" style="padding-left: 15px; margin-bottom: 0px;">
+								<li wicket:id="no_penalty_before_days">[If cancelled up to 1 days before date of arrival, no fee will be
+									charged]</li>
+								<li wicket:id="late_cancel_penalty">[If cancelled later 100% of the first night will be charged]</li>
+								<li wicket:id="no_show">[no show]</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+ 		</div>
+		<div class="tab-pane fade" id="description">
+			<div class="row">
+				<div class="col-md-12">
+					<div wicket:id="description"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">&nbsp;</div>
+	</div>
+	<script>
+		$('#myTab a').click(function(e) {
+			e.preventDefault();
+			$(this).tab('show');
+		});
+		
+		function checkRoom(id, index) {
+			$this = $('#' + id);
+			$('input:checked[data-room-index=' + index + ']').not($this).each(function(){
+				$('input[data-prev-room=' + $(this).attr('data-prev-room') + ']').removeAttr('disabled');				
+			});
+			$('input:checked[data-room-index=' + index + ']').not($this).prop('checked', false);
+			$('input[data-prev-room=' + $this.attr('data-prev-room') + '][data-room-index !=' + $this.attr('data-room-index') + ']').not($this).prop('disabled', $this.prop('checked'));
+			
+		}
+		
+		function checkOnChecked() {
+			if ($('input:checkbox:checked[data-room-index]').length) return true;
+			else {
+				alert('Для продолжения процесса бронирования пожалуйста, выберете подходящую комнату');
+				return false;
+			}
+		}
+	</script>
+</wicket:panel>

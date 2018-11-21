@@ -1,0 +1,235 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="language" content="ru-Ru" />
+<title>ДЕТАЛИ РЕЗЕРВАЦИИ</title>
+</head>
+<body>
+<div style="font-family: Verdana, sans-serif; font-size: 14px; border: 1px solid #000000; padding: 4px; width: 750px;">
+	<table style="width: 750px; border-spacing: 0; border-collapse: 0">
+		<tr style="font-weight: bold; font-size: 16px">
+			<td style="width: 50%; vertical-align: top;">
+				Куда: $hotel_name_region$<br>
+				Тел: $hotel_phone$<br>
+				$hotel_address$
+			</td>
+			<td style="width: 50%; text-align: right; border-left: 1px solid #000000; padding-left: 10px; vertical-align: top;">$tour_agency$</td>
+		</tr>
+		<tr>
+			<td style="width: 50%; font-size: 16px; vertical-align: top;">
+				<span style="font-weight: bold;">$reservation_type$<br />ЗАЯВКА № $order$</span><br /> <span
+					style="font-size: 13px;">Дата и время создания: $order_date_time$</span>
+			</td>
+			<td style="width: 50%; text-align: right; border-left: 1px solid #000000; padding-left: 10px;">
+				Адрес: $tour_agency_address$<br />
+				Сотрудник: $ta_name$<br />
+				e-mail: <a href="mailto:$ta_email$">$ta_email$</a><br />
+				$if(ta_phone)$
+					Контакты: $ta_phone$
+				$endif$
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="padding: 15px; font-size: 20px; font-weight: bold; text-align: center;">
+				<br />ДЕТАЛИ РЕЗЕРВАЦИИ
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				$if(guest)$
+				<table style="border-collapse: collapse; border-spacing: 0; border: 1px solid #000000; width: 100%;">
+					<tr>
+						<td style="font-weight: bold; border: 1px solid #000000; padding: 2px;">Ф.И.О. Гостя</td>
+						<td style="font-weight: bold; border: 1px solid #000000; padding: 2px;">$guest$</td>
+					</tr>
+				</table>
+				$endif$
+				<table style="border-collapse: collapse; border-spacing: 0; border: 1px solid #000000; width: 100%;">
+					<tr>
+						<td style="border: 1px solid #000000; padding: 2px;">Заезд:</td>
+						<td style="font-weight: bold; border: 1px solid #000000; padding: 2px;">$check_in$</td>
+						<td style="border: 1px solid #000000; padding: 2px;">Выезд:</td>
+						<td style="font-weight: bold; border: 1px solid #000000; padding: 2px;">$check_out$</td>
+						<td style="border: 1px solid #000000; padding: 2px;">Кол-во ночей:</td>
+						<td style="font-weight: bold; border: 1px solid #000000; padding: 2px;">$nights$</td>
+					</tr>
+				</table>
+				<div style="height: 25px;">&nbsp;</div>
+				<table style="border-collapse: collapse; border-spacing: 0; border: 1px solid #000000; width: 100%;">
+					<tr>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;">Тип номера</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;">Цена, $currency$</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;">Кол-во</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;" colspan="2">Взр. / Дети</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;">Цена, $currency$</th>
+					</tr>
+					$room_type_details:{room_type|
+					<tr>
+						<td style="border: 1px solid #000000; padding: 2px;">$room_type.name$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$room_type.price$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$room_type.count$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$room_type.adults$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$room_type.children$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$room_type.total_price$</td>
+					</tr>
+					}$
+					<tr>
+						<td style="border: 1px solid #000000; padding: 2px;" colspan="6">&nbsp;</td>
+					</tr>
+					<tr>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">Завтрак</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$breakfast$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">&nbsp;</td>
+						<td colspan="2" style="text-align: center; border: 1px solid #000000; padding: 2px;">&nbsp;</td>
+						<td style="text-align: center;">$breakfast$</td>
+					</tr>
+					$if(early_check_in)$
+					<tr>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">Ранний заезд</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$early_check_in$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$early_check_in_guests_count$</td>
+						<td colspan="2" style="text-align: center; border: 1px solid #000000; padding: 2px;">&nbsp;</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$early_check_in_sum$</td>
+					</tr>
+					$endif$
+					$if(late_check_out)$
+					<tr>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">Поздний выезд</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$late_check_out$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$late_check_out_guests_count$</td>
+						<td colspan="2" style="text-align: center; border: 1px solid #000000; padding: 2px;">&nbsp;</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$late_check_out_sum$</td>
+					</tr>
+					$endif$
+					$if(additional_details_hotel)$
+					<tr>
+						<td colspan="6"
+							style="font-weight: bold; border: 1px solid #000000; padding: 2px; border-left: 1px solid #ffffff !important; border-right: 1px solid #ffffff !important;">
+							<br />Дополнительные услуги в отеле:
+						</td>
+					</tr>
+					<tr>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;" colspan="3">Наименование</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;" colspan="2">Кол-во</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;">Цена</th>
+					</tr>
+					$additional_details_hotel:{details|
+					<tr>
+						<td colspan="3" style="text-align: center; border: 1px solid #000000; padding: 2px;">$details.name$</td>
+						<td colspan="2" style="text-align: center; border: 1px solid #000000; padding: 2px;">$details.count$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$details.total_price$</td>
+					</tr>
+					}$
+					$endif$
+					$if(additional_details_ta)$
+					<tr>
+						<td colspan="6"
+							style="font-weight: bold; border: 1px solid #000000; padding: 2px; border-left: 1px solid #ffffff !important; border-right: 1px solid #ffffff !important;">
+							<br />Дополнительные услуги:
+						</td>
+					</tr>
+					<tr>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;" colspan="5">Наименование</th>
+						<th style="background-color: #DDDDDD; border: 1px solid #000000; padding: 2px 2px 2px 10px;">Цена</th>
+					</tr>
+					$additional_details_ta:{details|
+					<tr>
+						<td colspan="5" style="text-align: center; border: 1px solid #000000; padding: 2px;">$details.name$</td>
+						<td style="text-align: center; border: 1px solid #000000; padding: 2px;">$details.total_price$</td>
+					</tr>
+					}$
+					$endif$
+					<tr>
+						<td colspan="6"
+							style="font-weight: bold; border-top: 1px solid #000000; padding: 2px; border-left: 1px solid #ffffff !important; border-right: 1px solid #ffffff !important; border-bottom: 1px solid #ffffff !important;">
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5" style="text-align: right; font-weight: bold; border: 1px solid #000000; padding: 2px; border: 1px solid #ffffff !important;">ИТОГО:</td>
+						<td style="font-weight: bold; padding: 2px; text-align: center; border: 1px solid #ffffff !important;">$if(total_sum_hotel)$ $total_sum_hotel$ $endif$ $if(total_sum_grand)$ $total_sum_grand$ $endif$</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		$if(rooming_list_left)$
+		<tr>
+			<td colspan="2">
+				<br />
+				<table style="width: 100%">
+					<tr>
+						<td colspan="3" style="font-weight: bold;">Rooming list $resident$</td>
+					</tr>
+					<tr>
+						<td style="width: 49%" valign="top">
+							<table style="border-collapse: collapse; border-spacing: 0; border: 1px solid #000000; width: 100%">
+							$rooming_list_left:{rooming_list|
+								<tr>
+									<td style="border: 1px solid #000000; padding: 2px;">$rooming_list.name$</td>
+									<td style="border: 1px solid #000000; padding: 2px;">$rooming_list.guest_name$</td>
+								</tr>
+							}$
+							</table>
+						</td>
+						<td style="width: 2%">&nbsp;</td>
+						<td style="width: 49%" valign="top">
+							<table style="border-collapse: collapse; border-spacing: 0; border: 1px solid #000000; width: 100%">
+							$rooming_list_right:{rooming_list|
+								<tr>
+									<td style="border: 1px solid #000000; padding: 2px;">$rooming_list.name$</td>
+									<td style="border: 1px solid #000000; padding: 2px;">$rooming_list.guest_name$</td>
+								</tr>
+							}$
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		$endif$
+		$if(ta_comments)$
+		<tr>
+			<td colspan="2" style="padding: 8px;">
+				<table style="width: 100%">
+					<tr>
+						<td style="font-weight: bold;">Специальный запрос:</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #000000; text-align: center;">
+							$ta_comments$
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		$endif$
+		<tr>
+			<td colspan="2">
+				<div style="height: 25px;">&nbsp;</div>
+				<hr/>
+				<table style="width: 100%">
+					<tr>
+						<td style="width: 220px; vertical-align: top; text-align: center;">
+							<div>заявка оформлена через</div>
+							<img
+								src="cid:logoimg"
+								name="Hotelios.uz" align="bottom" border="0" height="36" width="186"/>
+							<div>&nbsp;</div>
+							<div>Тел: (+998 71) 200-25-00</div>
+							<div style="font-size: 11px;"><a href="mailto:info@hotelios.uz">info@hotelios.uz</a> <a href="www.hotelios.uz">www.hotelios.uz</a></div>
+							<div style="font-size: 12px;">ежедневно с 09:00 до 18:00</div>
+						</td>
+						<td style="border-left: 1px solid #000000; padding-left: 10px; vertical-align: top">
+							<div style="font-weight: bold; font-size: 22px; text-align: center;">ВНИМАНИЕ!</div>
+							<div style="font-weight: bold; font-size: 18px;">- Бронь на $reservation_type_name$ основе</div>
+							<div style="font-weight: bold; font-size: 18px;">- $payment_owner$.</div>
+							<div style="font-size: 10px; text-decoration: underline;">условия бронирования/проживания/оплаты согласно договору с OOO Booking System</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

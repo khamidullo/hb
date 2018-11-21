@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.TourAgentReservation">
+    <select id="selectTAMealOptionValue" parameterType="MealOption" resultType="double">
+        SELECT mo.cost_per_person_per_night
+          FROM mealoptions mo
+         WHERE mo.hotelsusers_id = #{hotelsusers_id}
+           AND mo.meal_type = #{meal_type}
+           AND mo.included_to_room_rate = false
+    </select>
+    
+    <select id="selectTAReservationRule" parameterType="ReservationRuleType" resultType="ReservationRuleType">
+        SELECT city_tax,
+               check_in_from_time, 
+               check_in_to_time, 
+               check_in_half_charge_from_time,
+               check_in_half_charge_to_time,
+               check_in_full_charge_from_time,
+               check_in_full_charge_to_time,
+               check_in_half_charge_service_charge,
+               check_in_half_charge_service_charge_type,
+               check_in_full_charge_service_charge,
+               check_in_full_charge_service_charge_type,
+               check_out_from_time,
+               check_out_to_time,
+               check_out_half_charge_from_time,
+               check_out_half_charge_to_time,
+               check_out_full_charge_from_time,
+               check_out_full_charge_to_time,
+               check_out_half_charge_service_charge,
+               check_out_half_charge_service_charge_type,
+               check_out_full_charge_service_charge,
+               check_out_full_charge_service_charge_type,
+               minimum_free_age,
+               maximum_discount_age,
+  			   maximum_discount_age_value,
+  			   maximum_discount_age_type,
+  			   extra_bed_price_type,
+  			   extra_bed_price_type_value,
+  			   COALESCE(p.support_tentative_reservation, false) AS "reservationcancellationpolicy.support_tentative_reservation",
+  			   p.no_penalty_before_days AS "reservationcancellationpolicy.no_penalty_before_days.id", 
+  			   p.late_cancel_penalty AS "reservationcancellationpolicy.late_cancel_penalty.id",
+  			   p.no_show_penalty AS "reservationcancellationpolicy.no_show_penalty.id",
+  			   COALESCE(p.no_show_penalty_first_night, false) AS "reservationcancellationpolicy.no_show_penalty_first_night",
+  			   COALESCE(p.late_cancel_penalty_first_night, false) AS "reservationcancellationpolicy.late_cancel_penalty_first_night"
+          FROM hotelsreservationrules JOIN reservationcancellationpolicy p  ON reservationcancellationpolicy_id = p.id   
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND is_group = #{is_group} 
+    </select>
+    
+    <select id="selectTAHotelName" parameterType="long" resultType="string">
+        SELECT COALESCE(hd.display_name_en, hd.display_name) AS display_name
+          FROM hotelsdetails hd
+         WHERE hd.hotelsusers_id = #{id} 
+    </select>
+    
+    <select id="selectTAReserveAvailableRoomsByRoomType" parameterType="map" resultType="short">
+        SELECT COALESCE(get_available_room_count_ta(#{roomtypes_id}, #{check_in}::timestamp, #{check_out}::timestamp, #{reserve_id}), 0)
+    </select>
+    
+    <select id="selectTAReservationList" parameterType="map" resultType="Reservation">
+       SELECT r.id, 
+       		  r.create_date,
+              g.first_name || ' ' || g.last_name AS guest_name, 
+              COALESCE(h.display_name_en, h.display_name) AS hotel_name,
+              r.check_in, 
+              r.check_out,
+              r.status,
+              r.payment_owner, 
+              r.total + COALESCE(r.additional_service_cost, 0) AS total_sum,
+              r.payment_method
+         FROM reservations r, hotelsdetails h, guests g
+        WHERE r.creator_user_id = #{creator_user_id}
+          AND h.hotelsusers_id = r.hotelsusers_id
+          AND r.id = g.reservations_id
+          AND g.id = (SELECT MIN(g2.id) FROM guests g2 WHERE g2.guest_index = 1 AND g2.reservations_id = g.reservations_id)
+        <if test="hotelsusers_id != null">
+          AND h.hotelsusers_id = #{hotelsusers_id}
+        </if>
+        <if test="type != null">
+          AND r.reservation_type = #{type}
+        </if>
+        <if test="status != null">
+          AND r.status = #{status}
+        </if>
+        <if test="display_name != null">
+          AND h.display_name_en = #{display_name}
+        </if>
+        <if test="check_in != null">
+          AND r.check_in::date = #{check_in}::date 
+        </if>    
+        <if test="check_out != null">
+          AND r.check_out::date = #{check_out}::date 
+        </if>
+        <if test="date_from != null">
+          AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+        </if>    
+        <if test="date_to != null">
+          AND r.check_in::date <![CDATA[<=]]> #{date_to}::date 
+        </if>
+        <if test="payment_method != null">
+          AND r.payment_method = #{payment_method} 
+        </if>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		LIMIT #{limit} OFFSET #{offset}            
+    </select>
+    
+    <select id="selectTAReservationListCount" parameterType="map" resultType="long">
+       SELECT COUNT(*)
+         FROM reservations r, hotelsdetails h, guests g
+        WHERE r.creator_user_id = #{creator_user_id}
+          AND h.hotelsusers_id = r.hotelsusers_id
+          AND r.id = g.reservations_id
+          AND g.id = (SELECT MIN(g2.id) FROM guests g2 WHERE g2.guest_index = 1 AND g2.reservations_id = g.reservations_id)
+        <if test="hotelsusers_id != null">
+          AND h.hotelsusers_id = #{hotelsusers_id}
+        </if>
+        <if test="type != null">
+          AND r.reservation_type = #{type}
+        </if>
+        <if test="status != null">
+          AND r.status = #{status}
+        </if>
+        <if test="display_name != null">
+          AND h.display_name_en = #{display_name}
+        </if>
+        <if test="check_in != null">
+          AND r.check_in::date = #{check_in}::date 
+        </if>    
+        <if test="check_out != null">
+          AND r.check_out::date = #{check_out}::date 
+        </if>
+        <if test="date_from != null">
+          AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+        </if>    
+        <if test="date_to != null">
+          AND r.check_in::date <![CDATA[<=]]>  #{date_to}::date 
+        </if>
+        <if test="payment_method != null">
+          AND r.payment_method = #{payment_method} 
+        </if>
+    </select>
+    
+    <select id="selectTAReservationExportList" parameterType="map" resultType="Reservation">
+       SELECT r.id, 
+       		  r.create_date,
+              g.first_name || ' ' || g.last_name AS guest_name, 
+              COALESCE(h.display_name_en, h.display_name) AS hotel_name,
+              r.check_in, 
+              r.check_out,
+              r.status, 
+              r.payment_owner,
+              r.total AS total_sum
+         FROM reservations r, hotelsdetails h, guests g
+        WHERE r.creator_user_id = #{creator_user_id}
+          AND h.hotelsusers_id = r.hotelsusers_id
+          AND r.id = g.reservations_id
+          AND g.id = (SELECT MIN(g2.id) FROM guests g2 WHERE g2.guest_index = 1 AND g2.reservations_id = g.reservations_id)
+        <if test="hotelsusers_id != null">
+          AND h.hotelsusers_id = #{hotelsusers_id}
+        </if>
+        <if test="display_name != null">
+          AND h.display_name_en = #{display_name}
+        </if>
+        <if test="check_in != null">
+          AND r.check_in::date = #{check_in}::date 
+        </if>    
+        <if test="check_out != null">
+          AND r.check_out::date = #{check_out}::date 
+        </if>
+        <if test="date_from != null">
+          AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+        </if>    
+        <if test="date_to != null">
+          AND r.check_in::date <![CDATA[<=]]>  #{date_to}::date 
+        </if>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+    </select>
+    
+    <select id="selectTAReserveRoomType" parameterType="long" resultType="RoomType">
+        SELECT rt.id, rt.name
+          FROM reservationrooms rr, roomtypes rt
+         WHERE rr.reservations_id = #{value}
+           AND rt.id = rr.roomtypes_id 
+    </select>
+    
+	<select id="selectTAReservationHotelsCount" parameterType="map" resultType="Hotel">
+       SELECT h.hotelsusers_id AS users_id, h.display_name AS name
+         FROM reservations r, hotelsdetails h
+        WHERE r.creator_user_id = #{creator_user_id}
+          AND h.hotelsusers_id = r.hotelsusers_id
+        <if test="check_in != null">
+          AND r.check_in::date = #{check_in}::date 
+        </if>    
+        <if test="check_out != null">
+          AND r.check_out::date = #{check_out}::date 
+        </if>
+        <if test="date_from != null">
+          AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+        </if>    
+        <if test="date_to != null">
+          AND r.check_in::date <![CDATA[<=]]>  #{date_to}::date 
+        </if>
+        GROUP BY h.hotelsusers_id
+    </select>
+    
+	<select id="selectTACommissionsList" parameterType="map" resultType="Commission">
+		SELECT * 
+		  FROM (SELECT COALESCE(h.display_name_en, h.display_name) AS hotel_name,
+					   COUNT(*) AS reservations_count,
+					   SUM(r.total) AS total,
+					   SUM(CASE WHEN r.reservation_type = 1 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS definite,
+					   SUM(CASE WHEN r.reservation_type = 2 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS tentative,
+					   SUM(CASE WHEN r.status = 2 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS canceled,
+					   0 AS commission
+				  FROM reservations r, hotelsdetails h
+				 WHERE r.creator_user_id = #{creator_user_id}
+				   AND h.hotelsusers_id = r.hotelsusers_id 
+		        <if test="display_name != null">
+		          AND h.display_name_en = #{display_name}
+		        </if>
+		         <if test="check_in != null">
+		           AND r.check_in::date = #{check_in}::date 
+		         </if>    
+		         <if test="check_out != null">
+		           AND r.check_out::date = #{check_out}::date 
+		         </if>
+		         <if test="date_from != null">
+		           AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+		         </if>    
+		         <if test="date_to != null">
+		           AND r.check_in::date <![CDATA[<=]]>  #{date_to}::date 
+		         </if>
+		 		 GROUP BY h.display_name_en, reservation_type
+		         ) c
+	     <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		 </trim>
+		 LIMIT #{limit} OFFSET #{offset}            
+	</select>
+
+	<select id="selectTACommissionsCount" parameterType="map" resultType="long">
+		SELECT COUNT(*) 
+		  FROM (SELECT h.display_name_en AS hotel_name,
+					   COUNT(*) AS reservations_count,
+					   SUM(r.total) AS total,
+					   SUM(CASE WHEN r.reservation_type = 1 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS definite,
+					   SUM(CASE WHEN r.reservation_type = 2 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS tentative,
+					   SUM(CASE WHEN r.status = 2 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS canceled,
+					   0 AS commission
+				  FROM reservations r, hotelsdetails h
+				 WHERE r.creator_user_id = #{creator_user_id}
+				   AND h.hotelsusers_id = r.hotelsusers_id 
+		         <if test="display_name != null">
+		           AND h.display_name_en = #{display_name}
+		         </if>
+				 <if test="status != null">
+				   AND r.status = #{status}
+				 </if>
+		         <if test="check_in != null">
+		           AND r.check_in::date = #{check_in}::date 
+		         </if>    
+		         <if test="check_out != null">
+		           AND r.check_out::date = #{check_out}::date 
+		         </if>
+		         <if test="date_from != null">
+		           AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+		         </if>    
+		         <if test="date_to != null">
+		           AND r.check_in::date <![CDATA[<=]]>  #{date_to}::date 
+		         </if>
+				 GROUP BY h.display_name_en, reservation_type
+			     ) c
+	</select>
+
+	<select id="selectTACommissionsExportList" parameterType="map" resultType="Commission">
+		SELECT * 
+		  FROM (SELECT h.display_name_en AS hotel_name,
+					   COUNT(*) AS reservations_count,
+					   SUM(r.total) AS total,
+					   SUM(CASE WHEN r.reservation_type = 1 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS definite,
+					   SUM(CASE WHEN r.reservation_type = 2 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS tentative,
+					   SUM(CASE WHEN r.status = 2 
+					            THEN 1 
+					            ELSE 0 
+					       END
+					   ) AS canceled,
+					   0 AS commission
+				  FROM reservations r, hotelsdetails h
+				 WHERE r.creator_user_id = #{creator_user_id}
+				   AND h.hotelsusers_id = r.hotelsusers_id 
+		        <if test="display_name != null">
+		          AND h.display_name_en = #{display_name}
+		        </if>
+		         <if test="check_in != null">
+		           AND r.check_in::date = #{check_in}::date 
+		         </if>    
+		         <if test="check_out != null">
+		           AND r.check_out::date = #{check_out}::date 
+		         </if>
+		         <if test="date_from != null">
+		           AND r.check_in::date <![CDATA[>=]]> #{date_from}::date 
+		         </if>    
+		         <if test="date_to != null">
+		           AND r.check_in::date <![CDATA[<=]]>  #{date_to}::date 
+		         </if>
+		 		 GROUP BY h.display_name_en, reservation_type
+		         ) c
+	     <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		 </trim>
+	</select>
+			
+	<select id="selectTourAgentAvailableRoomsByDates" parameterType="map" resultType="TourAgentAvailableRooms">
+	     SELECT DISTINCT COALESCE(t.available_date, d.date) AS available_date, 
+	            t.available_count,
+<!-- 	            get_calc_busy_rooms_daily_ta(t.roomtypes_id, COALESCE(t.available_date, d.date)) AS no_free -->
+	            GET_RESERVEDROOMS_COUNT2(t.roomtypes_id, 
+	            						 GET_CHECK_DATE(t.roomtypes_id, 1::NUMERIC, COALESCE(t.available_date, d.date)), 
+	            						 GET_CHECK_DATE(t.roomtypes_id, 0::NUMERIC, COALESCE(t.available_date, d.date) + '1 DAY'::INTERVAL),
+	            						 1, NULL, NULL) AS no_free
+           FROM GET_DATE_LIST(#{date_from}::date, #{date_to}::date) d
+                LEFT JOIN touragentavailablerooms t ON d.date = t.available_date AND t.roomtypes_id = #{roomtypes_id}  
+	      ORDER BY 1 
+	</select>
+	
+	<insert id="insertTourAgentAvailableRooms" parameterType="TourAgentAvailableRooms">
+		INSERT INTO touragentavailablerooms (roomtypes_id, available_count, available_date, initiator_user_id)
+		VALUES (#{roomtypes_id}, #{available_count}, #{available_date}, #{initiator_user_id})	    
+	</insert>
+	
+	<update id="updateTourAgentAvailableRooms" parameterType="TourAgentAvailableRooms">
+		UPDATE touragentavailablerooms
+		   SET available_count = #{available_count},
+		       initiator_user_id = #{initiator_user_id}
+		 WHERE roomtypes_id = #{roomtypes_id}
+		   AND available_date = #{available_date}::date  
+	</update>
+	
+	<select id="selectTAAvailableRoomBySingleDate" parameterType="map" resultType="short">
+	    SELECT ta.available_count
+	      FROM touragentavailablerooms ta
+	     WHERE ta.roomtypes_id = #{roomtypes_id}
+	       AND ta.available_date = #{available_date}::date 
+	</select>
+	
+	<insert id="insertTAReserveSales" parameterType="ReservationSale">
+	    INSERT INTO tareservationsales(reservations_id, saleplanes_id, sale_date, sale)
+        VALUES (#{reservations_id}, #{saleplanes_id}, #{sale_date}, #{sale})
+	</insert>
+	
+	<select id="selectSalesList" parameterType="map">
+	    SELECT id, sale_date, sale, sale_uz
+          FROM saleplanes
+         WHERE hotelsusers_id = #{hotelsusers_id}
+           AND status = true 
+           AND roomtypes_id = #{roomtypes_id}
+           AND person_number = #{person_number}
+           AND is_group = #{is_group} 
+	</select>
+	
+	<insert id="insertTAReserveSalesByReservation" parameterType="ReservationSale">
+	    INSERT INTO reservationsales(reservations_id, saleplanes_id, sale_date, sale)
+             SELECT #{reservations_id}, id, sale_date, sale
+               FROM saleplanes
+	          WHERE hotelsusers_id = #{hotelsusers_id}
+	            AND status = true 
+	            AND roomtypes_id = #{roomtypes_id}
+	            AND person_number = #{person_number}
+	            AND is_group = #{is_group} 
+	</insert>
+	
+	<delete id="deleteTAReserveSalesByReservation" parameterType="long">
+	    DELETE FROM reservationsales WHERE reservations_id = #{reservations_id}
+	</delete>
+	
+	<select id="selectRateSaleSum" resultType="bigdecimal" parameterType="map">
+        SELECT SUM((SELECT COALESCE(a.sale, a.rate) 
+                      FROM get_rate_and_sale_room(#{hotelsusers_id}, #{person_number}, #{resident}, d.date, #{roomtypes_id}, #{is_group}, #{internal}) AS a)) as rate
+          FROM get_date_list(#{check_in}::date, ((#{check_out}::date - #{check_in}::date - 1) + #{check_in}::date)::date) as d 
+    </select>
+    
+	<select id="selectReserveRoomListById" parameterType="long" resultType="ReservationRoom">
+	    SELECT rr.id,
+	           rt.id AS "roomtype.id",
+	           rt.name AS "roomtype.name",
+	           COUNT(*) AS room_count,
+	           rr.previously_rooms_id,
+	           COALESCE(rr.meal_options, -1) AS meal_options,
+	           rr.extra_bed_needed,
+	           rr.non_smokers,
+	           rr.city_view,
+	           r.total,
+	           r.resident,
+	           rr.adults_count as holding_capacity,
+	           rr.rate,
+	           r.payment_owner,
+	           CASE (SELECT COUNT(*) 
+					   FROM insurances i JOIN additionalserviceorders aso ON i.additionalserviceorders_id = aso.id
+					  WHERE aso.reservations_id = r.id)
+					WHEN 0 THEN false 
+					ELSE true 
+			   END AS insurance,
+	           rr.early_check_in_cost AS check_in_rate,
+	           rr.late_check_out_cost AS check_out_rate
+	      FROM reservations r, reservationrooms rr, roomtypes rt
+	     WHERE r.id = #{id}
+	       AND rr.reservations_id = r.id 
+	       AND rt.id = rr.roomtypes_id
+	     GROUP BY r.id, rr.id, rt.id, rt.name, rr.previously_rooms_id, rr.meal_options, rr.extra_bed_needed, rr.non_smokers, 
+	              rr.city_view, r.total, r.resident, rr.adults_count, rr.rate, insurance, r.payment_owner
+	     ORDER BY 1
+	</select>
+	
+	<select id="selectGuestListByReserveRoomId" parameterType="long" resultType="Guest">
+	    SELECT g.id, 
+	    	   COALESCE(g.person_title,'MR.') AS "person_title.title", 
+	    	   g.first_name, 
+	    	   g.last_name, 
+	    	   g.nationality AS "nationality.code"
+	      FROM guests g
+	     WHERE g.reservationrooms_id = #{id}
+	     UNION ALL
+	    SELECT c.id, 'CHILD' AS "person_title.title", c.first_name, c.last_name, '' AS "nationality.code"
+	      FROM children c, reservations r, hotels h, hotelsreservationrules hrr 
+	     WHERE c.reservationrooms_id = #{id}
+	       AND r.id = c.reservations_id
+	       AND h.users_id = r.hotelsusers_id
+	       AND hrr.hotelsusers_id = h.users_id
+	       AND hrr.is_group = r.is_group
+	       AND c.age <![CDATA[>=]]> hrr.minimum_free_age  
+	</select>
+	
+	<insert id="insertChildTAReserve" parameterType="Child">
+	    <selectKey order="BEFORE" resultType="long" keyProperty="id">
+	        SELECT NEXTVAL('children_id_seq')
+	    </selectKey>
+	    INSERT INTO children (id, reservations_id, first_name, last_name, date_of_birth, child_index, reservationrooms_id, age)
+        VALUES (#{id}, #{reservations_id}, #{first_name}, #{last_name}, date_trunc('year', current_date - #{age} * '1 year'::interval), #{child_index}, #{reservationrooms_id}, #{age})
+	</insert>
+	
+	<update id="updateChildTAReserve" parameterType="Child">
+	    UPDATE children
+	       SET first_name = #{first_name},
+	           last_name = #{last_name},
+	           age = #{age},
+	           date_of_birth = date_trunc('year', current_date - #{age} * '1 year'::interval)
+	     WHERE child_index = #{child_index}
+	       AND reservationrooms_id = #{reservationrooms_id}
+	</update>
+
+    <select id="selectTAReservationRoomList" parameterType="long" resultType="Reservation">
+       SELECT g.first_name || ' ' || g.last_name AS guest_name, 
+              (rr.rate + rr.extra_bed_cost + rr.meal_cost + rr.early_check_in_cost + rr.late_check_out_cost) AS total_sum
+         FROM reservations r, reservationrooms rr, guests g
+        WHERE r.id = #{id}
+          AND r.id = rr.reservations_id
+          AND rr.id = g.reservationrooms_id
+        ORDER BY r.id, rr.id, g.guest_index
+	</select>
+	
+	<select id="selectSelectedSearchHotels" parameterType="map" resultType="BookingSearchResult">
+       SELECT sh.hotelsusers_id, 
+              sh.roomtypes_id, 
+              sh.roomtypes_name, 
+              sh.additional_bed, 
+              sh.room_area, 
+              sh.holding_capacity,
+              sh.holding_capacity_text,
+              sh.is_group,
+              sh.room_index,
+              sh.prev_room_id, 
+              sh.room_rate,
+              sh.extra_bed_cost,
+              sh.guests,
+              sh.childages,
+              COALESCE(mo.meal_type, -1) as meal_type,
+              CASE WHEN mo.meal_type IS NULL THEN false ELSE true END AS meal_option_included_to_room_rate,
+              r.bed_type AS bedType,
+              ROW_NUMBER() OVER (PARTITION BY room_index ORDER BY sh.holding_capacity) AS rowid
+	     FROM ta_search_hotel_roomtypes(#{params}::text, 
+	                        	        #{check_in}::timestamp, 
+	                        	        #{check_out}::timestamp, 
+	                        	        #{resident}, 
+	                        	        #{hotelsusers_id}::bigint,
+	                        	        #{reserve_is_group}) AS sh
+	     LEFT JOIN (SELECT hotelsusers_id, SUM(meal_type) AS meal_type FROM mealoptions WHERE included_to_room_rate = true GROUP BY hotelsusers_id) AS mo ON sh.hotelsusers_id = mo.hotelsusers_id
+	     JOIN hotelsroomtypes hrt ON sh.roomtypes_id = hrt.roomtypes_id
+	     JOIN rooms r ON sh.prev_room_id = r.id
+	    WHERE sh.room_rate IS NOT NULL
+	    ORDER BY sh.room_index, hrt.holding_capacity, sh.roomtypes_name, sh.guests
+	</select>
+	
+	<select id="selectSearchHotelsList" parameterType="map" resultType="BookingSearchResult">
+	   SELECT k.* FROM (  
+       SELECT h.users_id AS hotelsusers_id,
+       		  h.hotelscategories_id,	 
+              hd.hotelstars_id AS stars,
+              hd.recommended_sort, 
+              CASE no_penalty_before_days WHEN -1 THEN true ELSE false END AS free_cancelation,
+              COALESCE(mo.meal_type, -1) as meal_type,
+              CASE WHEN mo.meal_type IS NULL THEN false ELSE true END AS meal_option_included_to_room_rate,
+              (SELECT r.name FROM regions r WHERE r.id = ad.regions_id) AS region_name,
+              (SELECT ct.name FROM cities ct WHERE ct.id = ad.cities_id) AS city,
+              ad.longitude,
+              ad.latitude,
+              ad.address,
+              COALESCE(COALESCE(hd.display_name_en, hd.display_name), u.name) AS display_name,
+              ARRAY_TO_STRING(ARRAY(SELECT COUNT(*) ||' x '|| t.roomtypes_id ||'[#]' || t.holding_capacity_text || '[$]' || SUM(t.room_rate) || '[*]' || t.is_group AS room_rate
+				                      FROM (SELECT t1.*, COUNT(*) OVER (PARTITION BY rownum) as room_count
+				                              FROM (SELECT sh.roomtypes_id, 
+						                                   sh.roomtypes_name, 
+						                                   sh.holding_capacity_text,
+						                                   sh.room_rate,
+						                                   sh.is_group,
+						                                   ROW_NUMBER() OVER (PARTITION BY room_index ORDER BY sh.holding_capacity) AS rownum
+				                                      FROM ta_search_hotels_room(#{params}::text, #{check_in}::timestamp, #{check_out}::timestamp, #{region_id},  #{resident}, h.users_id) AS sh
+				                                     ORDER BY sh.room_rate) AS t1) AS t
+				                             WHERE rownum = 1 
+				                               AND room_count >= #{room_count}         
+				                             GROUP BY t.roomtypes_id, t.holding_capacity_text, t.is_group), <![CDATA['<br>']]>) AS roomtypes_name
+	     FROM hotels h LEFT JOIN (SELECT hotelsusers_id, SUM(meal_type) AS meal_type FROM mealoptions WHERE included_to_room_rate = true GROUP BY hotelsusers_id) AS mo ON h.users_id = mo.hotelsusers_id,
+	          hotelsreservationrules hrr, 
+	          reservationcancellationpolicy rcp, 
+	          users u,
+	          hotelsdetails hd LEFT JOIN addresses ad ON hd.addresses_id = ad.id 
+	    WHERE h.users_id = hd.hotelsusers_id
+	      AND u.id = hd.hotelsusers_id
+	      AND hrr.hotelsusers_id = h.users_id
+	      AND rcp.id = hrr.reservationcancellationpolicy_id
+	      AND EXISTS (SELECT * 
+	                    FROM ta_search_hotels_room(#{params}::text, #{check_in}::timestamp, #{check_out}::timestamp, #{region_id},  #{resident}, null::bigint) AS sh
+	                   WHERE sh.room_rate BETWEEN #{range_from} <if test="nights != null and nights > 1"> * #{nights} </if> AND #{range_to} <if test="nights != null and nights > 1"> * #{nights} </if>
+	                     AND hrr.is_group = sh.is_group
+	                     AND sh.hotelsusers_id = h.users_id)
+	    <if test="city_id != null">
+	        AND ad.cities_id = #{city_id}
+	    </if>                 	
+	    <if test="facilityIdList != null and facilityIdList.size() > 0">
+	      AND EXISTS (SELECT * FROM hotelsfacilities hf WHERE h.users_id = hf.hotelsusers_id AND hf.facilities_id IN 
+	      <foreach collection="facilityIdList" index="index" item="item" open="(" separator="," close=")">
+				#{item.id}
+	      </foreach>)
+	    </if>
+	    <if test="equipmentIdList != null and equipmentIdList.size() > 0">
+	      AND EXISTS (SELECT * FROM roomsequipments re WHERE h.users_id = re.hotelsusers_id AND re.equipments_id IN
+	      <foreach collection="equipmentIdList" index="index" item="item" open="(" separator="," close=")">
+				#{item.id}
+	      </foreach>)
+	    </if>
+	    <if test="starsIdList != null and starsIdList.size() > 0">
+	      AND EXISTS (SELECT * FROM hotelsdetails hd WHERE h.users_id = hd.hotelsusers_id AND hd.hotelstars_id IN
+	      <foreach collection="starsIdList" index="index" item="item" open="(" separator="," close=")">
+				#{item.id}
+	      </foreach>)
+	    </if>
+	    <if test="nearbyplaceList != null and nearbyplaceList.size() > 0">
+	         AND
+	         <foreach collection="nearbyplaceList" index="index" item="item" open="(" separator=" OR " close=")">
+	            EXISTS (SELECT * FROM hotelsnearbyplaces np WHERE np.hotelsusers_id = h.users_id AND np.type = #{item.type} AND np.value <![CDATA[<=]]> #{item.value}) 
+	         </foreach>
+	     </if>) AS k
+	   WHERE LENGTH(k.roomtypes_name) > 0
+	   <if test="sortFilter != null">
+	       ORDER BY 
+	       <choose>
+	           <when test="sortFilter.id == 0">
+	               k.recommended_sort
+	           </when>
+	           <when test="sortFilter.id == 1">
+	               to_number(right(roomtypes_name, length(roomtypes_name) - position('[$]' in roomtypes_name)),'99999999999.00')
+	           </when>
+	           <when test="sortFilter.id == 2">
+	               k.display_name
+	           </when>
+	           <when test="sortFilter.id == 3">
+	               k.stars
+	           </when>
+	           <otherwise>
+	               k.recommended_sort
+	           </otherwise>
+	       </choose>
+	       ${sortOrder}
+	   </if>
+	   
+	</select>
+	
+	<select id="selectRoomRatePlanId" parameterType="ReservationRoom" resultType="int">
+	    select get_rate_plan_id(#{hotelsusers_id}, #{check_in}::timestamp, #{roomtype.id}, false);
+	</select>
+	
+	<select id="selectCurrentRoomRatePlanId" parameterType="ReservationDetail" resultType="int">
+	    SELECT id
+	      FROM rateplanes rp
+	     WHERE rp.hotelsusers_id = #{hotelsusers_id}
+	       AND rp.internal = false
+	       AND EXISTS (SELECT * 
+	                     FROM rateplaneseasons rps
+	                    WHERE rp.id = rps.rateplanes_id
+	                      AND #{check_in}::date BETWEEN rps.season_from AND rps.season_to) 
+	</select>
+	
+	<select id="selectCheckInOrOutValue" parameterType="map" resultType="bigdecimal">
+		SELECT <choose>
+					<when test="io == 1">
+						SUM(COALESCE(early_check_in_cost, 0)) * #{currency}
+					</when>
+					<when test="io == 0">
+						SUM(COALESCE(late_check_out_cost, 0)) * #{currency}
+					</when>
+					<otherwise>
+						SUM(COALESCE(early_check_in_cost, 0)) * #{currency}
+					</otherwise>
+			   </choose>
+		FROM reservationrooms r
+	   WHERE r.reservations_id = #{reservations_id}
+	</select>
+</mapper>

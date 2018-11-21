@@ -1,0 +1,73 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback">[feedback]</span>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<form wicket:id="guestdetailsform">
+				<div class="row">
+					<div class="col-md-2">
+						<select wicket:id="selectedGuest" class="form-control">
+							<option>Choice One</option>
+						</select>
+					</div>
+					<div class="col-md-10">
+						<div class="row">
+							<div class="col-md-12" wicket:id="guest_container">
+								<wicket:container wicket:id="guest_data" />
+							</div>
+						</div>
+						<div class="row" wicket:id="childlist">
+							<div class="col-md-12">
+								<wicket:container wicket:id="child_data" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+						<button class="btn btn-primary" wicket:id="register">
+							<i class="fa fa-save"></i>
+							<wicket:message key="hotels.reservation.details.guest.register">[Register Guest]</wicket:message>
+						</button>
+						<a wicket:id="done" class="btn btn-primary"> <i class="fa fa-check"></i> <wicket:message
+								key="hotels.reservation.create.done">[Done]</wicket:message>
+						</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<br>
+	<script>
+		var data = [];
+
+		function getter() {
+			/* 	$table = $('table.table');
+			 if ($table.length){
+			 $table.find('input, select').each(function(index,element){
+			 $element = $(element);
+			 if ($element.attr('data-bind')) $element.val(data[$element.attr('data-bind')]);
+			 else $element.val(data[$element.attr('id')]);
+			 });
+			 }
+			 */
+		}
+
+		function setter() {
+			/* 	$table = $('table.table');
+			 if ($table.length){
+			 $table.find('input, select').each(function(index,element){
+			 $element = $(element);
+			 if ($element.attr('data-bind')) data[$element.attr('data-bind')] = $element.val(); 
+			 else data[$element.attr('id')] = $element.val();
+			 });
+			 }
+			 */
+		}
+	</script>
+</wicket:panel>

@@ -1,0 +1,207 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<div class="row">
+	<div class="col-md-12">
+		<span wicket:id="feedback">[Feedback]</span>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<wicket:message key="hotels.guest.details.guest">[Guest]</wicket:message>:
+<!-- 		<span wicket:id="guest_name">[Guest Name]</span> -->
+	</div>
+</div>
+<hr/>
+<div class="row">
+	<div class="col-md-5">
+		<wicket:message key="hotels.room.current">[Current Room]</wicket:message>:
+		<table class="table table-bordered table-hover table-condensed table-striped">
+			<tr>
+				<td><wicket:message key="hotels.room.number">[Room#]</wicket:message>:</td>
+				<td wicket:id="room_number"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.reservation.details.room.type">[Room Type]</wicket:message>:</td>
+				<td wicket:id="roomtype"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.reservation.details.adults">[Adults]</wicket:message>:</td>
+				<td wicket:id="adults"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.reservation.details.children">[Children]</wicket:message>:</td>
+				<td wicket:id="children"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.reservation.details.additional_bed">[Additional Bed]</wicket:message>:</td>
+				<td wicket:id="additional_bed"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.reservation.details.meal_options">[Meal Options]</wicket:message>:</td>
+				<td wicket:id="meal_options"/>
+			</tr>
+			<tr>
+				<td><wicket:message key="hotels.reservation.details.room.rate">[Room Rate]</wicket:message>:</td>
+				<td wicket:id="room_rate"/>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-2"></div>
+	<div class="col-md-5">
+		<form wicket:id="form" class="well">
+			<wicket:message key="hotels.room.new">[New Room]</wicket:message>:
+			<table class="table table-bordered table-hover table-condensed table-striped">
+				<tr>
+					<td>
+						<wicket:message key="hotels.reservation.details.room.type">[Room Type]</wicket:message>:
+					</td>
+					<td>
+						<select wicket:id="roomtype" class="form-control">
+							<option>Choice One</option>
+						</select>
+						<input wicket:id="roomtypes_id" type="hidden">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<wicket:message key="hotels.room.number">[Room#]</wicket:message>:
+					</td>
+					<td>
+						<select wicket:id="room" class="form-control">
+							<option>Choice One</option>
+						</select>
+						<input wicket:id="rooms_id" type="hidden">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<wicket:message key="hotels.reservation.details.adults">[Adults]</wicket:message>:
+					</td>
+							
+					<td>
+						<select wicket:id="adults"  class="form-control">
+							<option>Choice One</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<wicket:message key="hotels.reservation.details.children">[Children]</wicket:message>:
+					</td>
+					<td>
+						<select wicket:id="children" class="form-control">
+							<option>Choice One</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<wicket:message key="hotels.reservation.details.room.rate">[Room Rate]</wicket:message>:
+					</td>
+					<td>
+						<input wicket:id="rate" type="text" readonly="readonly">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<wicket:message key="hotels.reservation.details.meal_options">[Meal Options]</wicket:message>
+					</td>
+					<td wicket:id="meal_container">
+						<table>
+							<tr>
+								<td>
+									<span id="meal_options_value" class="badge">BB</span>
+								</td>
+								<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+								<td>
+									<label for="lunch" class="checkbox-inline">
+										<input id="lunch" tabindex="7" type="checkbox" class="meal" value="1"/>
+										<wicket:message key="meal_options.lunch">[Lunch]</wicket:message>
+									</label>
+									<label for="dinner" class="checkbox-inline">
+										<input id="dinner" tabindex="8" type="checkbox" class="meal" value="2"/>
+										<wicket:message key="meal_options.dinner">[Dinner]</wicket:message>
+									</label>
+								</td>
+							</tr>
+						</table>
+						<input type="hidden" value="0" id="meal_options" wicket:id="meal_options">
+						<input type="hidden" value="0" id="breakfast_cost" wicket:id="breakfast_cost">
+						<input type="hidden" value="0" id="lunch_cost" wicket:id="lunch_cost">
+						<input type="hidden" value="0" id="dinner_cost" wicket:id="dinner_cost">
+						<input type="hidden" wicket:message="value:meal_options.bb" id="bb">
+						<input type="hidden" wicket:message="value:meal_options.hb" id="hb">
+						<input type="hidden" wicket:message="value:meal_options.fb" id="fb">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<wicket:message key="hotels.reservation.details.additional_bed">[Additional bed]</wicket:message>
+					</td>
+					<td>
+						<select wicket:id="additional_bed" tabindex="4" class="form-control">
+							<option>Choice One</option>
+						</select>
+						<input wicket:id="extra_bed" type="hidden" class="form-control">
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button wicket:id="move" class="btn btn-xs btn-primary">
+							<i class="fa fa-refresh"></i>
+							<wicket:message key="hotels.room.guest.move">[Move Guest]</wicket:message>
+						</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	var $meal = parseInt($('input#meal_options').val());
+	if ($meal > 0) {
+		if ($meal == 1) {
+			$('input#lunch').prop('checked', true);
+		} else if ($meal == 2) {
+			$('input#dinner').prop('checked', true);
+		} else if ($meal == 3) {
+			$('input#lunch').prop('checked', true);
+			$('input#dinner').prop('checked', true);
+		}
+		getMealOptionsValue($meal);
+	}
+
+	$('input.meal').change(function() {
+		var meal = 0;
+		$('input:checked.meal').each(function(index, element) {
+			$element = $(element)
+			meal += parseInt($element.val());
+		})
+		getMealOptionsValue(meal);
+	});
+
+	if (parseFloat($('input:hidden#lunch_cost').val()) == .0) {
+		$('input#lunch').prop('disabled', true);
+	}
+
+	if (parseFloat($('input:hidden#dinner_cost').val()) == .0) {
+		$('input#dinner').prop('disabled', true);
+	}
+});
+
+function getMealOptionsValue(meal) {
+	var st = '';
+	if (meal == 0)
+		st = $('input:hidden#bb').val();
+	else if (meal == 1)
+		st = $('input:hidden#hb').val();
+	else if (meal == 2)
+		st = $('input:hidden#hb').val();
+	else if (meal == 3)
+		st = $('input:hidden#fb').val();
+	$('span#meal_options_value').text(st);
+	$('input#meal_options').val(meal);
+}
+
+</script>
+</wicket:panel>

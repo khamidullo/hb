@@ -1,0 +1,183 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-8">
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<div wicket:id="feedback"></div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-4">
+								<h4>
+									<wicket:message key="hotels.details.city">[City]</wicket:message>
+								</h4>
+ 								<wicket:container wicket:id="city" class="form-control"/>
+							</div>
+							<div class="col-md-5">
+								<h4>&nbsp;</h4>
+								<wicket:container wicket:id="resident">
+									<div class="radio">
+										<label wicket:for="resident" class="radio-inline">
+											<input wicket:id="resident" type="radio">
+											<wicket:message key="hotels.reservation.details.resident">[Resident]</wicket:message>
+										</label>
+										<label wicket:for="no_resident" class="radio-inline">
+											<input wicket:id="no_resident" type="radio">
+											<wicket:message key="hotels.reservation.details.resident.no">[No Resident]</wicket:message>
+										</label>
+									</div>
+								</wicket:container>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<h4>
+									<wicket:message key="touragents.newbooking.check_in_date">[Check-in date]</wicket:message>
+								</h4>
+								<div class="input-group">
+									<input wicket:id="fromDate" type="text" class="form-control" id="fromDateId">
+									<select wicket:id="fromTime" id="fromTimeId" required="required" class="form-control" style="min-width: 80px;">
+										<option>[13:00]</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<h4>
+									<wicket:message key="touragents.newbooking.check_out_date">[Check-out date]</wicket:message>
+								</h4>
+								<div class="input-group">
+									<input wicket:id="toDate" type="text" class="form-control" id="toDateId">
+									<select wicket:id="toTime" id="toTimeId" required="required" class="form-control" style="min-width: 80px;">
+										<option>[13:00]</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<h4>&nbsp;</h4>
+								<strong><span id="nightsLabel" class="badge" style="font-size: 16px; padding: 5px 10px;">[1]</span> <span id="nightsSuffixLabel">[night]</span></strong>
+								<input wicket:id="nights" type="hidden" id="nightsId">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<h4>
+									<wicket:message key="touragents.newbooking.rooms">[Rooms]</wicket:message>
+								</h4>
+								<select wicket:id="rooms" class="form-control">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+									<option>...</option>
+								</select>
+							</div>
+						</div>
+						<div style="padding-top: 10px; border-bottom: 1px solid #cccccc;"></div>
+						<div class="row">
+							<div class="col-md-12" wicket:id="roomsListContainer">
+								<div wicket:id="roomsCountPanel"></div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-8"></div>
+							<div class="col-md-4">
+								<input wicket:id="submit" type="submit" wicket:message="value:search" class="btn btn-success btn-block">
+							</div>
+						</div>
+<!-- 						<div style="padding: 5px;"></div>
+						<div class="row" style="visibility: hidden;">
+							<div class="col-md-12">
+								<a href="#" id="additionalFilter"> <i class="fa fa-caret-right" id="additionalFilterCaret"></i> <wicket:message
+										key="touragents.newbooking.additional_search_features">[Additional search features]</wicket:message>
+								</a>
+								<hr>
+							</div>
+						</div>
+						<div id="additionalFilterContent" style="display: none; visibility:hidden;">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>
+										<wicket:message key="touragents.newbooking.hotel_class">[Hotel class]</wicket:message>
+									</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<wicket:container wicket:id="starsCheckGroup">
+										<wicket:container wicket:id="stars">
+											<label class="checkbox-inline" wicket:for="star">
+												<input wicket:id="star" type="checkbox">
+												<span wicket:id="starLabel"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+											</label>
+											<br>
+										</wicket:container>
+									</wicket:container>
+								</div>
+							</div>
+						</div>
+ -->
+ 						<br>
+					</div>
+				</div>
+				<script wicket:id="scriptNightsSuffix">
+					var nightsSuffix = {"1" : "night", "2" : "nights"}; 
+				</script>
+				<script>
+					$("#additionalFilter").click(
+							function() {
+								$("#additionalFilterContent").toggle();
+								$("#additionalFilterCaret").toggleClass(
+										"fa-caret-right fa-caret-down");
+							});
+
+					$(document).ready(function() {
+						calcNights(0);
+					});
+					$(function() {
+						$("input#fromDateId").on("change", function(e) {
+							calcNights(0);
+						});
+						$("input#toDateId").on("change", function(e) {
+							calcNights(1);
+						});
+					});
+					function calcNights(fromOrTo) {
+						var from = moment($("#fromDateId").val(), "DD/MM/YYYY");
+						var to = moment($("#toDateId").val(), "DD/MM/YYYY");
+						if (from.isValid() && to.isValid()) {
+							if (to.isBefore(from)) {
+								if (fromOrTo == 0) {
+									to = moment(from).add(1, "days");
+								} else {
+									from = moment(to).subtract(1, "days");
+								}
+								$("input#fromDateId").val(
+										from.format("DD/MM/YYYY"));
+								$("input#toDateId")
+										.val(to.format("DD/MM/YYYY"));
+							} else if (to.isSame(from)) {
+								to.add(1, "days");
+							}
+							var diff = to.diff(from, "day");
+							$("#nightsId").val(diff);
+							$("#nightsLabel").html(diff);
+							jQuery.each(nightsSuffix, function (key, value) {
+								var n = diff > 5 ? 5 : diff;
+								if (key == n) {
+									$("#nightsSuffixLabel").html(value);
+								}
+							});
+						} else {
+							//invalid date
+						}
+					}
+				</script>
+			</form>
+		</div>
+	</div>
+</wicket:panel>

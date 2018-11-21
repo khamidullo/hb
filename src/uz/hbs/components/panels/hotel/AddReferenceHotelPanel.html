@@ -1,0 +1,101 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style type="text/css">
+		.onoffswitch {
+		    position: relative; width: 71px;
+		    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+		}
+		.onoffswitch-checkbox {
+		    display: none;
+		}
+		.onoffswitch-label {
+		    display: block; overflow: hidden; cursor: pointer;
+		    border: 2px solid #999999; border-radius: 8px;
+		}
+		.onoffswitch-inner {
+		    display: block; width: 200%; margin-left: -100%;
+		    transition: margin 0.3s ease-in 0s;
+		}
+		.onoffswitch-inner:before, .onoffswitch-inner:after {
+		    display: block; float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
+		    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+		    box-sizing: border-box;
+		}
+		.onoffswitch-inner:before {
+		    content: "Да";
+		    padding-left: 10px;
+		    background-color: #34A7C1; color: #FFFFFF;
+		}
+		.onoffswitch-inner:after {
+		    content: "Нет";
+		    padding-right: 10px;
+		    background-color: #AD0A0A; color: #FFFFFF;
+		    text-align: right;
+		}
+		.onoffswitch-switch {
+		    display: block; width: 18px; margin: 1px;
+		    background: #FFFFFF;
+		    position: absolute; top: 0; bottom: 0;
+		    right: 47px;
+		    border: 2px solid #999999; border-radius: 8px;
+		    transition: all 0.3s ease-in 0s; 
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+		    margin-left: 0;
+		}
+		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+		    right: 0px; 
+		}	
+	</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div style="font-weight: bold; padding: 15px 0;">
+				<a wicket:id="append"><i class="fa fa-plus"></i> <wicket:message key="add_another">[Add Other]</wicket:message>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div wicket:id="container">
+		<table class="table table-bordered table-hover table-striped table-condensed">
+			<thead>
+				<tr>
+					<th>
+						<wicket:message key="hotels.reference.name">[Name]</wicket:message>
+					</th>
+					<wicket:container wicket:id="use_search_container">
+						<th>
+							<wicket:message key="hotels.reference.use_in_search">[Use in search]</wicket:message>
+						</th>
+					</wicket:container>
+					<th>
+						<wicket:message key="users.operation">[Operation]</wicket:message>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="list">
+					<td wicket:id="name"></td>
+					<wicket:enclosure child="filter_flag">
+						<td>
+							<div class="onoffswitch">
+							    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" wicket:id="filter_flag">
+							    <label class="onoffswitch-label" wicket:for="filter_flag">
+							        <span class="onoffswitch-inner"></span>
+							        <span class="onoffswitch-switch"></span>
+							    </label>
+							</div>						
+						</td>
+					</wicket:enclosure>
+					<td>
+						<a wicket:id="remove" class="btn btn-xs btn-danger btn-outline" wicket:message="title:actions.title.delete"> <i
+								class="fa fa-trash-o fa-fw"></i>
+						</a> <a wicket:id="edit" class="btn btn-xs btn-success btn-outline" wicket:message="title:actions.title.edit"> <i
+								class="fa fa-edit fa-fw"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</wicket:panel>

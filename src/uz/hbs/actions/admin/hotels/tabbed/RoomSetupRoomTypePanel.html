@@ -1,0 +1,207 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<span wicket:id="feedback"></span>
+		</div>
+	</div>
+	<form wicket:id="form">
+		<div class="row">
+			<div class="col-md-10">
+				<table>
+					<tr>
+						<th>
+							<wicket:message key="hotels.room_type.room_area">[Area (sq.m.)]</wicket:message>
+							:
+						</th>
+						<td width="2%;">&nbsp;</td>
+						<td wicket:id="area" />
+					</tr>
+					<tr>
+						<th>
+							<wicket:message key="hotels.room_type.holding_capacity">[Holding capacity]</wicket:message>
+							:
+						</th>
+						<td width="2%;">&nbsp;</td>
+						<td wicket:id="holding_capacity" />
+					</tr>
+					<tr>
+						<th>
+							<wicket:message key="hotels.room_type.additional_bed">[Additional bed]</wicket:message>
+							:
+						</th>
+						<td width="2%;">&nbsp;</td>
+						<td>
+							<span wicket:id="additional_bed"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="col-md-2">
+				<div class="pull-right">
+					<button class="btn btn-success" wicket:id="save" type="submit">
+						<i class="fa fa-save"></i>
+						<span wicket:id="saveLabel">[Save]</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.room_setup.room_numbers">[Room numbers]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<table wicket:id="container">
+									<tr>
+										<td>
+											<wicket:message key="hotels.room_setup.room_number">[Room #]</wicket:message>
+										</td>
+										<td width="2%;">&nbsp;</td>
+										<td>
+											<a class="btn btn-xs btn-link" data-item="room-floor" onclick="apply(this)"> <i class="fa fa-copy"></i> <wicket:message
+													key="hotels.room_setup.room_floor">[Room floor]</wicket:message>
+											</a>
+										</td>
+										<td width="2%;">&nbsp;</td>
+										<td>
+											<a class="btn btn-xs btn-link" data-item="bed-type" onclick="apply(this)"> <i class="fa fa-copy"></i> <wicket:message
+													key="hotels.room_setup.bed_type">[Type]</wicket:message>
+											</a>
+										</td>
+										<td width="2%;">&nbsp;</td>
+										<td></td>
+									</tr>
+									<tr wicket:id="roomlist">
+										<td>
+											<input type="text" class="form-control" wicket:id="room_number"
+												wicket:message="placeholder:hotels.room_setup.room_number">
+										</td>
+										<td>&nbsp;</td>
+										<td>
+											<select class="form-control" wicket:id="room_floor" wicket:message="title:hotels.room_setup.room_floor"
+												required="required" data-item="room-floor">
+												<option>Choice One</option>
+											</select>
+										</td>
+										<td>&nbsp;</td>
+										<td>
+											<select class="form-control" wicket:id="bed_type" wicket:message="title:hotels.room_setup.bed_type"
+												required="required" data-item="bed-type">
+												<option>Choice One</option>
+											</select>
+										</td>
+										<td>&nbsp;</td>
+										<td>
+											<a wicket:id="delete" class="btn btn-xs btn-link"> <i class="fa fa-trash-o"
+													wicket:message="title:actions.title.delete"></i>
+											</a>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.room_setup.room_conditions">[Room conditions]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<wicket:message key="hotels.room_setup.room_conditions.select">[Select available conditions for this type of rooms]</wicket:message>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 checkbox">
+								<wicket:container wicket:id="conditionGroup">
+									<wicket:container wicket:id="conditionlist">
+										<label wicket:for="condition">
+											<input type="checkbox" wicket:id="condition" />
+											<span wicket:id="name">[Condition]</span>
+										</label>
+										<br />
+									</wicket:container>
+								</wicket:container>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.reference_info.equipment_in_rooms">[Equipment in room]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12" wicket:id="equipmentsPalette"></div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.room_setup.upload_room_images">[Upload room images]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="input-group">
+							<input type="text" class="form-control" readonly="readonly">
+							<span class="input-group-btn"> <span class="btn btn-default-2 btn-file"> <i
+										class="fa fa-folder-open fa-fw"></i> <wicket:message key="browse">[Browse...]</wicket:message> <input
+										wicket:id="room_images" type="file" multiple="multiple">
+							</span>
+							</span>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+									<div wicket:id="imgPanel" class="col-md-12"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<wicket:message key="hotels.details.description">[Description]</wicket:message>
+						</h3>
+					</div>
+					<div class="panel-body" style="padding: 0">
+						<textarea wicket:id="description" class="ckeditor" cols="80" id="editor2" name="editor2" rows="10"></textarea>
+						<script wicket:id="descriptionScript">
+							CKEDITOR.replace('editor2', {language: 'ru'});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" wicket:id="room_count" class="rooms">
+	</form>
+	<script type="text/javascript">
+		function apply(obj) {
+			$lnk = $(obj);
+			$parent = $lnk.parentsUntil('form');
+			$first = $('select[data-item=' + $lnk.attr('data-item') + ']:first', $parent);
+			if ($first.length) {
+				$('select[data-item=' + $lnk.attr('data-item') + ']', $parent).not($first).val($first.val());
+			}
+		}
+	</script>
+</wicket:panel>

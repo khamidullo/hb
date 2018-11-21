@@ -1,0 +1,342 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style>
+@media print {
+	.print {
+		display: none;
+	}
+}
+</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row" id="container">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12">
+					<span wicket:id="feedback">[feedback]</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					<h2 style="margin-top: 0px;" wicket:id="hotelName">[Hotel name]</h2>
+					<span wicket:id="roomTypeLabel">1 x Deluxe</span>
+					<p>
+						<span><wicket:message key="touragents.newbooking.check_in">[Check-in]</wicket:message></span>: <strong
+							wicket:id="checkInLabel">07 May from 06:00</strong> <br /> <span><wicket:message
+								key="touragents.newbooking.check_out">[Check-out]</wicket:message></span>: <strong wicket:id="checkOutLabel">10
+							May until 12:00</strong>
+					</p>
+				</div>
+				<div class="col-md-4">
+					<div class="pull-right">
+						<h3 style="color: green">
+							<wicket:message key="touragents.newbooking.total_price">[Total price]</wicket:message>
+							: <span wicket:id="totalPrice"></span>
+						</h3>
+						<h4 wicket:id="amountOfNightsLabel"></h4>
+						<h4 wicket:id="amountOfGuestsLabel"></h4>
+						<!-- <h5 wicket:id="serviceChargeIncludedLabel"></h5> -->
+						<!-- <h5 wicket:id="cityTaxIncludedLabel"></h5> -->
+					</div>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+					<h4>
+						<wicket:message key="touragents.newbooking.guest_details">[Guest details]</wicket:message>
+					</h4>
+				</div>
+			</div>
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<wicket:message key="touragents.newbooking.guest_details">[Guest details]</wicket:message>
+									</div>
+									<div class="panel-body">
+										<div style="font-style: italic; font-weight: bold;">
+											<wicket:message key="touragents.newbooking.main_guest">[Main guest]</wicket:message>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<wicket:message key="touragents.newbooking.title">[Title]</wicket:message>
+											</div>
+											<div class="col-md-3">
+												<wicket:message key="touragents.accountant_details.first_name">[First name]</wicket:message>
+											</div>
+											<div class="col-md-3">
+												<wicket:message key="touragents.accountant_details.last_name">[Last name]</wicket:message>
+											</div>
+											<div class="col-md-3">
+												<wicket:message key="touragents.newbooking.citizenship">[Citizenship]</wicket:message>
+											</div>
+											<div class="col-md-1"></div>
+										</div>
+										<div class="row">
+											<div class="col-md-2">
+												<input class="form-control" type="text" wicket:id="person_title"
+													wicket:message="placeholder:hotels.reservation.details.appeal">
+											</div>
+											<div class="col-md-3">
+												<input class="form-control" type="text" wicket:id="first_name"
+													wicket:message="placeholder:touragents.accountant_details.first_name">
+											</div>
+											<div class="col-md-3">
+												<input class="form-control" type="text" wicket:id="last_name"
+													wicket:message="placeholder:touragents.accountant_details.last_name">
+											</div>
+											<div class="col-md-3">
+												<input class="form-control" type="text" wicket:id="citizenship"
+													wicket:message="placeholder:touragents.newbooking.citizenship">
+											</div>
+											<div class="col-md-1"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<wicket:message key="meal_options">[Meal options]</wicket:message>
+							</div>
+							<div class="panel-body">
+								<table style="width: 90%">
+									<tr>
+										<td rowspan="3">
+											<span style="color: green;"><strong><span id="meal_options_cost">15000</span> <span
+													wicket:id="meal_options_cost_label">[USD/day/person]</span></strong></span>
+										</td>
+										<td>
+											<table>
+												<tr>
+													<td rowspan="3">
+														<label class="col-sm-4 control-label">
+															<span id="meal_options_value" class="badge">BB</span>
+														</label>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<label for="lunch" class="checkbox-inline">
+															<input id="lunch" type="checkbox" class="meal" value="1" disabled="disabled" />
+															<wicket:message key="meal_options.lunch">[Lunch]</wicket:message>
+														</label>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<label for="dinner" class="checkbox-inline">
+															<input id="dinner" type="checkbox" class="meal" value="2" disabled="disabled" />
+															<wicket:message key="meal_options.dinner">[Dinner]</wicket:message>
+														</label>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								<input type="hidden" value="0" id="meal_options" wicket:id="meal_options">
+								<input type="hidden" value="0" id="breakfast_cost" wicket:id="breakfast_cost">
+								<input type="hidden" value="0" id="lunch_cost" wicket:id="lunch_cost">
+								<input type="hidden" value="0" id="dinner_cost" wicket:id="dinner_cost">
+								<input type="hidden" wicket:message="value:meal_options.bb" id="bb">
+								<input type="hidden" wicket:message="value:meal_options.hb" id="hb">
+								<input type="hidden" wicket:message="value:meal_options.fb" id="fb">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<wicket:message key="touragents.newbooking.additional_options">[Additional options]</wicket:message>
+							</div>
+							<div class="panel-body">
+								<div>
+									<label class="checkbox-inline" wicket:for="extra_bed_needed">
+										<input type="checkbox" wicket:id="extra_bed_needed">
+										<span><wicket:message key="touragents.newbooking.bed_needed">[Additional bed needed]</wicket:message></span>
+									</label>
+									<!-- <input type="hidden" wicket:id="extra_bed"> -->
+								</div>
+								<div>
+									<label class="checkbox-inline" wicket:for="non_smokers">
+										<input type="checkbox" wicket:id="non_smokers">
+										<span><wicket:message key="touragents.newbooking.non_smokers_availability">[Room for non-smokers upon availability]</wicket:message></span>
+									</label>
+								</div>
+								<div>
+									<label class="checkbox-inline" wicket:for="city_view">
+										<input type="checkbox" wicket:id="city_view">
+										<span><wicket:message key="touragents.newbooking.city_view_availability">[Room with city view upon availability]</wicket:message></span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+<!-- 					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<wicket:message key="touragents.newbooking.payment_method">[Payment method]</wicket:message>
+							</div>
+							<div class="panel-body">
+								<table>
+									<tr>
+										<td style="white-space: nowrap; padding-right: 20px;">
+											<wicket:message key="touragents.newbooking.preferred_payment_method">[Preferred Payment Method]</wicket:message>
+											:
+										</td>
+										<td>
+											<select class="form-control" wicket:id="payment_method">
+												<option>--Select--</option>
+											</select>
+										</td>
+									</tr>
+								</table>
+								<div class="row">
+									<div class="col-md-6"></div>
+									<div class="col-md-6"></div>
+								</div>
+								<div style="height: 10px;"></div>
+								<div class="row">
+									<div class="col-md-12">
+										<div wicket:id="payment_method_container">
+											<input wicket:id="payment_method_other" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+ -->
+ 					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<wicket:message key="hotels.reservation.details.reservation.type">[Reservation type]</wicket:message>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<wicket:container wicket:id="reservation_type">
+										<div class="col-md-3">
+											<label class="radio-inline" wicket:for="definite">
+												<input type="radio" wicket:id="definite">
+												<wicket:message key="hotels.reservation.details.reservation.type.definite">[Definite]</wicket:message>
+											</label>
+										</div>
+										<div class="col-md-3">
+											<label class="radio-inline" wicket:for="tentative">
+												<input type="radio" wicket:id="tentative">
+												<wicket:message key="hotels.reservation.details.reservation.type.tentative">[Tentative]</wicket:message>
+											</label>
+										</div>
+									</wicket:container>
+									<div class="col-md-6"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<wicket:message key="touragents.newbooking.special_requests">[Special requests]</wicket:message>
+							</div>
+							<div class="panel-body">
+								<textarea class="form-control" rows="3" wicket:id="ta_comments"
+									wicket:message="placeholder:touragents.newbooking.special_requests"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6"></div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+							<button wicket:id="print" class="btn btn-primary print" onclick="printPage('container');">
+								<i class="fa fa-print"></i>
+								<wicket:message key="print">[Print]</wicket:message>
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col-md-12">&nbsp;</div>
+		</div>
+		<script type="text/javascript">
+			var lunch = 0;
+			var breakfast = 0;
+			var dinner = 0;
+
+			$(document).ready(function() {
+				breakfast = parseFloat($('input:hidden#breakfast_cost').val());
+				lunch = parseFloat($('input:hidden#lunch_cost').val());
+				dinner = parseFloat($('input:hidden#dinner_cost').val());
+				$('span#meal_options_cost').text(breakfast);
+
+				$meal_options = $('input#meal_options').val();
+				if ($meal_options == 1) {
+					$('input#lunch').prop('checked', true);
+				} else if ($meal_options == 2) {
+					$('input#dinner').prop('checked', true);
+				} else if ($meal_options == 3) {
+					$('input#lunch').prop('checked', true);
+					$('input#dinner').prop('checked', true);
+				}
+				getMealOptionsValue($meal_options);
+			});
+
+			function getMealOptionsValue(meal) {
+				var st = '';
+				var cost = 0;
+				if (meal == 0) {
+					st = $('input:hidden#bb').val();
+					cost = breakfast;
+				} else if (meal == 1) {
+					st = $('input:hidden#hb').val();
+					cost = breakfast + lunch;
+				} else if (meal == 2) {
+					st = $('input:hidden#hb').val();
+					cost = breakfast + dinner;
+				} else if (meal == 3) {
+					st = $('input:hidden#fb').val();
+					cost = breakfast + lunch + dinner;
+				}
+				$('span#meal_options_value').text(st);
+				$('span#meal_options_cost').text(cost);
+			}
+		</script>
+	</div>
+	<script type="text/javascript">
+		function printPage(id) {
+			var html = "<html>";
+			html += "<head>";
+			//   html += "<link href=\"css/bootstrap.css\" rel=\"stylesheet\"/>";
+			html += "</head>";
+			html += "<body>";
+			html += document.getElementById(id).innerHTML;
+			html += "</body>";
+			html += "</html>";
+
+			var printWin = window
+					.open('', '',
+							'left=0,top=0,width=1,height=1,toolbar=0,scrollbars=0,status=0');
+			printWin.document.write(html);
+			printWin.document.close();
+			printWin.focus();
+			printWin.print();
+			printWin.close();
+		}
+	</script>
+</wicket:panel>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+<meta charset="UTF-8">
+<title>Dashr</title>
+<wicket:link>
+	<link rel="stylesheet" type="text/css" href="Dashr.css" />
+</wicket:link>
+</head>
+<body>
+	<wicket:extend>
+		<table class="table table-bordered">
+			<tr>
+				<th>Space</th>
+				<th colspan="2">Status</th>
+				<th>Count</th>
+			</tr>
+			<wicket:container wicket:id="spaces">
+				<tbody wicket:id="rowPanel"></tbody>
+			</wicket:container>
+			<tr>
+				<th colspan="3"></th>
+				<th wicket:id="total" class="grand count"></th>
+			</tr>
+		</table>
+	</wicket:extend>
+</body>
+</html>

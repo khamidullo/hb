@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Spectators">
+	<select id="selectSpectatorsList" parameterType="map" resultType="Spectator">
+		SELECT s.users_id, 
+			   u.name, 
+			   s.primary_phone, 
+			   s.last_name || ' ' || s.first_name || ' ' || s.middle_name AS representative_name, 
+			   s.contact_number, 
+			   s.contact_email,
+			   u.create_date  
+		  FROM spectators s, users u
+		 WHERE s.users_id = u.id
+		 <if test="users_id != null">
+		   AND s.users_id = #{users_id} 
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		 </if>
+		 <if test="status != null">
+		   AND u.status = #{status} 
+		 </if>
+		 <if test="primary_phone != null">
+		   AND s.primary_phone = #{primary_phone} 
+		 </if>
+		 <if test="first_name != null">
+		   AND LOWER(s.first_name) LIKE '%' || LOWER(#{first_name}) || '%' 
+		 </if>
+		 <if test="last_name != null">
+		   AND LOWER(s.last_name) LIKE '%' || LOWER(#{last_name}) || '%'   
+		 </if>
+		 <if test="middle_name != null">
+		   AND LOWER(s.middle_name) LIKE '%' || LOWER(#{middle_name}) || '%' 
+		 </if>
+		 <if test="contact_number != null">
+		   AND s.contact_number = #{contact_number} 
+		 </if>
+		 <if test="contact_email != null">
+		   AND s.contact_email = #{contact_email} 
+		 </if>
+		<trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectSpectatorsCount" parameterType="map" resultType="long">
+		SELECT COUNT(*) 
+		  FROM spectators s, users u
+		 WHERE s.users_id = u.id
+		 <if test="users_id != null">
+		   AND s.users_id = #{users_id} 
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		 </if>
+		 <if test="status != null">
+		   AND u.status = #{status} 
+		 </if>
+		 <if test="primary_phone != null">
+		   AND s.primary_phone = #{primary_phone} 
+		 </if>
+		 <if test="first_name != null">
+		   AND LOWER(s.first_name) LIKE '%' || LOWER(#{first_name}) || '%' 
+		 </if>
+		 <if test="last_name != null">
+		   AND LOWER(s.last_name) LIKE '%' || LOWER(#{last_name}) || '%'   
+		 </if>
+		 <if test="middle_name != null">
+		   AND LOWER(s.middle_name) LIKE '%' || LOWER(#{middle_name}) || '%' 
+		 </if>
+		 <if test="contact_number != null">
+		   AND s.contact_number = #{contact_number} 
+		 </if>
+		 <if test="contact_email != null">
+		   AND s.contact_email = #{contact_email} 
+		 </if>
+	</select>
+	
+	<insert id="insertSpectator" parameterType="Spectator">
+		INSERT INTO spectators (users_id, primary_phone, first_name, middle_name, last_name, contact_number, contact_email)
+		VALUES (#{users_id}, #{primary_phone}, #{first_name}, #{middle_name}, #{last_name}, #{contact_number}, #{contact_email})
+	</insert>
+	
+	<update id="updateSpectator" parameterType="Spectator">
+		UPDATE spectators 
+		<set>
+		    <if test="primary_phone != null">
+		       primary_phone = #{primary_phone},
+		    </if>
+		    <if test="first_name != null">
+		       first_name = #{first_name},
+		    </if>
+		    <if test="middle_name != null">
+		       middle_name = #{middle_name},
+		    </if>
+		    <if test="last_name != null">
+		       last_name = #{last_name},
+		    </if>
+		    <if test="contact_number != null">
+		       contact_number = #{contact_number},
+		    </if>
+		    <if test="contact_email != null">
+		       contact_email = #{contact_email},
+		    </if>
+		</set> 
+		 WHERE users_id = #{users_id}
+	</update>
+	
+	<select id="selectSpectators" parameterType="Spectator" resultType="Spectator">
+	    SELECT s.users_id, 
+			   u.name, 
+			   u.email,
+			   s.primary_phone, 
+			   s.last_name,
+			   s.first_name,
+			   s.middle_name, 
+			   s.contact_number, 
+			   s.contact_email,
+			   u.status
+		  FROM spectators s, users u
+		 WHERE s.users_id = u.id
+		   AND s.users_id = #{users_id} 
+	</select>
+</mapper>

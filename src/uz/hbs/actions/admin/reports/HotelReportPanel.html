@@ -1,0 +1,106 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover table-condensed table-striped">
+					<thead>
+						<tr>
+							<th rowspan="2">
+								<a wicket:id="orderByHotel"> <wicket:message key="report.hotel.name">[Hotel Name]</wicket:message>
+								</a>
+							</th>
+							<th rowspan="2">
+								<a wicket:id="orderByCity"> <wicket:message key="report.hotel.city">[Manager]</wicket:message>
+								</a>
+							</th>
+							<th rowspan="2">
+								<a wicket:id="orderByRegDate"> <wicket:message key="report.client.regdate">[Registration Date]</wicket:message>
+								</a>
+							</th>
+							<th colspan="3">
+								<wicket:message key="report.hotel.date_of_last_activity">[Date Of Last Activity]</wicket:message>
+							</th>
+							<th colspan="6">
+								<wicket:message key="report.hotel.count_of_last_reserve">[Last Period]</wicket:message>
+							</th>
+							<th rowspan="2">
+								<a wicket:id="orderByTentative"> <wicket:message key="report.hotel.tentative">[Percent Total]</wicket:message>
+								</a>
+							</th>
+						</tr>
+						<tr>
+							<th>
+								<a wicket:id="orderByLogin"> <wicket:message key="report.hotel.login">[Month]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByPuttingNumber"> <wicket:message key="report.hotel.putting_number">[Month]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByManageRate"> <wicket:message key="report.hotel.manage_rates">[Month]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByMonth1"> <wicket:message key="report.last.month.1">[Month]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByMonth3"> <wicket:message key="report.last.month.3">[3 Month]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByMonth6"> <wicket:message key="report.last.month.6">[6 Month]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByMonth12"> <wicket:message key="report.last.month.12">[Year]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<a wicket:id="orderByMonth"> <wicket:message key="report.last.month.period">[All Period]</wicket:message>
+								</a>
+							</th>
+							<th>
+								<wicket:message key="report.hotel.percent_of_total">[Percent Total]</wicket:message>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr wicket:id="list">
+							<td wicket:id="hotel" />
+							<td wicket:id="city" />
+							<td wicket:id="regdate" />
+							<td wicket:id="login" />
+							<td wicket:id="putting_number" />
+							<td wicket:id="manage_rate" />
+							<td wicket:id="month_1" />
+							<td wicket:id="month_3" />
+							<td wicket:id="month_6" />
+							<td wicket:id="month_12" />
+							<td wicket:id="month" />
+							<td wicket:id="total" />
+							<td wicket:id="tentative" />
+						</tr>
+						<wicket:enclosure child="paging">
+							<tr>
+								<td colspan="13" align="right">
+									<ul wicket:id="paging"></ul>
+								</td>
+							</tr>
+						</wicket:enclosure>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div style="margin-bottom: 20px;">
+		<div class="row">
+			<div class="col-md-12">
+				<a wicket:id="export" class="btn btn-success btn-outline"> <i class="fa fa-file-excel-o"></i> <wicket:message
+						key="export">Export</wicket:message>
+				</a>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

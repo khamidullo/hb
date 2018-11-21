@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.Users">
+	<select id="selectActions" parameterType="map" resultType="Action">
+	    SELECT id, value
+	      FROM actions
+	    <where>
+	      <if test="id != null">
+	       AND id = #{id}      
+	      </if>
+	      <if test="value != null">
+	       AND value = #{value}      
+	      </if>
+	    </where>
+	</select>
+	
+	<select id="selectAvailableActions" resultType="Action">
+	    SELECT a.id, a.value
+	      FROM actions a
+	</select>
+	
+	<select id="selectSelectedActions" resultType="Action" parameterType="int">
+	    SELECT a.id, a.value
+	      FROM actions a JOIN roleactions ra ON a.id = ra.actions_id
+	                     JOIN roles r ON  ra.roles_id = r.id
+	    WHERE r.id = #{valie}                 
+	</select>
+	
+	<insert id="insertActions" parameterType="Action">
+	    INSERT INTO actions (id, value)
+	    VALUES (#{id}, #{value})
+	</insert>
+	
+	<select id="selectRoles" parameterType="map" resultType="Role">
+	    SELECT id, name
+	      FROM roles
+	    <where>
+	      <if test="id != null">
+	       AND id = #{id}      
+	      </if>
+	      <if test="name != null">
+	       AND name = #{name}      
+	      </if>
+	    </where>
+	</select>
+
+	<select id="selectUserAvailableRoles" resultType="Role">
+	    SELECT id, name
+	      FROM roles
+	</select>
+	
+	<update id="updateLegalName" parameterType="User">
+	    UPDATE users
+	       SET name = #{name},
+	           update_date = now()
+	     WHERE id = #{id}      
+	</update>
+	
+	<select id="selectUserSelectedRoles" parameterType="long" resultType="Action">
+	    SELECT r.id, r.name
+	      FROM roles r 
+	     WHERE r.id IN (SELECT ur.roles_id 
+	     				  FROM userroles ur 
+	     				 WHERE ur.users_id = #{value})
+	</select>
+
+	<insert id="insertRoles" parameterType="Role">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			SELECT NEXTVAL('roles_id_seq')
+	    </selectKey>
+	    INSERT INTO roles (id, name)
+	    VALUES (#{id}, #{name})
+	</insert>
+	
+	<update id="updateRoles" parameterType="Role">
+	    UPDATE roles
+	       SET name = #{name}
+	     WHERE id = #{id}  
+	</update>
+	
+	<select id="selectRolesList" parameterType="map" resultType="Role">
+		SELECT r.id,
+			   r.name,
+			   (SELECT COUNT(ra.roles_id) FROM roleactions ra WHERE ra.roles_id = r.id) AS actions_count,
+			   (SELECT COUNT(DISTINCT ur.users_id) FROM userroles ur WHERE ur.roles_id = r.id) AS users_count
+		  FROM roles r
+		<where>
+		 <if test="id != null">
+		   AND r.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND r.name = #{name} 
+		 </if>
+		</where>
+	    <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		</trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectRolesCount" parameterType="map" resultType="long">
+		SELECT COUNT(*) 
+		  FROM roles r
+		<where>
+		 <if test="id != null">
+		   AND r.id = #{id} 
+		 </if>
+		 <if test="name != null">
+		   AND r.name = #{name} 
+		 </if>
+		</where>
+	</select>
+
+	<delete id="deleteRoles" parameterType="int">
+	    DELETE FROM roles WHERE id = #{id}
+	</delete>
+	
+	<insert id="insertRoleActions" parameterType="map">
+		INSERT INTO roleactions (roles_id, actions_id)
+		VALUES (#{roles_id}, #{actions_id})
+	</insert>
+	
+	<delete id="deleteRoleActions" parameterType="int">
+	    DELETE FROM roleactions WHERE roles_id = #{value} 
+	</delete>
+	
+	<insert id="insertUserRoles" parameterType="map">
+		INSERT INTO userroles (users_id, roles_id)
+		VALUES (#{users_id}, #{roles_id})    
+	</insert>
+	
+	<delete id="deleteUsersRole" parameterType="long">
+	    DELETE FROM userroles WHERE users_id = #{value} 
+	</delete>
+	
+	
+	<select id="selectUserActions" parameterType="map" resultType="Action">
+	    SELECT ac.id, ac.value, ac.type
+	      FROM actions ac 
+	     WHERE ac.id IN (SELECT ra.actions_id 
+	     				   FROM roleactions ra, userroles ur 
+	     				  WHERE ra.roles_id = ur.roles_id 
+	     				    AND ur.users_id = #{users_id})
+		<if test="type != null">
+	       AND ac.type = #{type}
+		</if>
+	</select>
+    
+    <select id="selectUsers" parameterType="map" resultType="User">
+		SELECT u.id,
+			   u.login,
+			   u.password,
+			   u.name,
+			   u.type,
+			   u.status,
+			   u.email,
+			   u.create_date,
+			   u.update_date,
+			   u.workusers_id AS "work.id",
+			   u.workusers_id AS hotelsusers_id,
+			   u.workusers_id AS touragency_user_id,
+			   u.phone_number,
+			   u.workable,
+			   u.access_key
+		  FROM users u
+		 WHERE u.id <![CDATA[>]]> 0
+	     <if test="statusAll == null">
+		   AND u.status != 3
+		 </if>
+		 <if test="login != null">
+		   AND u.login = #{login}          
+		 </if>
+		 <if test="password != null">
+		   AND u.password = #{password}          
+		 </if>
+		 <if test="type != null">
+		   AND u.type = #{type} 
+		 </if>
+		 <if test="type == null">
+		   AND u.type IN (1, 2, 3, 4) 
+		 </if>
+		 <if test="status != null">
+		   AND u.status = #{status}          
+		 </if>
+		 <if test="workusers_id != null">
+		   AND u.workusers_id = #{workusers_id}          
+		 </if>
+    </select>
+	
+	<select id="selectUsersList" parameterType="map" resultType="User">
+		SELECT u.id,
+			   u.login,
+			   u.password,
+			   u.name,
+			   u.type,
+			   u.status,
+			   u.email,
+			   u.create_date,
+			   u.update_date,
+			   u.workusers_id AS "work.id",
+			   ou.name AS org_name,
+			   u.phone_number,
+			   u.workable,
+			   u.access_key
+		  FROM users u
+		       LEFT JOIN users ou ON u.workusers_id = ou.id
+		 WHERE u.id <![CDATA[>]]> 0
+		   AND u.status != 3
+		 <if test="id != null">
+		   AND u.id = #{id} 
+		 </if>
+		 <if test="login != null">
+		   AND LOWER(u.login) LIKE '%' || LOWER(#{login}) || '%' 
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		 </if>
+		 <if test="org_name != null">
+		   AND LOWER(ou.name) LIKE '%' || LOWER(#{org_name}) || '%' 
+		 </if>
+		 <if test="type != null">
+		   AND u.type = #{type.id} 
+		 </if>
+		 <if test="type == null">
+		   AND u.type IN (1, 2, 3, 4) 
+		 </if>
+		 <if test="status != null">
+		   AND u.status = #{status.id} 
+		 </if>
+		 <if test="workusers_id != null">
+		   AND u.workusers_id = #{workusers_id} 
+		 </if>
+		 <if test="phone_number != null">
+		   AND u.phone_number = #{phone_number} 
+		 </if>
+	     <trim prefix="ORDER BY">
+			<if test="sortField != null">
+				${sortField} ${sortOrder}
+			</if>
+		 </trim>
+		 LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="selectUsersCount" parameterType="map" resultType="long">
+		SELECT COUNT(*) 
+		  FROM users u
+		 WHERE u.id <![CDATA[>]]> 0
+		   AND u.status != 3
+		 <if test="id != null">
+		   AND u.id = #{id} 
+		 </if>
+		 <if test="login != null">
+		   AND LOWER(u.login) LIKE '%' || LOWER(#{login}) || '%' 
+		 </if>
+		 <if test="name != null">
+		   AND LOWER(u.name) LIKE '%' || LOWER(#{name}) || '%' 
+		 </if>
+		 <if test="type != null">
+		   AND u.type = #{type.id} 
+		 </if>
+		 <if test="type == null">
+		   AND u.type IN (1, 2, 3, 4) 
+		 </if>
+		 <if test="status != null">
+		   AND u.status = #{status.id} 
+		 </if>
+		 <if test="workusers_id != null">
+		   AND u.workusers_id = #{workusers_id} 
+		 </if>
+		 <if test="phone_number != null">
+		   AND u.phone_number = #{phone_number} 
+		 </if>
+	</select>
+    
+    <insert id="insertUser" parameterType="User">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT NEXTVAL('users_id_seq')
+        </selectKey>
+        INSERT INTO users (id, login, email, password, name, type, status, initiator_user_id, workusers_id, phone_number, workable, access_key)
+        VALUES (#{id}, #{login}, #{email}, #{password}, #{name}, #{type.id}, #{status.id}, #{initiator_user_id}, #{work.id}, #{phone_number}, #{workable}, #{access_key})
+    </insert>
+
+    <select id="selectHotelsSequence" resultType="long">
+        SELECT NEXTVAL('hotels_s')
+    </select>
+
+    <select id="selectTourAgencySequence" resultType="long">
+        SELECT NEXTVAL('touragents_s')
+    </select>
+    
+    <select id="selectSpectatorSequence" resultType="long">
+        SELECT NEXTVAL('spectators_s')
+    </select>
+    
+    <update id="updateUserPassword" parameterType="User">
+         UPDATE users
+            SET password = #{password},
+            	initiator_user_id = #{initiator_user_id},
+            	change_password_required = FALSE,
+            	change_password_token = NULL,
+            	change_password_expiry_date = NULL,
+                update_date = CURRENT_TIMESTAMP
+          WHERE id = #{id}  
+    </update>
+    
+    <update id="updateUserStatus" parameterType="User">
+         UPDATE users
+            SET status = #{status.id},
+                update_date = CURRENT_TIMESTAMP
+          WHERE id = #{id}  
+    </update>
+    
+    <update id="updateUser" parameterType="User">
+        UPDATE users
+          <set>
+              update_date = CURRENT_TIMESTAMP,
+              <if test="name != null">
+                  name = #{name},
+              </if>
+              <if test="email != null">
+                  email = #{email},
+              </if>
+              <if test="type != null">
+                  type = #{type.id},
+              </if>
+              <if test="status != null">
+                  status = #{status.id},
+              </if>
+              <if test="initiator_user_id != null">
+                  initiator_user_id = #{initiator_user_id},
+              </if>
+              <if test="work != null">
+                  workusers_id = #{work.id},
+              </if>
+              <if test="phone_number != null">
+                  phone_number = #{phone_number},
+              </if>
+              <if test="workable != null">
+                  workable = #{workable},
+              </if>
+              <if test="access_key != null">
+              	  access_key = #{access_key},
+              </if>
+          </set>
+         WHERE id = #{id}
+    </update>
+    
+    <insert id="insertUserSessions" parameterType="UserSession">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT NEXTVAL('usersessions_id_seq')
+        </selectKey>
+        INSERT INTO usersessions (id, session_id, interface_type, app_type, client_host, client_info, initiator_user_id)
+        VALUES (#{id}, #{session_id}, #{interface_type}, #{app_type}, #{client_host}, #{client_info}, #{initiator_user_id})
+    </insert>
+    
+    <select id="selectUserSessions" parameterType="long" resultType="UserSession">
+        SELECT id,
+        	   session_id,
+        	   interface_type,
+        	   app_type,
+        	   client_host,
+        	   client_info,
+        	   initiator_user_id,
+        	   create_date
+          FROM usersessions 
+         WHERE initiator_user_id = #{user_id} 
+           AND create_date = (SELECT MAX(create_date) FROM usersessions WHERE initiator_user_id = #{user_id})
+    </select>
+    
+    <select id="selectNow" resultType="java.util.Date">
+        SELECT now()::timestamp(0)
+    </select>
+    
+    <select id="selectWorkList" parameterType="int" resultType="IdLongAndName">
+        <if test="value == 2">
+            SELECT u.id, u.name
+              FROM hotels h JOIN users u ON h.users_id = u.id 
+             WHERE u.id <![CDATA[>]]> 0
+        </if>
+        <if test="value == 3">
+            SELECT u.id, u.name
+              FROM touragents ta JOIN users u ON ta.users_id = u.id
+             WHERE u.id <![CDATA[>]]> 0
+        </if>
+    </select>
+    
+    <select id="selectUserByUserId" parameterType="long" resultType="User">
+		SELECT u.id,
+			   u.login,
+			   u.password,
+			   u.name,
+			   u.type,
+			   u.status,
+			   u.email,
+			   u.create_date,
+			   u.update_date,
+			   u.workusers_id AS "work.id",
+			   u.phone_number,
+			   u.access_key
+		  FROM users u
+		 WHERE u.id = #{id} 
+    </select>
+    
+    <select id="selectUserTypeStatusCount" parameterType="map" resultType="int">
+		SELECT COUNT(u.status) 
+		  FROM users u
+		<where>
+		 <if test="type != null and type == 1">
+		   AND u.type in (1, 2, 3) 
+		 </if>
+		 <if test="type != null and type &gt; 3">
+		   AND u.type = #{type} 
+		 </if>
+		 <if test="status != null">
+	       AND u.status <![CDATA[<]]> #{status}
+		 </if>
+		 <if test="status == null">
+		     AND u.status <![CDATA[<]]> 3
+		 </if>
+		</where>
+    </select>
+
+    <update id="updateUserChangePasswordToken" parameterType="User">
+         UPDATE users
+            SET change_password_token = #{change_password_token},
+                change_password_expiry_date = #{change_password_expiry_date}::timestamp,
+                update_date = CURRENT_TIMESTAMP
+          WHERE id = #{id}  
+    </update>
+    
+    <select id="selectUserForRestorePassword" parameterType="map" resultType="User">
+		SELECT u.id,
+			   u.login,
+			   u.password,
+			   u.name,
+			   u.type,
+			   u.status,
+			   u.email,
+			   u.create_date,
+			   u.update_date,
+			   u.workusers_id AS "work.id",
+			   u.change_password_required,
+			   u.change_password_token,
+			   u.change_password_expiry_date,
+			   u.phone_number
+		  FROM users u
+		 WHERE u.id = #{id}
+		   AND u.change_password_token = #{change_password_token}
+		   AND u.change_password_expiry_date <![CDATA[>]]> CURRENT_TIMESTAMP
+    </select>
+</mapper>

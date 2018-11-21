@@ -1,0 +1,39 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div wicket:id="listView">
+		<div class="row">
+			<div class="col-md-2">
+				<h5>&nbsp;</h5>
+				<p wicket:id="roomLabel" style="padding-top: 10px; padding-left: 20px; font-weight: bold; white-space: nowrap;"></p>
+			</div>
+			<div class="col-md-2">
+				<h5>
+					<wicket:message key="touragents.newbooking.adults">[Adults]</wicket:message>
+				</h5>
+				<select wicket:id="adults" class="form-control">
+					<option>0</option>
+					<option>1</option>
+					<option>2</option>
+				</select>
+				<div style="height: 10px;"></div>
+			</div>
+			<div class="col-md-2">
+				<h5>
+					<wicket:message key="touragents.newbooking.children">[Children]</wicket:message>
+				</h5>
+				<select wicket:id="children" class="form-control">
+					<option>0</option>
+					<option>1</option>
+					<option>2</option>
+				</select>
+				<div style="height: 10px;"></div>
+			</div>
+			<div class="col-md-6" wicket:id="childrenAgeContainer">
+				<h5 wicket:id="childAgeLabel">
+					[Age of child(ren)]
+				</h5>
+				<div wicket:id="childrenAgePanel"></div>
+			</div>
+		</div>
+		<div style="border-bottom: 1px solid #cccccc;"></div>
+	</div>
+</wicket:panel>

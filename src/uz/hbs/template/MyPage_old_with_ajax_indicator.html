@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="en">
+<head>
+<title wicket:id="title">MyApp</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootswatch.css" rel="stylesheet" />
+<!-- <link href="css/bootstrap-theme.css" rel="stylesheet" /> -->
+
+<!-- Custom styles for this template -->
+<link href="css/sticky-footer-navbar.css" rel="stylesheet" />
+<link href="css/mystyle.css" rel="stylesheet" />
+
+<!-- FontAwesome -->
+<link href="css/font-awesome.css" rel="stylesheet" />
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<!-- Fixed navbar -->
+	<div wicket:id="header" class="navbar navbar-inverse navbar-fixed-top" role="navigation">[header navbar]</div>
+	<!-- Begin page content -->
+	<div class="container" style="background-color: #ffffff;">
+		<div class="row" wicket:id="breadCrumbContainer">
+			<div class="col-md-12" wicket:id="breadCrumbContainer">
+				<ol style="margin-bottom: 8px;" wicket:id="breadCrumbBar"></ol>
+			</div>
+		</div>
+		<wicket:child>
+			[Child page/panel]
+		</wicket:child>
+	</div>
+
+	<wicket:container wicket:id="footer">
+	</wicket:container>
+
+	<div id="MyAjaxIndicator" class="dimmer_indicator"
+		style="width: 200px; height: 100px; background-color: #ffffff; position: absolute; display: none; visibility: hidden;">
+		<table style="width: 100%; height: 100%;">
+			<tr>
+				<td valign="middle" style="padding: 10px;">
+					<img src="img/ajax-loader.gif" align="left" />
+				</td>
+				<td valign="middle">
+					<wicket:message key="wait">[Please wait...]</wicket:message>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="MyAjaxIndicatorBg" class="dimmer"
+		style="z-index: 20000; position: absolute; top: 0px; left: 0px; background-image: none; display: none; visibility: hidden;"></div>
+
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootswatch/bootswatch.js"></script>
+	<script src="js/twitter-bootstrap-hover-dropdown.js"></script>
+	<script src="js/moment.js"></script>
+	<script src="js/moment/locale/ru.js"></script>
+	<script type="text/javascript" src="js/hb.js"></script>
+	<script type="text/javascript">
+		function getViewportHeight() {
+			if (typeof (window.innerHeight) !== "undefined")
+				return window.innerHeight;
+
+			if (document.compatMode === 'CSS1Compat')
+				return document.documentElement.clientHeight;
+
+			if (document.body)
+				return document.body.clientHeight;
+
+			return 0;
+		};
+
+		function getViewportWidth() {
+			if (typeof (window.innerWidth) !== "undefined")
+				return window.innerWidth;
+
+			if (document.compatMode === 'CSS1Compat')
+				return document.documentElement.clientWidth;
+
+			if (document.body)
+				return document.body.clientWidth;
+
+			return 0;
+		}
+
+		function getScrollX() {
+			var iebody = (document.compatMode && document.compatMode !== "BackCompat") ? document.documentElement : document.body;
+			return document.all ? iebody.scrollLeft : window.pageXOffset;
+		}
+
+		function getScrollY() {
+			var iebody = (document.compatMode && document.compatMode !== "BackCompat") ? document.documentElement : document.body;
+			return document.all ? iebody.scrollTop : window.pageYOffset;
+		}
+
+		function isSafari() {
+			return !(/Chrome/).test(window.navigator.userAgent) && (/KHTML/).test(window.navigator.userAgent)
+				&& (/Apple/).test(window.navigator.userAgent);
+		}
+
+		function isIELessThan11() {
+			return !isSafari() && typeof (document.all) !== "undefined" && typeof (window.opera) === "undefined"
+		}
+
+		function isGecko() {
+			return (/Gecko/).test(window.navigator.userAgent) && !isSafari();
+		}
+
+		function getCenterPosLeft() {
+			var screenLeft = 0;
+			if (isIELessThan11() || isGecko())
+				screenLeft = getScrollX();
+			var width = getViewportWidth();
+			var modalWidth = 200;
+			if (modalWidth > width - 10) {
+				this.window.style.width = (width - 10) + "px";
+				modalWidth = this.window.offsetWidth;
+			}
+			var left = (width / 2) - (modalWidth / 2) + screenLeft;
+			return (left < 0 ? 0 : left) + "px";
+		}
+
+		function getCenterPosTop() {
+			var screenTop = 0;
+			if (isIELessThan11() || isGecko())
+				screenTop = getScrollY();
+			var height = getViewportHeight();
+			var modalHeight = 100;
+			if (modalHeight > height - 40) {
+				this.content.style.height = (height - 40) + "px";
+				modalHeight = this.window.offsetHeight;
+			}
+			var top = (height / 2) - (modalHeight / 2) + screenTop;
+			return (top < 0 ? 0 : top) + "px";
+		}
+		function onStartAjax() {
+			document.body.style.cursor = "wait";
+			document.getElementById("MyAjaxIndicator").style.display = "";
+			document.getElementById("MyAjaxIndicator").style.visibility = "visible";
+			document.getElementById("MyAjaxIndicator").style.top = getCenterPosTop();
+			document.getElementById("MyAjaxIndicator").style.left = getCenterPosLeft();
+			document.getElementById("MyAjaxIndicatorBg").style.display = "";
+			document.getElementById("MyAjaxIndicatorBg").style.visibility = "visible";
+		}
+
+		function onStopAjax() {
+			document.body.style.cursor = "default";
+			document.getElementById("MyAjaxIndicator").style.display = "none";
+			document.getElementById("MyAjaxIndicator").style.visibility = "hidden";
+			document.getElementById("MyAjaxIndicatorBg").style.display = "none";
+			document.getElementById("MyAjaxIndicatorBg").style.visibility = "hidden";
+		}
+	</script>
+	<script>
+		window.onload = setupFunc;
+		function setupFunc() {
+			onStopAjax();
+			Wicket.Event.subscribe('/ajax/call/beforeSend', function(attributes, jqXHR, settings) {
+				onStartAjax();
+			});
+			Wicket.Event.subscribe('/ajax/call/complete', function(attributes, jqXHR, textStatus) {
+				onStopAjax();
+			});
+		}
+	</script>
+</body>
+</html>

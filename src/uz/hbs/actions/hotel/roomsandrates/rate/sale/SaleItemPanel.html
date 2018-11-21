@@ -1,0 +1,44 @@
+<wicket:head xmlns:wicket="http://wicket.apache.org">
+	<style type="text/css">
+		input[type="checkbox"].sale{
+	  		display: none;
+		}	
+		
+		input[type="checkbox"].sale + span {
+	  		cursor: pointer;
+	  		display: block;
+	  		width: 25px;
+	  		height: 25px;
+	  		background-color: transparent;
+			text-align:center;
+			opacity: 0.5;
+			box-sizing: padding-box;
+			margin: -4px;
+			padding-top: 2px;
+			
+	
+	  		-webkit-transition: all .5s ease;
+	  		-moz-transition: all .5s ease;
+	  		-o-transition: all .5s ease;
+	  		-ms-transition: all .5s ease;
+	   		 transition: all .5s ease;
+		}
+		
+		input[type="checkbox"].sale:checked + span {
+	  		background-color: lightgreen;
+	  		opacity: 0.9;
+	  		border-radius: 100%;
+		 }
+	</style>
+</wicket:head>
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<td style="width: 15px; padding: 4px 0 0 2px; vertical-align: middle; text-align: left; white-space: nowrap;">
+		<label wicket:for="checked">
+			<input wicket:id="checked" type="checkbox" class="sale" onclick="">
+			<span wicket:id="dom"></span>
+		</label>
+		<a wicket:id="change" class="btn btn-xs btn-link" style="padding: 1px 2px;">
+			<i class="fa fa-money" style="font-size: 14px;" wicket:message="title:hotels.rate.plane.sale"></i>
+		</a>
+	</td>
+</wicket:panel>

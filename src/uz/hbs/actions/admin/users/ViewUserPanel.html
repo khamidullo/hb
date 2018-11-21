@@ -1,0 +1,69 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12" wicket:id="feedback"></div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<wicket:message key="users.data">[User data]</wicket:message>
+			</h3>
+		</div>
+		<div class="panel-body" wicket:id="container">
+			<div class="row">
+				<div class="col-md-4">
+					<strong><wicket:message key="users.login" />:</strong> <span
+						wicket:id="login"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="users.name" />:</strong> <span
+						wicket:id="name"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="users.email" />:</strong> <span
+						wicket:id="email"></span>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-4">
+					<strong><wicket:message key="users.status" />:</strong> <span
+						wicket:id="status"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="users.type" />:</strong> <span
+						wicket:id="type"></span>
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="users.type.work" />:</strong> <span
+						wicket:id="worker"></span>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-4">
+					<strong><wicket:message key="hotels.phone" />:</strong> <span
+						wicket:id="phone_number"></span>
+				</div>
+				<div class="col-md-4">
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="pull-right">
+						<a wicket:id="changePasswordLink" class="btn btn-link"><i
+							class="fa fa-key"></i> <wicket:message
+								key="users.change.password.link" /> </a> <a
+							wicket:id="resetPasswordLink" class="btn btn-link"><i
+							class="fa fa-retweet"></i> <wicket:message
+								key="users.reset.password.link" /> </a> <a wicket:id="userRoleLink"
+							class="btn btn-link"><i class="fa fa-retweet"></i> <wicket:message
+								key="users.role.link" /> </a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

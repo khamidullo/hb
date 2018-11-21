@@ -1,0 +1,23 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+<br>
+<div class="row">
+	<div class="col-md-12">
+		<table class="table table-bordered table-hover table-condensed table-striped">
+			<thead>
+				<tr>
+					<th><wicket:message key="datetime">[date & time]</wicket:message></th>
+					<th><wicket:message key="description">[description]</wicket:message></th>
+					<th><wicket:message key="author">[author]</wicket:message></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr wicket:id="loglist">
+					<td wicket:id="datetime"/>
+					<td wicket:id="description"/>
+					<td wicket:id="author"/>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</wicket:panel>

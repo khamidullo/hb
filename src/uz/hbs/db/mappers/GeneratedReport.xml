@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="uz.hbs.db.mappers.GeneratedReport">
+	<insert id="insertGeneratedReport" parameterType="GeneratedReport">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+		    SELECT NEXTVAL('generatedreport_id_seq')
+		</selectKey>
+	    INSERT INTO generatedreports (id, cities_id, name, link, initiator_user_id)
+	    VALUES (#{id}, #{cities_id}, #{name}, #{link}, #{initiator_user_id})
+	</insert>
+	
+	<select id="selectGeneratedReportList" parameterType="map" resultType="GeneratedReport">
+		SELECT rt.id,
+			   (SELECT ct.name || ', ' || r.name || ', ' || c.name FROM countries c, regions r, cities ct WHERE ct.regions_id = r.id AND r.countries_id = c.id AND ct.id = rt.cities_id) AS city_name,
+			   rt.name,
+			   rt.link,
+			   rt.initiator_user_id,
+			   u.name || ', ' || u.login AS author,
+			   rt.create_date
+		  FROM generatedreports rt, users u
+		 WHERE rt.initiator_user_id = u.id
+	     <trim prefix="ORDER BY">
+			<if test="sortField != null">
+			   ${sortField} ${sortOrder}
+			</if>
+		 </trim>
+		 <trim prefix="LIMIT">
+		 	<if test="limit != null">
+			   #{limit} OFFSET #{offset}
+		 	</if>
+		 </trim>
+	</select>
+
+	<select id="selectGeneratedReportCount" parameterType="map" resultType="long">
+		SELECT COUNT(*)
+		  FROM generatedreports r, users u
+		 WHERE r.initiator_user_id = u.id
+	</select>
+</mapper>

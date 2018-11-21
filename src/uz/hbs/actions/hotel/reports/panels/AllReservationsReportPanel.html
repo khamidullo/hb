@@ -1,0 +1,46 @@
+<wicket:extend xmlns:wicket="http://wicket.apache.org">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover table-condensed table-striped">
+					<thead>
+						<tr class="headers">
+							<th><wicket:message key="hotels.reservation.report.reservation.id">[Reserv ID]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.created">[Created]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.guest_name">[Guest Name]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.tour_agent">[Tour Agent]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.check_in">[Check In]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.check_out">[Check Out]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.status">[Status]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.type">[Type]</wicket:message></th>
+							<th><wicket:message key="hotels.reservation.report.reservation.total">[Total]</wicket:message></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr wicket:id="reportlist">
+							<td wicket:id="id"/>
+							<td wicket:id="create_date"/>
+							<td wicket:id="guest_name"/>
+							<td wicket:id="tour_agent"/>
+							<td wicket:id="check_in"/>
+							<td wicket:id="check_out"/>
+							<td wicket:id="status"/>
+							<td wicket:id="type"/>
+							<td wicket:id="total"/>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-1">
+			<a wicket:id="export" class="btn btn-success btn-outline">
+				<i class="fa fa-file-excel-o"></i>
+				<wicket:message key="export">Export</wicket:message>
+			</a>
+		</div>
+		<div class="col-md-11"></div>
+	</div>
+	<br>
+</wicket:extend>

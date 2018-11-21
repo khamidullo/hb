@@ -1,0 +1,36 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<form wicket:id="form">
+				<div class="row">
+					<div class="col-md-12">
+						<span wicket:id="feedback">[feedback]</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<table>
+							<tr>
+								<th><wicket:message	key="pricerange.minimum"/></th>
+								<td style="padding-left: 15px;"><input wicket:id="start_price" type="number" class="form-control"></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="padding: 5px;"></td>
+							</tr>
+							<tr>
+								<th><wicket:message	key="pricerange.maximum"/></th>
+								<td style="padding-left: 15px;"><input wicket:id="end_price" type="number" class="form-control"></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="padding: 5px;"></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align: right;"><input wicket:id="submit" type="submit" class="btn btn-sm btn-primary" wicket:message="value:button.save"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</wicket:panel>

@@ -1,0 +1,22 @@
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<div class="row" wicket:id="container">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="pull-right" style="margin-bottom: 5px;">
+						<a wicket:id="addLink" href="#" class="btn btn-success"> <i class="fa fa-plus"></i> <wicket:message
+								key="users.add" />
+						</a>
+					</div>
+				</div>
+			</div>
+			<form wicket:id="filterForm" role="form">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover table-condensed table-striped" wicket:id="table"></table>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div wicket:id="dialog"></div>
+	<div wicket:id="feedback"></div>
+</wicket:panel>
