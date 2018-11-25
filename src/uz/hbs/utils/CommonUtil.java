@@ -6,14 +6,17 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -547,5 +550,13 @@ public class CommonUtil {
 
 	public static BigDecimal currencyConverted(Currencies currency, BigDecimal value) {
 		return nvl(value.multiply(new BigDecimal(currency.getValue())));
+	}
+	
+	public static List<Integer> list() {
+		List<Integer> list = new ArrayList<>();
+		IntStream.range(0, 10).forEach(i -> {
+			list.add(i);
+		});
+		return list;
 	}
 }

@@ -9,7 +9,7 @@ public class ReservationRule implements IClusterable {
 	
 	private ReservationRuleType individual; 
 	private ReservationRuleType group;
-    private long hotelsusers_id;
+    private long hotel_id;
 	
 	
 	public ReservationRule() {
@@ -18,11 +18,11 @@ public class ReservationRule implements IClusterable {
 	}
 	
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public ReservationRuleType getIndividual() {

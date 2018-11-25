@@ -15,8 +15,8 @@ public class AuditLog implements IClusterable {
 	private Long id;
 	private Byte log_level;
 	private String actions_id;
-	private Long initiator_user_id;
-	private Long usersessions_id;
+	private Long user_id;
+	private Long session_id;
 	private String description;
 	private Date create_date;
 	private Date update_date;
@@ -48,12 +48,20 @@ public class AuditLog implements IClusterable {
 		this.actions_id = actions_id;
 	}
 
-	public Long getInitiator_user_id() {
-		return initiator_user_id;
+	public Long getUser_id() {
+		return user_id;
 	}
 
-	public void setInitiator_user_id(Long initiator_user_id) {
-		this.initiator_user_id = initiator_user_id;
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
+	}
+
+	public Long getSession_id() {
+		return session_id;
+	}
+
+	public void setSession_id(Long session_id) {
+		this.session_id = session_id;
 	}
 
 	public String getDescription() {
@@ -80,11 +88,10 @@ public class AuditLog implements IClusterable {
 		this.update_date = update_date;
 	}
 
-	public Long getUsersessions_id() {
-		return usersessions_id;
-	}
-
-	public void setUsersessions_id(Long usersessions_id) {
-		this.usersessions_id = usersessions_id;
+	@Override
+	public String toString() {
+		return "AuditLog [id=" + id + ", log_level=" + log_level + ", actions_id=" + actions_id + ", user_id=" + user_id
+				+ ", session_id=" + session_id + ", description=" + description + ", create_date=" + create_date
+				+ ", update_date=" + update_date + "]";
 	}
 }

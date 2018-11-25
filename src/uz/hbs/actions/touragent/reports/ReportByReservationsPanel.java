@@ -661,7 +661,7 @@ public class ReportByReservationsPanel extends MyBreadCrumbPanel {
 							param.put("city", filter.getCity());
 							param.put("reservation_type", filter.getReservation_type());
 							param.put("reservation_status", filter.getReservation_status());
-							param.put("reservations_id", filter.getReservations_id());
+							param.put("reservation_id", filter.getReservations_id());
 							param.put("user_type", filter.getUser_type());
 							param.put("offset", 0);
 							param.put("limit", Long.MAX_VALUE);
@@ -766,7 +766,7 @@ public class ReportByReservationsPanel extends MyBreadCrumbPanel {
 			model.getObject().setCreated_from(new Date());
 			model.getObject().setCreated_to(dateTo);
 
-			add(new TextField<String>("reservations_id"));
+			add(new TextField<String>("reservation_id"));
 
 			DateTextField date_from = new DateTextField("created_from", new PatternDateConverter(MyWebApplication.DATE_FORMAT, false));
 			date_from.add(new MyDatePicker());

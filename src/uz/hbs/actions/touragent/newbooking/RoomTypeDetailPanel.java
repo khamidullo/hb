@@ -28,7 +28,7 @@ public abstract class RoomTypeDetailPanel extends WebPage {
 			@Override
 			protected List<KeyAndValue> load() {
 				Map<String, Serializable> params = new HashMap<String, Serializable>();
-				params.put("roomtypes_id", roomTypesId);
+				params.put("roomtype_id", roomTypesId);
 				return new MyBatisHelper().selectList("selectRoomTypeImages", params);
 			}
 		};

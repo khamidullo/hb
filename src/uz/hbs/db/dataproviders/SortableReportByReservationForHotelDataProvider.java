@@ -50,7 +50,7 @@ public class SortableReportByReservationForHotelDataProvider extends SortableDat
 			param.put("hotel", filter.getHotel());
 			param.put("reservation_type", filter.getReservation_type());
 			param.put("reservation_status", filter.getReservation_status());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 			param.put("offset", offset);
 			param.put("limit", limit);
 			param.put("sortField", sp.getProperty());
@@ -83,7 +83,7 @@ public class SortableReportByReservationForHotelDataProvider extends SortableDat
 			param.put("hotel", filter.getHotel());
 			param.put("reservation_type", filter.getReservation_type());
 			param.put("reservation_status", filter.getReservation_status());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 
 			Long count = (Long) new MyBatisHelper().selectOne("selectReservationsReportCountForHotel", param);
 

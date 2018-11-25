@@ -25,10 +25,10 @@ public class IssueBillPrintPanel extends Panel {
 	private BigDecimal subtotal = new BigDecimal("0");
 	private BigDecimal paid = new BigDecimal("0");
 
-	public IssueBillPrintPanel(String id, final long reservations_id) {
+	public IssueBillPrintPanel(String id, final long reservation_id) {
 		super(id);
 		
-		Guest guest = new MyBatisHelper().selectOne("selectIssueBillPrintGuestDetail", reservations_id);
+		Guest guest = new MyBatisHelper().selectOne("selectIssueBillPrintGuestDetail", reservation_id);
 		
 		WebMarkupContainer guest_detail;
 		add(guest_detail = new WebMarkupContainer("guest_detail"));
@@ -38,7 +38,7 @@ public class IssueBillPrintPanel extends Panel {
 		guest_detail.add(new Label("city", guest.getCity()));
 		guest_detail.add(new Label("passport", guest.getPassport_number()));
 		
-		Hotel hotel =  new MyBatisHelper().selectOne("selectIssueBillPrintHotelDetail", reservations_id);
+		Hotel hotel =  new MyBatisHelper().selectOne("selectIssueBillPrintHotelDetail", reservation_id);
 		
 		WebMarkupContainer hotel_detail;
 		add(hotel_detail = new WebMarkupContainer("hotel_detail"));
@@ -48,7 +48,7 @@ public class IssueBillPrintPanel extends Panel {
 		hotel_detail.add(new Label("city", hotel.getCity()));
 		hotel_detail.add(new Label("phone", hotel.getPrimary_phone()));
 		
-		final ReservationDetail reserv = new MyBatisHelper().selectOne("selectIssueBillPrintReservationDetail", reservations_id);
+		final ReservationDetail reserv = new MyBatisHelper().selectOne("selectIssueBillPrintReservationDetail", reservation_id);
 		
 		add(new Label("actual_check_in", FormatUtil.toString(reserv.getCheck_in(), "dd/MM/yyyy HH:mm:ss")));
 		add(new Label("check_out", FormatUtil.toString(reserv.getCheck_out(), "dd/MM/yyyy")));
@@ -62,7 +62,7 @@ public class IssueBillPrintPanel extends Panel {
 
 			@Override
 			protected List<Bill> load() {
-				return new MyBatisHelper().selectList("selectIssueBills", reservations_id);
+				return new MyBatisHelper().selectList("selectIssueBills", reservation_id);
 			}
 		}) {
 			private static final long serialVersionUID = 1L;
@@ -90,7 +90,7 @@ public class IssueBillPrintPanel extends Panel {
 			}
 		}));
 		
-		final ReservationRuleType rule  = new MyBatisHelper().selectOne("selectIssueBillReservationRuleById", reservations_id);
+		final ReservationRuleType rule  = new MyBatisHelper().selectOne("selectIssueBillReservationRuleById", reservation_id);
 		
 		add(new Label("subtotal", new LoadableDetachableModel<BigDecimal>() {
 			private static final long serialVersionUID = 1L;

@@ -12,7 +12,7 @@ public class RatePlane implements IClusterable {
 	private String name;
 	private String description;
 	private boolean internal;
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	private Long initiator_user_id;
 	private Date create_date;
 	private Date update_date;
@@ -31,8 +31,8 @@ public class RatePlane implements IClusterable {
 		this.id = id;
 	}
 
-	public RatePlane(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public RatePlane(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 	
 	public Integer getId() {
@@ -68,11 +68,11 @@ public class RatePlane implements IClusterable {
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsuser_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsuser_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public List<RateSeason> getSeasonlist() {

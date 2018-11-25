@@ -30,7 +30,7 @@ public class RoomType implements IClusterable {
 	private Double min_room_area;
 	private Double max_room_area;
 	
-	private long hotelsusers_id;
+	private long hotel_id;
 	
 	private List<Equipment> equipments;
 	private List<Condition> conditions;
@@ -141,12 +141,12 @@ public class RoomType implements IClusterable {
 		this.check_out_rate = CommonUtil.nvl(check_out_rate);
 	}
 	
-	public RoomType(int id, String name, String description, List<Equipment> equipments, List<Condition> conditions, List<Image> images, List<Room> rooms, long hotelsusers_id) {
+	public RoomType(int id, String name, String description, List<Equipment> equipments, List<Condition> conditions, List<Image> images, List<Room> rooms, long hotel_id) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.hotelsusers_id = hotelsusers_id;
+		this.hotel_id = hotel_id;
 		this.equipments = new ArrayList<Equipment>();
 		this.equipments.addAll(equipments);
 		this.conditions = new ArrayList<Condition>();
@@ -157,7 +157,7 @@ public class RoomType implements IClusterable {
 		this.rooms.addAll(rooms);
 	}
 	
-	public RoomType(RoomType roomtype, List<Equipment> equipments, List<Condition> conditions, List<Image> images, List<Room> rooms, long hotelsusers_id) {
+	public RoomType(RoomType roomtype, List<Equipment> equipments, List<Condition> conditions, List<Image> images, List<Room> rooms, long hotel_id) {
 		super();
 		this.id = roomtype.id;
 		this.name = roomtype.name;
@@ -165,7 +165,7 @@ public class RoomType implements IClusterable {
 		this.additional_bed = roomtype.additional_bed;
 		this.holding_capacity = roomtype.holding_capacity;
 		this.room_area = roomtype.room_area;
-		this.hotelsusers_id = hotelsusers_id;
+		this.hotel_id = hotel_id;
 		this.equipments = new ArrayList<Equipment>();
 		this.equipments.addAll(equipments);
 		this.conditions = new ArrayList<Condition>();
@@ -287,11 +287,11 @@ public class RoomType implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public FileUploadField getRoomImageField() {

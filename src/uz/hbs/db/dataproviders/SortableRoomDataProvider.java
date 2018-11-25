@@ -39,7 +39,7 @@ public class SortableRoomDataProvider extends SortableDataProvider<Room, String>
 			param.put("clean_state", filter.getClean_state());
 			param.put("onsale_state", filter.getOnsale_state());
 			param.put("room_state", filter.getRoom_state());
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			param.put("offset", offset);
 			param.put("limit", limit);
 			param.put("sortField", sp.getProperty());
@@ -74,7 +74,7 @@ public class SortableRoomDataProvider extends SortableDataProvider<Room, String>
 			param.put("clean_state", filter.getClean_state());
 			param.put("onsale_state", filter.getOnsale_state());
 			param.put("room_state", filter.getRoom_state());
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			Long count = (Long) new MyBatisHelper().selectOne("selectRoomManagementListCount", param);
 			return count;
 		} catch (Exception e) {

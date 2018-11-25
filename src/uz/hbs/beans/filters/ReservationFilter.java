@@ -10,7 +10,7 @@ import uz.hbs.beans.ReservationType;
 
 public class ReservationFilter implements IClusterable {
 	private static final long serialVersionUID = 1L;
-	private long hotelsusers_id;
+	private long hotel_id;
 	private String group_name;
 	private String first_name;
 	private String last_name;
@@ -23,13 +23,13 @@ public class ReservationFilter implements IClusterable {
 	private Date date_to;
 	private Long id;
 	
-	public ReservationFilter(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public ReservationFilter(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 	
 	public ReservationFilter(ReservationDetail reserv) {
 		this.id = reserv.getId();
-		this.hotelsusers_id = reserv.getHotelsusers_id();
+		this.hotel_id = reserv.getHotelsusers_id();
 	}
 
 	public Date getCheck_in() {
@@ -89,11 +89,11 @@ public class ReservationFilter implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public ReservationStatus getReservation_status() {

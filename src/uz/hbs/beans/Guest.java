@@ -20,7 +20,7 @@ public class Guest implements IClusterable {
 	private String relationship;
 	private Nationality nationality;
 	private String passport_number;
-	private Date passport_date_of_issue;
+	private Date passport_issue_date;
 	private String passport_issue_place;
 	private String address;
 	private String postal_index;
@@ -31,13 +31,13 @@ public class Guest implements IClusterable {
 	private String company;
 	private String purpose_of_arrival;
 	private String occupation;
-	private long reservationrooms_id;
-	private Long reservations_id;
+	private long reservationroom_id;
+	private Long reservation_id;
 	private Long additionalservicedetails_id;
 	private Room room;
 	private Long rooms_id;
 	private RoomType roomtype;
-	private Integer roomtypes_id;
+	private Integer roomtype_id;
 	private Address guest_address;
 	private String visa_type;
 	private String visa_number;
@@ -88,12 +88,36 @@ public class Guest implements IClusterable {
 		this.passport_number = passport_number;
 	}
 
-	public Date getPassport_date_of_issue() {
-		return passport_date_of_issue;
+	public Date getPassport_issue_date() {
+		return passport_issue_date;
 	}
 
-	public void setPassport_date_of_issue(Date passport_date_of_issue) {
-		this.passport_date_of_issue = passport_date_of_issue;
+	public void setPassport_issue_date(Date passport_issue_date) {
+		this.passport_issue_date = passport_issue_date;
+	}
+
+	public long getReservationroom_id() {
+		return reservationroom_id;
+	}
+
+	public void setReservationroom_id(long reservationroom_id) {
+		this.reservationroom_id = reservationroom_id;
+	}
+
+	public Long getReservation_id() {
+		return reservation_id;
+	}
+
+	public void setReservation_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
+	}
+
+	public Integer getRoomtype_id() {
+		return roomtype_id;
+	}
+
+	public void setRoomtype_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public String getPassport_issue_place() {
@@ -210,11 +234,11 @@ public class Guest implements IClusterable {
 	}
 	
 	public long getReservationrooms_id() {
-		return reservationrooms_id;
+		return reservationroom_id;
 	}
 
-	public void setReservationrooms_id(long reservationrooms_id) {
-		this.reservationrooms_id = reservationrooms_id;
+	public void setReservationrooms_id(long reservationroom_id) {
+		this.reservationroom_id = reservationroom_id;
 	}
 
 	public String getGuest_value() {
@@ -234,11 +258,11 @@ public class Guest implements IClusterable {
 	}
 
 	public Long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(Long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 
 	public Address getGuest_address() {
@@ -306,11 +330,11 @@ public class Guest implements IClusterable {
 	}
 
 	public Integer getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(Integer roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public String getVisa_type() {

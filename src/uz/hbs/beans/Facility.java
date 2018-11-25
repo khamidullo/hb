@@ -3,7 +3,7 @@ package uz.hbs.beans;
 public class Facility extends IdAndName {
 	private static final long serialVersionUID = 1L;
 	private boolean paid;
-	private Long hotelsusers_id;
+	private Long hotel_id;
 
 	public Facility() {
 		super();
@@ -24,15 +24,15 @@ public class Facility extends IdAndName {
 
 	@Override
 	public String toString() {
-		return "{id=" + id + ", name=" + name + ", hotelsusers_id=" + hotelsusers_id + ", paid=" + paid + "}";
+		return "{id=" + id + ", name=" + name + ", hotel_id=" + hotel_id + ", paid=" + paid + "}";
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	@Override

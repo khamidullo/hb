@@ -11,32 +11,32 @@ public class Child implements IClusterable {
 	private String first_name;
 	private String last_name;
 	private Date date_of_birth;
-	
+
 	private long guest_detail_id;
-	private long reservations_id;
-	private long initiator_user_id;
-	
-	private Long reservationrooms_id;
+	private long reservation_id;
+	private long user_id;
+
+	private Long reservationroom_id;
 	private Short age;
 	private boolean free;
-	
+
 	public Child() {
 	}
-	
+
 	public Child(Guest guest) {
 		this.age = guest.getChildAge().getAge();
 		this.child_index = guest.getChildAge().getChild_index();
 		this.first_name = guest.getFirst_name();
 		this.last_name = guest.getLast_name();
 	}
-	
+
 	public Child(short child_index) {
 		this.child_index = child_index;
 	}
-	
-	public Child(long reservations_id, long reservationrooms_id, short child_index, Short age) {
-		this.reservations_id = reservations_id;
-		this.reservationrooms_id = reservationrooms_id;
+
+	public Child(long reservation_id, long reservationroom_id, short child_index, Short age) {
+		this.reservation_id = reservation_id;
+		this.reservationroom_id = reservationroom_id;
 		this.age = age;
 		this.child_index = child_index;
 	}
@@ -73,30 +73,6 @@ public class Child implements IClusterable {
 		this.id = id;
 	}
 
-	public long getReservations_id() {
-		return reservations_id;
-	}
-
-	public void setReservations_id(long reservations_id) {
-		this.reservations_id = reservations_id;
-	}
-
-	public long getInitiator_user_id() {
-		return initiator_user_id;
-	}
-
-	public void setInitiator_user_id(long initiator_user_id) {
-		this.initiator_user_id = initiator_user_id;
-	}
-
-	public Long getReservationrooms_id() {
-		return reservationrooms_id;
-	}
-
-	public void setReservationrooms_id(Long reservationrooms_id) {
-		this.reservationrooms_id = reservationrooms_id;
-	}
-
 	public Short getAge() {
 		return age;
 	}
@@ -127,5 +103,29 @@ public class Child implements IClusterable {
 
 	public void setFree(boolean free) {
 		this.free = free;
+	}
+
+	public long getReservation_id() {
+		return reservation_id;
+	}
+
+	public void setReservation_id(long reservation_id) {
+		this.reservation_id = reservation_id;
+	}
+
+	public long getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(long user_id) {
+		this.user_id = user_id;
+	}
+
+	public Long getReservationroom_id() {
+		return reservationroom_id;
+	}
+
+	public void setReservationroom_id(Long reservationroom_id) {
+		this.reservationroom_id = reservationroom_id;
 	}
 }

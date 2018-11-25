@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.wicket.util.io.IClusterable;
 
 import uz.hbs.beans.rate.RatePlane;
+import uz.hbs.beans.types.BedType;
 
 public class Room implements IClusterable {
 	private static final long serialVersionUID = 1L;
@@ -18,8 +19,8 @@ public class Room implements IClusterable {
 	private BedType bed_type;
 	private AdditionalBed additional_bed;
 	private long initiator_user_id;
-	private long hotelsusers_id;
-	private int roomtypes_id;
+	private long hotel_id;
+	private int roomtype_id;
 	private String roomtype;
 	private short floor;
 	private CleanState clean_state 		= new CleanState(CleanState.UNCLEAN);
@@ -124,19 +125,19 @@ public class Room implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public int getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(int roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(int roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public String getRoomtype() {

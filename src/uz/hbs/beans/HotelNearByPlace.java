@@ -9,7 +9,7 @@ public class HotelNearByPlace extends IdAndName {
 	public static final byte CITY_CENTER = 3;  
 	public static final byte METRO = 4;  
 	
-	private long hotelsusers_id;
+	private long hotel_id;
 	private Float value;
 	private byte type;
 	private long initiator_user_id;
@@ -23,8 +23,8 @@ public class HotelNearByPlace extends IdAndName {
 		this.value = value;
 	}
 	
-	public HotelNearByPlace(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public HotelNearByPlace(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public String getName() {
@@ -36,11 +36,11 @@ public class HotelNearByPlace extends IdAndName {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public Float getValue() {

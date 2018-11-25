@@ -22,7 +22,7 @@ public class MealOption implements IClusterable {
 	private byte meal_type;
 	private boolean included_to_room_rate;
 	private Double cost_per_person_per_night;
-	private long hotelsusers_id;
+	private long hotel_id;
 	
 	private boolean breakfast;
 	private boolean breakfast_included_to_room_rate;
@@ -40,16 +40,16 @@ public class MealOption implements IClusterable {
 		
 	}
 	
-	public MealOption(byte meal_type, boolean included_to_room_rate, Double cost_per_person_per_night, long hotelsusers_id) {
+	public MealOption(byte meal_type, boolean included_to_room_rate, Double cost_per_person_per_night, long hotel_id) {
 		this.meal_type = meal_type;
 		this.included_to_room_rate = included_to_room_rate;
 		this.cost_per_person_per_night = cost_per_person_per_night;
-		this.hotelsusers_id = hotelsusers_id;
+		this.hotel_id = hotel_id;
 	}
 	
-	public MealOption(byte meal_type, long hotelsusers_id) {
+	public MealOption(byte meal_type, long hotel_id) {
 		this.meal_type = meal_type;
-		this.hotelsusers_id = hotelsusers_id;
+		this.hotel_id = hotel_id;
 	}
 	
 	
@@ -57,7 +57,7 @@ public class MealOption implements IClusterable {
 	@Override
 	public String toString() {
 		return "MealOption [meal_type=" + meal_type + ", included_to_room_rate=" + included_to_room_rate + ", cost_per_person_per_night="
-				+ cost_per_person_per_night + ", hotelsusers_id=" + hotelsusers_id + ", breakfast=" + breakfast + ", breakfast_included_to_room_rate="
+				+ cost_per_person_per_night + ", hotel_id=" + hotel_id + ", breakfast=" + breakfast + ", breakfast_included_to_room_rate="
 				+ breakfast_included_to_room_rate + ", breakfast_per_person_per_night=" + breakfast_per_person_per_night + ", lunch=" + lunch
 				+ ", lunch_included_to_room_rate=" + lunch_included_to_room_rate + ", lunch_per_person_per_night=" + lunch_per_person_per_night
 				+ ", dinner=" + dinner + ", dinner_included_to_room_rate=" + dinner_included_to_room_rate + ", dinner_per_person_per_night="
@@ -89,11 +89,11 @@ public class MealOption implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 	
 	public boolean isBreakfast() {

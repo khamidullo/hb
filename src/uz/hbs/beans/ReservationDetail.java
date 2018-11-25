@@ -32,7 +32,7 @@ public class ReservationDetail implements IClusterable {
 	protected Byte reservation_type;
 	protected String reception_comments;
 	protected BigDecimal total;
-	protected long hotelsusers_id;
+	protected long hotel_id;
 	protected ReservationStatus status;
 	protected boolean is_group;
 	protected long initiator_user_id;
@@ -97,7 +97,7 @@ public class ReservationDetail implements IClusterable {
 		this.adults = reserve.getAdults();
 		this.children = reserve.getChildren();
 		this.additional_bed = reserve.getAdditional_bed();
-		this.hotelsusers_id = reserve.getHotelsusers_id();
+		this.hotel_id = reserve.getHotelsusers_id();
 		this.check_in = reserve.getCheck_in();
 		this.check_out = reserve.getCheck_out();
 		this.is_group = reserve.isIs_group();
@@ -185,11 +185,11 @@ public class ReservationDetail implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public ReservationStatus getStatus() {

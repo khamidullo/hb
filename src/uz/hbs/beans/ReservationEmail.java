@@ -10,7 +10,7 @@ public class ReservationEmail implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private Long reservations_id;
+	private Long reservation_id;
 	private Long messages_id;
 	private ReservationEmailType type;
 	private ReservationEmailStatus status;
@@ -21,11 +21,11 @@ public class ReservationEmail implements Serializable {
 	}
 
 	public Long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(Long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 
 	public Long getMessages_id() {

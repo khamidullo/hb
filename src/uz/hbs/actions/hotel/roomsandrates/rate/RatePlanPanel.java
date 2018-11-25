@@ -301,7 +301,7 @@ public class RatePlanPanel extends MyBreadCrumbPanel {
 						}
 					});
 					final HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-					param.put("hotelsusers_id", plane.getHotelsusers_id());
+					param.put("hotel_id", plane.getHotelsusers_id());
 					item.add(new ListView<IdAndName>("roomtypelist", new LoadableDetachableModel<List<IdAndName>>() {
 						private static final long serialVersionUID = 1L;
 						

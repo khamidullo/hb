@@ -138,7 +138,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 		
 		/******* BEGIN Image Slider *******/
 		final Map<String, Object> param = new HashMap<String, Object>();
-		param.put("hotelsusers_id", modelObject.getHotelsusers_id());
+		param.put("hotel_id", modelObject.getHotelsusers_id());
 		// params.put("limit", 1);
 		List<KeyAndValue> imgLinkList = new MyBatisHelper().selectList("selectHotelUploadedFiles", param);
 
@@ -189,7 +189,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 		param.put("equipmentIdList", filter.getHotelFacilities());
 		param.put("starsIdList", filter.getStars());
 		param.put("reserve_is_group", modelObject.getIs_group());
-		param.put("hotelsusers_id", modelObject.getHotelsusers_id());
+		param.put("hotel_id", modelObject.getHotelsusers_id());
 
 		logger.debug("SearchParams=" + param);
 
@@ -270,7 +270,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 						roomTypeLink.add(new Label("roomType", model.getRoomtypes_name()));
 						
 						Map<String, Serializable> params = new HashMap<String, Serializable>();
-						params.put("roomtypes_id", model.getRoomtypes_id());
+						params.put("roomtype_id", model.getRoomtypes_id());
 						params.put("selectId", model.getRoomtypes_id());
 						params.put("selectType", 2);
 						//params.put("limit", 1);
@@ -363,7 +363,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 						param.put("resident", filter.isResident());
 						param.put("internal", false);
 						param.put("is_group", modelObject.getIs_group());
-						param.put("hotelsusers_id", modelObject.getHotelsusers_id());
+						param.put("hotel_id", modelObject.getHotelsusers_id());
 						
 						ReservationRuleType rule = new MyBatisHelper().selectOne("selectReservationRuleByHotel", param);
 						
@@ -372,7 +372,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 						Double first_rate = 0d;
 						
 						param.put("check_date", DateUtil.getDate(filter.getFromDate(), filter.getFromTime()));
-						param.put("roomtypes_id", roomtype.getId());
+						param.put("roomtype_id", roomtype.getId());
 						param.put("holding_capacity", model.getGuests());
 						first_rate = CommonUtil.nvl((Double) new MyBatisHelper().selectOne("selectRateSaleReserve", param)); 
 
@@ -381,7 +381,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 						Double last_rate = 0d;
 						
 						param.put("check_date", DateUtil.getDate(filter.getToDate(), filter.getToTime()));
-						param.put("roomtypes_id", roomtype.getId());
+						param.put("roomtype_id", roomtype.getId());
 						param.put("holding_capacity", model.getGuests());
 						last_rate = CommonUtil.nvl((Double) new MyBatisHelper().selectOne("selectRateSaleReserve", param));
 						
@@ -477,8 +477,8 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 									param.put("resident", filter.isResident());
 									param.put("internal", false);
 									param.put("is_group", modelObject.getIs_group());
-									param.put("hotelsusers_id", modelObject.getHotelsusers_id());
-									param.put("roomtypes_id", reservationRoom.getRoomtype().getId());
+									param.put("hotel_id", modelObject.getHotelsusers_id());
+									param.put("roomtype_id", reservationRoom.getRoomtype().getId());
 									param.put("holding_capacity", model.getGuests() - ((model.getHolding_capacity_text().contains("(+1)"))?1:0));
 									
 									ReservationRuleType rule = new MyBatisHelper().selectOne("selectReservationRuleByHotel", param);
@@ -585,7 +585,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 			@Override
 			protected List<ReservationCancellationPolicy> load() {
 				Map<String, Serializable> params = new HashMap<String, Serializable>();
-				params.put("hotelsusers_id", modelObject.getHotelsusers_id());
+				params.put("hotel_id", modelObject.getHotelsusers_id());
 				params.put("is_group", false);
 				return new MyBatisHelper().selectList("selectReservationCancellationPolicyByHotelId", params);
 			}
@@ -628,7 +628,7 @@ public class BookingSelectedHotel extends MyBreadCrumbPanel {
 			@Override
 			protected ReservationRuleType load() {
 				Map<String, Serializable> params = new HashMap<String, Serializable>();
-				params.put("hotelsusers_id", modelObject.getHotelsusers_id());
+				params.put("hotel_id", modelObject.getHotelsusers_id());
 				params.put("is_group", false);
 				return new MyBatisHelper().selectOne("selectReservationRulesByHotelsId", params);
 			}

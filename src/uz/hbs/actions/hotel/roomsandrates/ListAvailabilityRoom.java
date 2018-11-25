@@ -77,11 +77,11 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 	public ListAvailabilityRoom(String id, IBreadCrumbModel breadCrumbModel, Hotel hotel) {
 		super(id, breadCrumbModel);
 		this.hotel = hotel;
-		long hotelsusers_id;
+		long hotel_id;
 		if (hotel == null) {
-			hotelsusers_id = getMySession().getUser().getHotelsusers_id();
+			hotel_id = getMySession().getUser().getHotelsusers_id();
 		} else {
-			hotelsusers_id = hotel.getUsers_id();
+			hotel_id = hotel.getUsers_id();
 		}
 		
 		model = new ValueMap();
@@ -171,7 +171,7 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 			@Override
 			protected List<RoomType> load() {
 				if (!dateList.isEmpty())
-					return new MyBatisHelper().selectList("selectRoomTypesByHotel", hotelsusers_id);
+					return new MyBatisHelper().selectList("selectRoomTypesByHotel", hotel_id);
 				else
 					return Collections.emptyList();
 			}
@@ -195,7 +195,7 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 						dialog.setMinimalHeight(250);
 						dialog.setMinimalWidth(600);
 						dialog.setTitle(getString("hotels.change_available_rooms"));
-						dialog.setContent(new ChangeAvailableRoomsPanel(dialog.getContentId(), feedback, hotelsusers_id, null, item.getModelObject()) {
+						dialog.setContent(new ChangeAvailableRoomsPanel(dialog.getContentId(), feedback, hotel_id, null, item.getModelObject()) {
 							private static final long serialVersionUID = 1L;
 
 							@Override
@@ -218,8 +218,8 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 				HashMap<String, Serializable> param = new HashMap<String, Serializable>();
 				param.put("date_from", (Date) model.get("date_from"));
 				param.put("date_to", (Date) model.get("date_to"));
-				param.put("roomtypes_id", item.getModelObject().getId());
-				param.put("hotelsusers_id", hotelsusers_id);
+				param.put("roomtype_id", item.getModelObject().getId());
+				param.put("hotel_id", hotel_id);
 
 				final List<SalePlane> salePlansList = new MyBatisHelper().selectList("selectSalePlaneByPeriod", param);
 				final List<TourAgentAvailableRooms> tourAgentAvailableRoomsList = new MyBatisHelper().selectList("selectTourAgentAvailableRoomsByDates", param);
@@ -243,7 +243,7 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 								dialog.setMinimalHeight(250);
 								dialog.setMinimalWidth(600);
 								dialog.setTitle(getString("hotels.change_available_rooms"));
-								dialog.setContent(new ChangeAvailableRoomsPanel(dialog.getContentId(), feedback, hotelsusers_id, itemChild.getModelObject(), item.getModelObject()) {
+								dialog.setContent(new ChangeAvailableRoomsPanel(dialog.getContentId(), feedback, hotel_id, itemChild.getModelObject(), item.getModelObject()) {
 									private static final long serialVersionUID = 1L;
 
 									@Override
@@ -274,8 +274,8 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 						label.setEscapeModelStrings(false);
 						itemChild.add(label);
 						HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-						param.put("hotelsusers_id", hotelsusers_id);
-						param.put("roomtypes_id", item.getModelObject().getId());
+						param.put("hotel_id", hotel_id);
+						param.put("roomtype_id", item.getModelObject().getId());
 						param.put("check_date", tourAgentAvailableRoomsList.get(itemChild.getIndex()).getAvailable_date());
 						final List<ReservationDetail> list = new MyBatisHelper().selectList("selectCheckOutList", param);
 						itemChild.add(new AjaxLink<Void>("soldCheckedOutRoomsLink"){
@@ -310,8 +310,8 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 				});
 
 				param = new HashMap<String, Serializable>();
-				param.put("roomtypes_id", item.getModelObject().getId());
-				param.put("hotelsusers_id", hotelsusers_id);
+				param.put("roomtype_id", item.getModelObject().getId());
+				param.put("hotel_id", hotel_id);
 
 				Integer numberOfRoomsByHotel = new MyBatisHelper().selectOne("selectNumberOfRoomsByHotel", param);
 
@@ -354,7 +354,7 @@ public class ListAvailabilityRoom extends MyBreadCrumbPanel {
 
 							@Override
 							public BreadCrumbPanel create(String componentId, IBreadCrumbModel breadCrumbModel) {
-								return new SalePlanePanel(componentId, breadCrumbModel, hotelsusers_id, item.getModelObject().getId());
+								return new SalePlanePanel(componentId, breadCrumbModel, hotel_id, item.getModelObject().getId());
 							}
 						});
 					}

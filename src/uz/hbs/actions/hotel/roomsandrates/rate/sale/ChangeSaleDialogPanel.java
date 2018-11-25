@@ -130,12 +130,12 @@ public class ChangeSaleDialogPanel extends Panel {
 		});
 	}
 	
-	private HashMap<Short,List<SalePlane>> getSaleMap(long hotelsusers_id, int roomtype_id, short max_person, Date sale_date){
+	private HashMap<Short,List<SalePlane>> getSaleMap(long hotel_id, int roomtype_id, short max_person, Date sale_date){
 		HashMap<Short,List<SalePlane>> salemap = new HashMap<Short,List<SalePlane>>();
 		for (short person = 1; person <= max_person; person ++){
 			List<SalePlane> list = new ArrayList<SalePlane>();
-			list.add((SalePlane) new MyBatisHelper().selectOne("selectSalePlane", new SalePlane(hotelsusers_id, roomtype_id, person, sale_date, RateDetails.INDIVIDUAL)));
-			list.add((SalePlane) new MyBatisHelper().selectOne("selectSalePlane", new SalePlane(hotelsusers_id, roomtype_id, person, sale_date, RateDetails.GROUP)));
+			list.add((SalePlane) new MyBatisHelper().selectOne("selectSalePlane", new SalePlane(hotel_id, roomtype_id, person, sale_date, RateDetails.INDIVIDUAL)));
+			list.add((SalePlane) new MyBatisHelper().selectOne("selectSalePlane", new SalePlane(hotel_id, roomtype_id, person, sale_date, RateDetails.GROUP)));
 			salemap.put(person, list);
 		}
 		return salemap;

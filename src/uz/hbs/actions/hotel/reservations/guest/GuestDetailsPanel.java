@@ -453,7 +453,7 @@ public class GuestDetailsPanel extends MyBreadCrumbPanel {
 					if (reserve.isIs_group()) {
 						HashMap<String, Serializable> param = new HashMap<String, Serializable>();
 						if (model.getObject().getRoomtypes_id() != null) {
-							param.put("roomtypes_id", model.getObject().getRoomtypes_id());
+							param.put("roomtype_id", model.getObject().getRoomtypes_id());
 							param.put("check_in", reserve.getCheck_in());
 							param.put("check_out", reserve.getCheck_out());
 							param.put("adults", 0);
@@ -466,7 +466,7 @@ public class GuestDetailsPanel extends MyBreadCrumbPanel {
 						if (guest == 0){
 							HashMap<String, Serializable> param = new HashMap<String, Serializable>();
 							if (model.getObject().getRoomtypes_id() != null) {
-								param.put("roomtypes_id", model.getObject().getRoomtypes_id());
+								param.put("roomtype_id", model.getObject().getRoomtypes_id());
 								param.put("check_in", reserve.getCheck_in());
 								param.put("check_out", reserve.getCheck_out());
 								param.put("adults", reserve.getAdults());
@@ -499,13 +499,13 @@ public class GuestDetailsPanel extends MyBreadCrumbPanel {
 			room.setEnabled(reserve.getStatus().getId() == ReservationStatus.RESERVED);
 			
 			final HiddenField<Integer> roomtype_id;
-			add(roomtype_id = new HiddenField<Integer>("roomtypes_id", new PropertyModel<Integer>(model, "roomtypes_id")){
+			add(roomtype_id = new HiddenField<Integer>("roomtype_id", new PropertyModel<Integer>(model, "roomtype_id")){
 				private static final long serialVersionUID = 1L;
 
 				@Override
 				protected void onComponentTag(ComponentTag tag) {
 					super.onComponentTag(tag);
-					tag.put("data-bind", "roomtypes_id" + guest);
+					tag.put("data-bind", "roomtype_id" + guest);
 				}
 			});
 			roomtype_id.setLabel(new StringResourceModel("hotels.reservation.details.room.type", null));

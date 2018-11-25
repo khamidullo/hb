@@ -40,7 +40,7 @@ public class SortableAdditionalServiceOrderDataProvider extends SortableDataProv
 			param.put("offset", offset);
 			param.put("limit", limit);
 			param.put("id", filter.getId());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 			param.put("sortField", sp.getProperty());
 			param.put("sortOrder", sp.isAscending() ? "ASC" : "DESC");
 			list = new MyBatisHelper().selectList("selectAdditionalServiceOrderList", param);
@@ -60,7 +60,7 @@ public class SortableAdditionalServiceOrderDataProvider extends SortableDataProv
 			param.put("creator_user_id", filter.getCreator_user_id());
 			param.put("touragent_id", filter.getTouragent_id());
 			param.put("id", filter.getId());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 			Long count = (Long) new MyBatisHelper().selectOne("selectAdditionalServiceOrderListCount", param);
 			return count;
 		} catch (Exception e) {

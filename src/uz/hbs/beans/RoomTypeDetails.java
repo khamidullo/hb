@@ -17,8 +17,8 @@ public class RoomTypeDetails implements IClusterable{
 	private String guest_name;
 	private Byte status;
 	private Boolean selected = Boolean.FALSE;
-	private Long reservationrooms_id;
-	private Long hotelsusers_id;
+	private Long reservationroom_id;
+	private Long hotel_id;
 	private boolean is_group;
 	
 	public RoomTypeDetails() {
@@ -134,11 +134,11 @@ public class RoomTypeDetails implements IClusterable{
 	}
 
 	public Long getReservationrooms_id() {
-		return reservationrooms_id;
+		return reservationroom_id;
 	}
 
-	public void setReservationrooms_id(Long reservationrooms_id) {
-		this.reservationrooms_id = reservationrooms_id;
+	public void setReservationrooms_id(Long reservationroom_id) {
+		this.reservationroom_id = reservationroom_id;
 	}
 
 	public boolean isIs_group() {
@@ -150,10 +150,10 @@ public class RoomTypeDetails implements IClusterable{
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 }

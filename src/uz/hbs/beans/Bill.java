@@ -28,22 +28,22 @@ public class Bill implements IClusterable {
 	private BigDecimal total;
 	private BigDecimal paid;
 	private BigDecimal total_due;
-	private long reservations_id;
+	private long reserve_id;
 	private boolean manual;
-	private long hotelsusers_id;
-	private long initiator_user_id;
+	private long hotel_id;
+	private long user_id;
 	private ReservationRoom reserveroom;
 	
 	public Bill() {
 	}
 	
-	public Bill(long reservations_id) {
-		this.setReservations_id(reservations_id);
+	public Bill(long reserve_id) {
+		this.reserve_id = reserve_id;
 	}
 	
-	public Bill(long reservations_id, long hotelsusers_id) {
-		this.setReservations_id(reservations_id);
-		this.hotelsusers_id = hotelsusers_id;
+	public Bill(long reserve_id, long hotel_id) {
+		this.reserve_id = reserve_id;
+		this.hotel_id = hotel_id;
 	}
 
 	public Date getBill_date() {
@@ -150,36 +150,12 @@ public class Bill implements IClusterable {
 		this.description = description;
 	}
 
-	public long getReservations_id() {
-		return reservations_id;
-	}
-
-	public void setReservations_id(long reservations_id) {
-		this.reservations_id = reservations_id;
-	}
-
-	public long gethotelsusers_id() {
-		return hotelsusers_id;
-	}
-
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
-	}
-
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public long getInitiator_user_id() {
-		return initiator_user_id;
-	}
-
-	public void setInitiator_user_id(long initiator_user_id) {
-		this.initiator_user_id = initiator_user_id;
 	}
 
 	public boolean isManual() {
@@ -196,5 +172,39 @@ public class Bill implements IClusterable {
 
 	public void setReserveroom(ReservationRoom reserveroom) {
 		this.reserveroom = reserveroom;
+	}
+
+	public long getReserve_id() {
+		return reserve_id;
+	}
+
+	public void setReserve_id(long reserve_id) {
+		this.reserve_id = reserve_id;
+	}
+
+	public long getHotel_id() {
+		return hotel_id;
+	}
+
+	public void setHotel_id(long hotel_id) {
+		this.hotel_id = hotel_id;
+	}
+
+	public long getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(long user_id) {
+		this.user_id = user_id;
+	}
+
+	@Override
+	public String toString() {
+		return "Bill [id=" + id + ", bill_date=" + bill_date + ", service=" + service + ", charge=" + charge + ", note="
+				+ note + ", description=" + description + ", debit=" + debit + ", credit=" + credit
+				+ ", service_charge=" + service_charge + ", city_tax=" + city_tax + ", subtotal=" + subtotal
+				+ ", total=" + total + ", paid=" + paid + ", total_due=" + total_due + ", reserve_id=" + reserve_id
+				+ ", manual=" + manual + ", hotel_id=" + hotel_id + ", user_id=" + user_id + ", reserveroom="
+				+ reserveroom + "]";
 	}
 }

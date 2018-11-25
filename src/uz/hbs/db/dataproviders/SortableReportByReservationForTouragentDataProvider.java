@@ -52,7 +52,7 @@ public class SortableReportByReservationForTouragentDataProvider extends Sortabl
 			param.put("city", filter.getCity());
 			param.put("reservation_type", filter.getReservation_type());
 			param.put("reservation_status", filter.getReservation_status());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 			param.put("user_type", filter.getUser_type());
 			param.put("offset", offset);
 			param.put("limit", limit);
@@ -88,7 +88,7 @@ public class SortableReportByReservationForTouragentDataProvider extends Sortabl
 			param.put("city", filter.getCity());
 			param.put("reservation_type", filter.getReservation_type());
 			param.put("reservation_status", filter.getReservation_status());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 			param.put("user_type", filter.getUser_type());
 
 			Long count = (Long) new MyBatisHelper().selectOne("selectReservationsReportCountForTouragent", param);

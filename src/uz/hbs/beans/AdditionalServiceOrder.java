@@ -22,7 +22,7 @@ public class AdditionalServiceOrder implements IClusterable {
 	private Date create_date;
 	private Date update_date;
 	private Long initiator_user_id;
-	private Long reservations_id;
+	private Long reservation_id;
 	private BigDecimal total;
 	private String fullname;
 	private byte status;
@@ -35,8 +35,8 @@ public class AdditionalServiceOrder implements IClusterable {
 		
 	}
 
-	public AdditionalServiceOrder(long reservations_id) {
-		this.reservations_id = reservations_id;
+	public AdditionalServiceOrder(long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 	
 	public AdditionalServiceDetail getArrival() {
@@ -136,11 +136,11 @@ public class AdditionalServiceOrder implements IClusterable {
 	}
 
 	public Long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(Long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 	
 	public short getDays(){

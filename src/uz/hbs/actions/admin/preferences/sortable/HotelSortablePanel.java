@@ -150,7 +150,7 @@ public class HotelSortablePanel extends MyBreadCrumbPanel {
 							HashMap<String, Long> param = new HashMap<String, Long>();
 							for (int i = 0; i < s.length; i++){
 								param.put("recommended_sort", (long) i);
-								param.put("hotelsusers_id", Long.parseLong(s[i]));
+								param.put("hotel_id", Long.parseLong(s[i]));
 								sql.update("updateHotelDetailsRecommendedSort", param);
 							}
 							sql.commit();

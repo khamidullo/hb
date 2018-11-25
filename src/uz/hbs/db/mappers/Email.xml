@@ -8,7 +8,7 @@
 			   update_date, 
 			   status, 
 			   creator_user_id, 
-			   reservations_id, 
+			   reservation_id, 
 			   additionalserviceorders_id,
 			   first_name,
 			   last_name,
@@ -126,15 +126,15 @@
 		SELECT COALESCE(hd.display_name_en, hd.display_name) AS display_name
 		  FROM hotelsdetails hd, reservations r
 		 WHERE r.id = #{id}
-		   AND hd.hotelsusers_id = r.hotelsusers_id
+		   AND hd.hotel_id = r.hotel_id
 	</select>
 	
 	<insert id="insertReservationEmails" parameterType="ReservationEmail">
 		<selectKey keyProperty="id" keyColumn="id" resultType="long" order="BEFORE">
 			SELECT NEXTVAL('reservationemails_id_seq')
 	    </selectKey>
-		INSERT INTO reservationemails (id, reservations_id, messages_id, type, status)
-		VALUES (#{id}, #{reservations_id}, #{messages_id}, #{type}::reservationemails_type, #{status}::reservationemails_status)
+		INSERT INTO reservationemails (id, reservation_id, messages_id, type, status)
+		VALUES (#{id}, #{reservation_id}, #{messages_id}, #{type}::reservationemails_type, #{status}::reservationemails_status)
 	</insert>
 	
 	<update id="updateReservationEmails" parameterType="ReservationEmail">
@@ -147,14 +147,14 @@
 	
 	<select id="selectReservationEmails" parameterType="long" resultType="ReservationEmail">
 		SELECT id,
-			   reservations_id,
+			   reservation_id,
 			   messages_id,
 			   type,
 			   status,
 			   create_date,
 			   update_date
 		  FROM reservationemails re
-		 WHERE re.reservations_id = #{reservations_id}
+		 WHERE re.reservation_id = #{reservation_id}
 		 ORDER BY re.update_date DESC
 	</select>
 </mapper>

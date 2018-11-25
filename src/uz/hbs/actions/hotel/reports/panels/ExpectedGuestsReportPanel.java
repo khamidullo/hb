@@ -43,7 +43,7 @@ public class ExpectedGuestsReportPanel extends ReservationReportPanel {
 	public ExpectedGuestsReportPanel(String id, IBreadCrumbModel breadCrumbModel, final ValueMap model) {
 		super(id, breadCrumbModel, model);
 		
-		model.put("hotelsusers_id", ((MySession) getSession()).getUser().getHotelsusers_id());
+		model.put("hotel_id", ((MySession) getSession()).getUser().getHotelsusers_id());
 		final List<HotelReservationReport> list = new MyBatisHelper().selectList("selectExpectedGuestReport", model); 
 		
 		IModel<List<HotelReservationReport>> reportListModel = new LoadableDetachableModel<List<HotelReservationReport>>() {

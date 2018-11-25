@@ -63,7 +63,7 @@ public class SalePlanePanel extends MyBreadCrumbPanel {
 	
 	List<SalePlane> saleList = new ArrayList<SalePlane>();
 
-	public SalePlanePanel(String id, IBreadCrumbModel breadCrumbModel, final long hotelsusers_id, final int roomtype_id) {
+	public SalePlanePanel(String id, IBreadCrumbModel breadCrumbModel, final long hotel_id, final int roomtype_id) {
 		super(id, breadCrumbModel);
 		
 		add(feedback = new MyFeedbackPanel("feedback"));
@@ -91,9 +91,9 @@ public class SalePlanePanel extends MyBreadCrumbPanel {
 		
 		final short max_person = new MyBatisHelper().selectOne("selectHoldingCapacityRoomType", roomtype_id);
 		
-		resident = (Boolean) new MyBatisHelper().selectOne("selectSupportResidentRate", hotelsusers_id);
+		resident = (Boolean) new MyBatisHelper().selectOne("selectSupportResidentRate", hotel_id);
 		
-		salemap = getSaleMap(hotelsusers_id, roomtype_id, max_person);
+		salemap = getSaleMap(hotel_id, roomtype_id, max_person);
 		
 		form.add(new ListView<Short>("personlist", HotelModels.getShortListModel((short) 1, max_person)) {
 			private static final long serialVersionUID = 1L;
@@ -149,7 +149,7 @@ public class SalePlanePanel extends MyBreadCrumbPanel {
 
 			@Override
 			protected void populateItem(final Item<Short> item) {
-				item.add(new CalendarGridPanel("container", datemap.get(item.getModelObject()), hotelsusers_id, roomtype_id, saleList, dialog));
+				item.add(new CalendarGridPanel("container", datemap.get(item.getModelObject()), hotel_id, roomtype_id, saleList, dialog));
 			}
 
 			@Override
@@ -363,12 +363,12 @@ public class SalePlanePanel extends MyBreadCrumbPanel {
 		return datemap;
 	}
 	
-	private HashMap<Short,List<SalePlane>> getSaleMap(long hotelsusers_id, int roomtype_id, short max_person){
+	private HashMap<Short,List<SalePlane>> getSaleMap(long hotel_id, int roomtype_id, short max_person){
 		HashMap<Short,List<SalePlane>> salemap = new HashMap<Short,List<SalePlane>>();
 		for (short person = 1; person <= max_person; person ++){
 			List<SalePlane> list = new ArrayList<SalePlane>();
-			list.add(new SalePlane(hotelsusers_id, roomtype_id, person, RateDetails.INDIVIDUAL));
-			list.add(new SalePlane(hotelsusers_id, roomtype_id, person, RateDetails.GROUP));
+			list.add(new SalePlane(hotel_id, roomtype_id, person, RateDetails.INDIVIDUAL));
+			list.add(new SalePlane(hotel_id, roomtype_id, person, RateDetails.GROUP));
 			salemap.put(person, list);
 		}
 		return salemap;

@@ -106,8 +106,8 @@ public class RoomSetupModel {
 		};
 	}
 
-	public static List<Condition> getAvailableCondition(final long hotelsusers_id){
-		List<Condition> list = new MyBatisHelper().selectList("selectConditionsByHotel", hotelsusers_id);
+	public static List<Condition> getAvailableCondition(final long hotel_id){
+		List<Condition> list = new MyBatisHelper().selectList("selectConditionsByHotel", hotel_id);
 		return list;
 	}
 	

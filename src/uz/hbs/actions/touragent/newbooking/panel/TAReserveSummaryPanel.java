@@ -765,7 +765,7 @@ public class TAReserveSummaryPanel extends MyBreadCrumbPanel {
 							HashMap<Integer, Short> roomtype_map = new HashMap<Integer, Short>();
 
 							for (ReservationRoom reserveroom : reserve.getReserverooms()) {//
-								param.put("roomtypes_id", reserveroom.getRoomtype().getId());
+								param.put("roomtype_id", reserveroom.getRoomtype().getId());
 
 								short available = new MyBatisHelper().selectOne("selectTAReserveAvailableRoomsByRoomType", param);
 								short available2 = 0;
@@ -1009,7 +1009,7 @@ public class TAReserveSummaryPanel extends MyBreadCrumbPanel {
 								else
 									reserveroom.setMeal_options(meal_option_all);
 
-								param.put("roomtypes_id", reserveroom.getRoomtype().getId());
+								param.put("roomtype_id", reserveroom.getRoomtype().getId());
 
 								short available = new MyBatisHelper().selectOne("selectTAReserveAvailableRoomsByRoomType", param);
 								short available2 = 0;

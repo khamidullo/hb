@@ -140,7 +140,7 @@ public class BookingGroupReservationDetailsView extends MyBreadCrumbPanel {
 				@Override
 				protected void populateItem(final ListItem<ReservationRoom> item) {
 					HashMap<String, Object> param = new HashMap<String, Object>();
-					param.put("hotelsusers_id", reserve.getHotelsusers_id());
+					param.put("hotel_id", reserve.getHotelsusers_id());
 					
 					final List<RoomType> list = new MyBatisHelper().selectList("selectReservationRoomTypeByHotel", param);
 					
@@ -167,7 +167,7 @@ public class BookingGroupReservationDetailsView extends MyBreadCrumbPanel {
 							HashMap<String, Object> param = new HashMap<String, Object>();
 							
 							if (item.getModelObject().getRoomtype() != null) {
-								param.put("roomtypes_id", item.getModelObject().getRoomtype().getId());
+								param.put("roomtype_id", item.getModelObject().getRoomtype().getId());
 								param.put("check_in", reserve.getCheck_in());
 								if (item.getModelObject().getRoomtype() != null) {
 									short room_count = new MyBatisHelper().selectOne("selectTAReserveAvailableRoomsByRoomType", param);
@@ -190,7 +190,7 @@ public class BookingGroupReservationDetailsView extends MyBreadCrumbPanel {
 					room.add(new AjaxOnBlurEvent());
 					
 					final HiddenField<Integer> roomtype_id;
-					item.add(roomtype_id = new HiddenField<Integer>("roomtypes_id", new PropertyModel<Integer>(item.getModel(), "roomtypes_id")));
+					item.add(roomtype_id = new HiddenField<Integer>("roomtype_id", new PropertyModel<Integer>(item.getModel(), "roomtype_id")));
 					roomtype_id.setOutputMarkupId(true);
 					roomtype_id.setLabel(new StringResourceModel("hotels.reservation.details.room.type", null));
 					roomtype_id.setEnabled(false);

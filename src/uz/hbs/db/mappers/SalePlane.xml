@@ -6,8 +6,8 @@
         <selectKey order="BEFORE" resultType="long" keyProperty="id">
             SELECT NEXTVAL('saleplanes_id_seq')
         </selectKey>
-		INSERT INTO saleplanes(id, create_date, sale_date, sale, sale_uz, update_date, initiator_user_id, hotelsusers_id, roomtypes_id, person_number, is_group)
-        VALUES (#{id}, now(), #{sale_date}::date, #{sale}, #{sale_uz}, now(), #{initiator_user_id}, #{hotelsusers_id}, #{roomtypes_id}, #{person_number}, #{is_group})        
+		INSERT INTO saleplanes(id, create_date, sale_date, sale, sale_uz, update_date, initiator_user_id, hotel_id, roomtype_id, person_number, is_group)
+        VALUES (#{id}, now(), #{sale_date}::date, #{sale}, #{sale_uz}, now(), #{initiator_user_id}, #{hotel_id}, #{roomtype_id}, #{person_number}, #{is_group})        
     </insert>
     
     <update id="updateSalePlane" parameterType="SalePlane">
@@ -25,8 +25,8 @@
                sale_uz = #{sale_uz}, 
                update_date = now(), 
                initiator_user_id = #{initiator_user_id}
-         WHERE hotelsusers_id = #{hotelsusers_id}
-           AND roomtypes_id = #{roomtypes_id}
+         WHERE hotel_id = #{hotel_id}
+           AND roomtype_id = #{roomtype_id}
            AND person_number = #{person_number}
            AND is_group = #{is_group}
            AND sale_date::date = #{sale_date}::date
@@ -35,8 +35,8 @@
     <select id="selectIsExistsSalePlane" parameterType="SalePlane" resultType="boolean">
         SELECT COUNT(*)         
           FROM saleplanes
-         WHERE hotelsusers_id = #{hotelsusers_id}
-           AND roomtypes_id = #{roomtypes_id}
+         WHERE hotel_id = #{hotel_id}
+           AND roomtype_id = #{roomtype_id}
            AND person_number = #{person_number}
            AND is_group = #{is_group}
            AND sale_date::date = #{sale_date}::date
@@ -51,9 +51,9 @@
     </update>
     
     <select id="selectSalePlaneByPeriod" parameterType="map" resultType="SalePlane">
-        SELECT DISTINCT COALESCE(s.sale_date,d.date) AS sale_date, s.hotelsusers_id, s.roomtypes_id
-          FROM get_date_list(#{date_from}::date, #{date_to}::date) d LEFT JOIN saleplanes s ON d.date = s.sale_date AND s.hotelsusers_id = #{hotelsusers_id}
-                                                                                                                    AND s.roomtypes_id = #{roomtypes_id}
+        SELECT DISTINCT COALESCE(s.sale_date,d.date) AS sale_date, s.hotel_id, s.roomtype_id
+          FROM get_date_list(#{date_from}::date, #{date_to}::date) d LEFT JOIN saleplanes s ON d.date = s.sale_date AND s.hotel_id = #{hotel_id}
+                                                                                                                    AND s.roomtype_id = #{roomtype_id}
         ORDER BY 1 ASC                                                                                                             
     </select>
     
@@ -63,10 +63,10 @@
     
     <select id="selectSalePlane" parameterType="SalePlane" resultType="SalePlane">
         SELECT id, create_date, sale_date, sale, sale_uz, update_date, initiator_user_id, 
-               hotelsusers_id, status, roomtypes_id, person_number, is_group
+               hotel_id, status, roomtype_id, person_number, is_group
           FROM saleplanes
-         WHERE hotelsusers_id = #{hotelsusers_id}
-           AND roomtypes_id = #{roomtypes_id}
+         WHERE hotel_id = #{hotel_id}
+           AND roomtype_id = #{roomtype_id}
            AND is_group = #{is_group}
            AND person_number = #{person_number}
            AND sale_date::date = #{sale_date}::date
@@ -75,8 +75,8 @@
     <select id="selectStatusIndicateSalePlane" parameterType="map" resultType="short">
         SELECT SUM(CASE status WHEN true THEN 1 ELSE 0 END)/COUNT(*) 
           FROM saleplanes
-         WHERE hotelsusers_id = #{hotelsusers_id}
-           AND roomtypes_id = #{roomtypes_id}
+         WHERE hotel_id = #{hotel_id}
+           AND roomtype_id = #{roomtype_id}
            AND is_group = #{is_group}
            AND sale_date::date = #{sale_date}::date
     </select>
@@ -84,8 +84,8 @@
     <select id="selectSalePlanePeriod" parameterType="map" resultType="SalePlane">
         SELECT id, sale_date, sale, sale_uz
           FROM saleplanes
-         WHERE hotelsusers_id = #{hotelsusers_id}
-           AND roomtypes_id = #{roomtypes_id}
+         WHERE hotel_id = #{hotel_id}
+           AND roomtype_id = #{roomtype_id}
            AND status = true
            AND is_group = #{is_group}
            AND person_number = #{person_number}

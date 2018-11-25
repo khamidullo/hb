@@ -321,7 +321,7 @@ public class TAIndividualReservePrintPanel extends MyBreadCrumbPanel {
 					boolean extra_bed = false;
 					_log.debug("Extrabed: "+item.getModelObject().isExtra_bed_needed());
 					final HashMap<String, Object> param = new HashMap<String, Object>();
-					param.put("hotelsusers_id", reserve.getHotelsusers_id());
+					param.put("hotel_id", reserve.getHotelsusers_id());
 					
 					item.getModelObject().setIndex((short) (item.getIndex() + 1));
 					
@@ -337,7 +337,7 @@ public class TAIndividualReservePrintPanel extends MyBreadCrumbPanel {
 					item.add(new Label("roomtype_label", item.getModelObject().getRoomtype().getName()));
 					
 					if (item.getModelObject().getGuestlist().isEmpty()) {
-						param.put("roomtypes_id", item.getModelObject().getRoomtype().getId());
+						param.put("roomtype_id", item.getModelObject().getRoomtype().getId());
 						short holding_capacity = new MyBatisHelper().selectOne("selectHoldingCapacityRoomType", item.getModelObject().getRoomtype().getId());
 						_log.debug("Holding capacity: "+item.getModelObject().getHolding_capacity());
 						if (holding_capacity < item.getModelObject().getHolding_capacity()) {

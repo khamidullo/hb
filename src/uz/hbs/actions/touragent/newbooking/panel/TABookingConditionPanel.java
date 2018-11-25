@@ -12,8 +12,8 @@ import uz.hbs.utils.CommonUtil;
 public class TABookingConditionPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
-	public TABookingConditionPanel(String id, long hotelsusers_id, boolean is_group) {
-		this(id, (ReservationRuleType) new MyBatisHelper().selectOne("selectTAReservationRule", new ReservationRuleType(hotelsusers_id, is_group)));
+	public TABookingConditionPanel(String id, long hotel_id, boolean is_group) {
+		this(id, (ReservationRuleType) new MyBatisHelper().selectOne("selectTAReservationRule", new ReservationRuleType(hotel_id, is_group)));
 	}
 	
 	public TABookingConditionPanel(String id, ReservationRuleType rule) {

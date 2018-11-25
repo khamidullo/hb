@@ -20,12 +20,12 @@ public class ReservationRoom implements IClusterable {
 	private Long rooms_id;
 	private Long previously_rooms_id;
 	private RoomType roomtype;
-	private Integer roomtypes_id;
+	private Integer roomtype_id;
 	private RatePlane rateplane;
 	private Date create_date;
 	private Date update_date;
 	private long initiator_user_id;
-	private long reservations_id;
+	private long reservation_id;
 	private BigDecimal rate;
 	private BigDecimal total;
 	
@@ -35,7 +35,7 @@ public class ReservationRoom implements IClusterable {
 	private String room_number;
 	private short holding_capacity;
 	
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	private Date check_in;
 	
 	private short index;
@@ -67,41 +67,41 @@ public class ReservationRoom implements IClusterable {
 		this.room = reserveroom.getRoom();
 		this.rooms_id = reserveroom.getRoom().getId();
 		this.roomtype = reserveroom.getRoomtype();
-		this.roomtypes_id = reserveroom.getRoomtype().getId();
+		this.roomtype_id = reserveroom.getRoomtype().getId();
 	}
 	
 	public ReservationRoom(long id) {
 		this.id = id;
 	}
 	
-	public ReservationRoom(ReservationDetail reserve, int roomtypes_id, Long rooms_id) {
-		this(reserve.getId(), roomtypes_id, rooms_id, reserve.getRateplane(), null);
+	public ReservationRoom(ReservationDetail reserve, int roomtype_id, Long rooms_id) {
+		this(reserve.getId(), roomtype_id, rooms_id, reserve.getRateplane(), null);
 	}
 //	
-//	public ReservationRoom(ReservationDetail reserve, int roomtypes_id, Long rooms_id, Long initiator_user_id) {
-//		this(reserve.getId(), roomtypes_id, rooms_id, reserve.getRateplane(), reserve.getRate());
+//	public ReservationRoom(ReservationDetail reserve, int roomtype_id, Long rooms_id, Long initiator_user_id) {
+//		this(reserve.getId(), roomtype_id, rooms_id, reserve.getRateplane(), reserve.getRate());
 //		this.initiator_user_id = initiator_user_id;
 //		this.rooms_id = rooms_id;
-//		this.roomtypes_id = roomtypes_id;
+//		this.roomtype_id = roomtype_id;
 //	}
 
-	public ReservationRoom(long reservations_id, int roomtype_id, long rooms_id, RatePlane rateplane, BigDecimal rate) {
+	public ReservationRoom(long reservation_id, int roomtype_id, long rooms_id, RatePlane rateplane, BigDecimal rate) {
 		this.room = new Room(rooms_id);
 		this.roomtype = new RoomType(roomtype_id);
-		this.reservations_id = reservations_id;
+		this.reservation_id = reservation_id;
 		this.rateplane = new RatePlane(rateplane);
 		this.rate = rate;
 	}
 	
-	public ReservationRoom(long reservations_id, int roomtype_id, long rooms_id) {
+	public ReservationRoom(long reservation_id, int roomtype_id, long rooms_id) {
 		room = new Room(rooms_id);
 		roomtype = new RoomType(roomtype_id);
-		this.reservations_id = reservations_id;
+		this.reservation_id = reservation_id;
 	}
 	
-	public ReservationRoom(long reservations_id, int roomtype_id) {
+	public ReservationRoom(long reservation_id, int roomtype_id) {
 		roomtype = new RoomType(roomtype_id);
-		this.reservations_id = reservations_id;
+		this.reservation_id = reservation_id;
 	}
 	
 	public ReservationRoom(int roomtype_id, String roomtype_name, byte holding_capacity) {
@@ -158,11 +158,11 @@ public class ReservationRoom implements IClusterable {
 	}
 
 	public long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 
 	public BigDecimal getRate() {
@@ -182,11 +182,11 @@ public class ReservationRoom implements IClusterable {
 	}
 
 	public Integer getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(Integer roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public Long getRooms_id() {
@@ -302,11 +302,11 @@ public class ReservationRoom implements IClusterable {
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public Date getCheck_in() {

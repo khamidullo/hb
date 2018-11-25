@@ -270,7 +270,7 @@ public class GuestsReportPanel extends Panel {
 					        
 							Map<String, Serializable> param = new HashMap<String, Serializable>();
 							param.put("creator_user_id", filter.getTouragent_id());
-							param.put("hotelsusers_id", filter.getHotel_id());
+							param.put("hotel_id", filter.getHotel_id());
 							param.put("display_name", filter.getHotel_name());
 							param.put("date_from", filter.getFromDate());
 							param.put("date_to", filter.getToDate());

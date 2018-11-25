@@ -57,7 +57,7 @@ public class User implements IClusterable {
 	private Date change_password_expiry_date;
 	private String phone_number;
 
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	private Long touragency_user_id;
 
 	private boolean isCorpUser = false;
@@ -189,11 +189,11 @@ public class User implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public IdLongAndName getWork() {

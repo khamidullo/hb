@@ -10,11 +10,11 @@
     <select id="selectNightAuditRegisteredByHotelId" parameterType="Hotel" resultType="ReservationDetail">
         SELECT id, extra_bed, COALESCE(meal_options,-1) AS meal_options, 
                adults, children, is_group, check_in, 
-               hotelsusers_id AS hotelsusers_id, rate,
+               hotel_id AS hotel_id, rate,
                (#{operday}::date - check_in) AS check_in_day,
                (#{operday}::date - check_out) AS check_out_day
           FROM reservations r
-         WHERE r.hotelsusers_id = #{users_id}
+         WHERE r.hotel_id = #{users_id}
            AND r.check_in <![CDATA[<=]]> #{operday}::date
            AND r.status = 1 
     </select>
@@ -22,8 +22,8 @@
     <select id="selectNightAuditReservedByHotelId" parameterType="Hotel" resultType="ReservationDetail">
         SELECT r.id, t.id as rooms_id
           FROM reservations r, reservationrooms rr LEFT JOIN rooms t ON rr.rooms_id = t.id 
-         WHERE r.hotelsusers_id = #{users_id}
-           AND rr.reservations_id = r.id
+         WHERE r.hotel_id = #{users_id}
+           AND rr.reservation_id = r.id
            AND r.check_in <![CDATA[<]]> now()::dateд
            AND r.status = 0 
     </select>
@@ -46,8 +46,8 @@
     <select id="selectExistsBillData" parameterType="ReservationDetail" resultType="boolean">
         SELECT COUNT(*)
           FROM reservationbills
-         WHERE reservations_id = #{id}
-           AND hotelsusers_id = #{hotelsusers_id}
+         WHERE reservation_id = #{id}
+           AND hotel_id = #{hotel_id}
     </select>
     
     <insert id="insertNightAuditLog" parameterType="NightAuditLog">

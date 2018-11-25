@@ -82,7 +82,7 @@
 	<select id="selectReservationsReportListForAdmin" parameterType="map" resultType="ReservationDetail">
 		SELECT r.id,
 		       r.create_date,
-		       r.hotelsusers_id,
+		       r.hotel_id,
 			 <if test="user_type == 50">
 			   u.id AS "tour_agent.users_id",
 			   u.name AS "tour_agent.name",
@@ -95,7 +95,7 @@
 		       COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name AS hotel_name,
 		       hu.name AS hotel_legal_name,
 		       g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') AS guest_name,
-		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservations_id = r.id) AS guest_count,
+		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservation_id = r.id) AS guest_count,
 		       r.check_in,
 		       r.check_out,
 		       r.status AS "status.id",
@@ -104,32 +104,32 @@
 		       r.reservation_type,
 		       r.payment_method,
 		       r.payment_confirmation,
-		       (SELECT COUNT(re.reservations_id) FROM reservationemails re WHERE re.reservations_id = r.id AND re.type = 'CREATED' AND re.status = 'SENT') AS emails_sent
+		       (SELECT COUNT(re.reservation_id) FROM reservationemails re WHERE re.reservation_id = r.id AND re.type = 'CREATED' AND re.status = 'SENT') AS emails_sent
 		  FROM reservations r
 		<if test="user_type != 50">
 		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
 		</if>
 		  JOIN users u ON r.creator_user_id = u.id AND u.type = #{user_type}
-		  JOIN users hu ON r.hotelsusers_id = hu.id
-		  LEFT JOIN (SELECT g.reservations_id,
+		  JOIN users hu ON r.hotel_id = hu.id
+		  LEFT JOIN (SELECT g.reservation_id,
   				            g.first_name,
   				            g.middle_name,
   				            g.last_name,
-  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservation_id ORDER BY g.id) AS rownum
 				       FROM guests g
-				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+				      WHERE g.guest_index = 1) g ON r.id = g.reservation_id AND g.rownum = 1,
 		       hotels h,
 		       hotelsdetails hd,
 		       addresses ad,
 		       cities c
-		 WHERE r.hotelsusers_id = h.users_id
-		   AND h.users_id = hd.hotelsusers_id
+		 WHERE r.hotel_id = h.users_id
+		   AND h.users_id = hd.hotel_id
 		   AND hd.addresses_id = ad.id
 		   AND c.id = ad.cities_id
-	 	<if test="reservations_id != null">
-	 	   AND r.id = #{reservations_id}
+	 	<if test="reservation_id != null">
+	 	   AND r.id = #{reservation_id}
 	 	</if>
-		<if test="reservations_id == null">
+		<if test="reservation_id == null">
 	 		<if test="created_from != null">
 	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
 	 		</if>
@@ -158,7 +158,7 @@
 	 		   AND r.touragentsusers_id = #{touragent.id}
 	 		</if>
 	 		<if test="hotel != null">
-	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		   AND r.hotel_id = #{hotel.id}
 	 		</if>
 	 		<if test="city != null">
 	 		   AND ad.cities_id = #{city.id}
@@ -185,26 +185,26 @@
 		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
 		</if>
 		  JOIN users u ON r.creator_user_id = u.id AND u.type = #{user_type}
-		  JOIN users hu ON r.hotelsusers_id = hu.id
-		  LEFT JOIN (SELECT g.reservations_id,
+		  JOIN users hu ON r.hotel_id = hu.id
+		  LEFT JOIN (SELECT g.reservation_id,
   				            g.first_name,
   				            g.middle_name,
   				            g.last_name,
-  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservation_id ORDER BY g.id) AS rownum
 				       FROM guests g
-				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+				      WHERE g.guest_index = 1) g ON r.id = g.reservation_id AND g.rownum = 1,
 		       hotels h,
 		       hotelsdetails hd,
 		       addresses ad,
 		       cities c
-		 WHERE r.hotelsusers_id = h.users_id
-		   AND h.users_id = hd.hotelsusers_id
+		 WHERE r.hotel_id = h.users_id
+		   AND h.users_id = hd.hotel_id
 		   AND hd.addresses_id = ad.id
 		   AND c.id = ad.cities_id
-	 	<if test="reservations_id != null">
-	 	   AND r.id = #{reservations_id}
+	 	<if test="reservation_id != null">
+	 	   AND r.id = #{reservation_id}
 	 	</if>
-		<if test="reservations_id == null">
+		<if test="reservation_id == null">
 	 		<if test="created_from != null">
 	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
 	 		</if>
@@ -233,7 +233,7 @@
 	 		   AND r.touragentsusers_id = #{touragent.id}
 	 		</if>
 	 		<if test="hotel != null">
-	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		   AND r.hotel_id = #{hotel.id}
 	 		</if>
 	 		<if test="city != null">
 	 		   AND ad.cities_id = #{city.id}
@@ -247,14 +247,14 @@
 	<select id="selectReservationsReportListForHotel" parameterType="map" resultType="ReservationDetail">
 		SELECT r.id,
 		       r.create_date,
-		       r.hotelsusers_id,
+		       r.hotel_id,
 		       CASE WHEN u.type = 50 THEN u.id ELSE ta.users_id END AS "tour_agent.users_id",
 		       CASE WHEN u.type = 50 THEN g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') ELSE ta.display_name END AS "tour_agent.name",
-		       (SELECT STRING_AGG(rt.name, ', ') from reservationrooms rr, roomtypes rt where rr.reservations_id = r.id AND rr.roomtypes_id = rt.id) AS room_type,
+		       (SELECT STRING_AGG(rt.name, ', ') from reservationrooms rr, roomtypes rt where rr.reservation_id = r.id AND rr.roomtype_id = rt.id) AS room_type,
 		       COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name AS hotel_name,
 		       hu.name AS hotel_legal_name,
 		       g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') AS guest_name,
-		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservations_id = r.id) AS guest_count,
+		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservation_id = r.id) AS guest_count,
 		       r.check_in,
 		       r.check_out,
 		       r.status AS "status.id",
@@ -264,27 +264,27 @@
 		  FROM reservations r
 		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
 		  JOIN users u ON r.creator_user_id = u.id
-		  JOIN users hu ON r.hotelsusers_id = hu.id
-		  LEFT JOIN (SELECT g.reservations_id,
+		  JOIN users hu ON r.hotel_id = hu.id
+		  LEFT JOIN (SELECT g.reservation_id,
   				            g.first_name,
   				            g.middle_name,
   				            g.last_name,
-  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservation_id ORDER BY g.id) AS rownum
 				       FROM guests g
-				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+				      WHERE g.guest_index = 1) g ON r.id = g.reservation_id AND g.rownum = 1,
 		       hotels h,
 		       hotelsdetails hd,
 		       addresses ad,
 		       cities c
-		 WHERE r.hotelsusers_id = h.users_id
-		   AND h.users_id = hd.hotelsusers_id
+		 WHERE r.hotel_id = h.users_id
+		   AND h.users_id = hd.hotel_id
 		   AND hd.addresses_id = ad.id
 		   AND c.id = ad.cities_id
-		   AND r.hotelsusers_id = #{hotel.id}
-	 	<if test="reservations_id != null">
-	 	   AND r.id = #{reservations_id}
+		   AND r.hotel_id = #{hotel.id}
+	 	<if test="reservation_id != null">
+	 	   AND r.id = #{reservation_id}
 	 	</if>
-		<if test="reservations_id == null">
+		<if test="reservation_id == null">
 	 		<if test="created_from != null">
 	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
 	 		</if>
@@ -323,27 +323,27 @@
 		  FROM reservations r
 		  LEFT JOIN touragents ta ON r.touragentsusers_id = ta.users_id
 		  JOIN users u ON r.creator_user_id = u.id
-		  JOIN users hu ON r.hotelsusers_id = hu.id
-		  LEFT JOIN (SELECT g.reservations_id,
+		  JOIN users hu ON r.hotel_id = hu.id
+		  LEFT JOIN (SELECT g.reservation_id,
   				            g.first_name,
   				            g.middle_name,
   				            g.last_name,
-  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservation_id ORDER BY g.id) AS rownum
 				       FROM guests g
-				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+				      WHERE g.guest_index = 1) g ON r.id = g.reservation_id AND g.rownum = 1,
 		       hotels h,
 		       hotelsdetails hd,
 		       addresses ad,
 		       cities c
-		 WHERE r.hotelsusers_id = h.users_id
-		   AND h.users_id = hd.hotelsusers_id
+		 WHERE r.hotel_id = h.users_id
+		   AND h.users_id = hd.hotel_id
 		   AND hd.addresses_id = ad.id
 		   AND c.id = ad.cities_id
-	 	   AND r.hotelsusers_id = #{hotel.id}
-	 	<if test="reservations_id != null">
-	 	   AND r.id = #{reservations_id}
+	 	   AND r.hotel_id = #{hotel.id}
+	 	<if test="reservation_id != null">
+	 	   AND r.id = #{reservation_id}
 	 	</if>
-		<if test="reservations_id == null">
+		<if test="reservation_id == null">
 	 		<if test="created_from != null">
 	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
 	 		</if>
@@ -374,36 +374,36 @@
 	<select id="selectReservationsReportListForTouragent" parameterType="map" resultType="ReservationDetail">
 		SELECT r.id,
 		       r.create_date,
-		       r.hotelsusers_id,
+		       r.hotel_id,
 		       COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name AS hotel_name,
 		       g.first_name || ' ' || g.last_name || COALESCE(g.middle_name, '') AS guest_name,
-		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservations_id = r.id) AS guest_count,
+		       (SELECT COUNT(g1.*) FROM guests g1 WHERE g1.reservation_id = r.id) AS guest_count,
 		       r.check_in,
 		       r.check_out,
 		       r.status AS "status.id",
 		       r.payment_owner,
 		       r.total
 		  FROM reservations r
-		  LEFT JOIN (SELECT g.reservations_id,
+		  LEFT JOIN (SELECT g.reservation_id,
   				            g.first_name,
   				            g.middle_name,
   				            g.last_name,
-  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservation_id ORDER BY g.id) AS rownum
 				       FROM guests g
-				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+				      WHERE g.guest_index = 1) g ON r.id = g.reservation_id AND g.rownum = 1,
 		       hotels h,
 		       hotelsdetails hd,
 		       addresses ad,
 		       cities c
-		 WHERE r.hotelsusers_id = h.users_id
-		   AND h.users_id = hd.hotelsusers_id
+		 WHERE r.hotel_id = h.users_id
+		   AND h.users_id = hd.hotel_id
 		   AND hd.addresses_id = ad.id
 		   AND c.id = ad.cities_id
 		   AND r.creator_user_id = #{touragent.id}
-	 	<if test="reservations_id != null">
-	 	   AND r.id = #{reservations_id}
+	 	<if test="reservation_id != null">
+	 	   AND r.id = #{reservation_id}
 	 	</if>
-		<if test="reservations_id == null">
+		<if test="reservation_id == null">
 	 		<if test="created_from != null">
 	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
 	 		</if>
@@ -429,7 +429,7 @@
 		 	   AND r.status = #{reservation_status.id}
 	 		</if>
 	 		<if test="hotel != null">
-	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		   AND r.hotel_id = #{hotel.id}
 	 		</if>
 	 		<if test="city != null">
 	 		   AND ad.cities_id = #{city.id}
@@ -446,26 +446,26 @@
 	<select id="selectReservationsReportCountForTouragent" parameterType="map" resultType="long">
 		SELECT COUNT(*)
 		  FROM reservations r
-		  LEFT JOIN (SELECT g.reservations_id,
+		  LEFT JOIN (SELECT g.reservation_id,
   				            g.first_name,
   				            g.middle_name,
   				            g.last_name,
-  				            ROW_NUMBER() OVER (PARTITION BY g.reservations_id ORDER BY g.id) AS rownum
+  				            ROW_NUMBER() OVER (PARTITION BY g.reservation_id ORDER BY g.id) AS rownum
 				       FROM guests g
-				      WHERE g.guest_index = 1) g ON r.id = g.reservations_id AND g.rownum = 1,
+				      WHERE g.guest_index = 1) g ON r.id = g.reservation_id AND g.rownum = 1,
 		       hotels h,
 		       hotelsdetails hd,
 		       addresses ad,
 		       cities c
-		 WHERE r.hotelsusers_id = h.users_id
-		   AND h.users_id = hd.hotelsusers_id
+		 WHERE r.hotel_id = h.users_id
+		   AND h.users_id = hd.hotel_id
 		   AND hd.addresses_id = ad.id
 		   AND c.id = ad.cities_id
 		   AND r.creator_user_id = #{touragent.id}
-	 	<if test="reservations_id != null">
-	 	   AND r.id = #{reservations_id}
+	 	<if test="reservation_id != null">
+	 	   AND r.id = #{reservation_id}
 	 	</if>
-		<if test="reservations_id == null">
+		<if test="reservation_id == null">
 	 		<if test="created_from != null">
 	 		   AND r.create_date::date <![CDATA[>=]]> #{created_from}::date 
 	 		</if>
@@ -491,7 +491,7 @@
 		 	   AND r.status = #{reservation_status.id}
 	 		</if>
 	 		<if test="hotel != null">
-	 		   AND r.hotelsusers_id = #{hotel.id}
+	 		   AND r.hotel_id = #{hotel.id}
 	 		</if>
 	 		<if test="city != null">
 	 		   AND ad.cities_id = #{city.id}
@@ -526,7 +526,7 @@
 			   hd.fax2 AS "hotelsDetails.fax2"
 		  FROM users u, hotels h, hotelsdetails hd, addresses ad, cities c, contracts ct
 		 WHERE u.id = h.users_id
-		   AND h.users_id = hd.hotelsusers_id
+		   AND h.users_id = hd.hotel_id
 		   AND hd.addresses_id = ad.id
 		   AND ad.cities_id = c.id
 		   AND u.id = ct.users_id

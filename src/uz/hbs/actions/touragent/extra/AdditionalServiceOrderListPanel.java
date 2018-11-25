@@ -75,7 +75,7 @@ public class AdditionalServiceOrderListPanel extends MyBreadCrumbPanel {
 		ArrayList<IColumn<AdditionalServiceOrder, String>> columns = new ArrayList<IColumn<AdditionalServiceOrder, String>>();
 
 		columns.add(new MyTextFilteredPropertyColumn<AdditionalServiceOrder, AdditionalServiceOrder, String>(new StringResourceModel("id", null), "id"));
-		columns.add(new MyTextFilteredPropertyColumn<AdditionalServiceOrder, AdditionalServiceOrder, String>(new StringResourceModel("touragents.reservation.id", null), "reservations_id", "reservations_id"));
+		columns.add(new MyTextFilteredPropertyColumn<AdditionalServiceOrder, AdditionalServiceOrder, String>(new StringResourceModel("touragents.reservation.id", null), "reservation_id", "reservation_id"));
 		columns.add(new PropertyColumn<AdditionalServiceOrder, String>(new StringResourceModel("hotels.reservation.details.create_date", null), "create_date", "create_date"){
 			private static final long serialVersionUID = 1L;
 

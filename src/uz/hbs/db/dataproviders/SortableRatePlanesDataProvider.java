@@ -37,7 +37,7 @@ public class SortableRatePlanesDataProvider extends SortableDataProvider<RatePla
 			Map<String, Serializable> param = new HashMap<String, Serializable>();
 			param.put("name", filter.getName());
 			param.put("description", filter.getDescription());
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			param.put("offset", offset);
 			param.put("limit", limit);
 			param.put("sortField", sp.getProperty());
@@ -70,7 +70,7 @@ public class SortableRatePlanesDataProvider extends SortableDataProvider<RatePla
 			Map<String, Serializable> param = new HashMap<String, Serializable>();
 			param.put("name", filter.getName());
 			param.put("description", filter.getDescription());
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			Long count = (Long) new MyBatisHelper().selectOne("selectRatePlaneListCount", param);
 			return count;
 		} catch (Exception e) {

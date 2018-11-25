@@ -12,10 +12,10 @@ public class RoomFilter implements IClusterable {
 	private OnSaleState onsale_state;
 	private RoomState room_state;
 	private String room_number;
-	private long hotelsusers_id;
+	private long hotel_id;
 	
-	public RoomFilter(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public RoomFilter(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public CleanState getClean_state() {
@@ -51,10 +51,10 @@ public class RoomFilter implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 }

@@ -5,7 +5,7 @@
     <select id="selectIssueBillDescription" parameterType="long" resultType="IdAndName">
 	    SELECT f.id, f.name
 	      FROM facilities f JOIN hotelsfacilities hf ON f.id = hf.facilities_id
-	     WHERE hf.hotelsusers_id = #{hotelsusers_id}
+	     WHERE hf.hotel_id = #{hotel_id}
 	       AND hf.paid = true 
 	</select>
 	
@@ -13,21 +13,21 @@
         <selectKey order="BEFORE" resultType="long" keyProperty="id">
             SELECT NEXTVAL('reservationbills_id_seq')
         </selectKey>
-        INSERT INTO reservationbills(id, reservations_id, hotelsusers_id, bill_date, credit, debit, description, 
-                                     note, create_date, manual, initiator_user_id, reservationrooms_id)
-        VALUES (#{id}, #{reservations_id}, #{hotelsusers_id}, #{bill_date}::date, COALESCE(#{credit}, 0), 
+        INSERT INTO reservationbills(id, reservation_id, hotel_id, bill_date, credit, debit, description, 
+                                     note, create_date, manual, initiator_user_id, reservationroom_id)
+        VALUES (#{id}, #{reservation_id}, #{hotel_id}, #{bill_date}::date, COALESCE(#{credit}, 0), 
                 COALESCE(#{debit}, 0), #{description}, #{note}, now(), #{manual}, #{initiator_user_id}, #{reserveroom.id})
     </insert>
     
     <select id="selectIssueBills" parameterType="long" resultType="Bill">
-        SELECT id, reservations_id, 
-               hotelsusers_id AS hotelsusers_id, 
+        SELECT id, reservation_id, 
+               hotel_id AS hotel_id, 
                bill_date, credit, debit, description,
                credit as charge, manual,
                note, create_date, initiator_user_id,
-               reservationrooms_id AS "reserveroom.id"
+               reservationroom_id AS "reserveroom.id"
           FROM reservationbills
-         WHERE reservations_id = #{reservations_id}
+         WHERE reservation_id = #{reservation_id}
          ORDER BY id 
     </select>
     
@@ -38,16 +38,16 @@
     <select id="selectIssueBillTotal" parameterType="long" resultType="Bill">
         SELECT SUM(COALESCE(credit,0)) AS credit, SUM(COALESCE(debit,0)) AS debit
           FROM reservationbills
-         WHERE reservations_id = #{reservations_id} 
+         WHERE reservation_id = #{reservation_id} 
     </select>
     
     <select id="selectIssueBillReservationRuleById" parameterType="long" resultType="ReservationRuleType">
         SELECT COALESCE(service_charge, 0) AS service_charge, 
                COALESCE(city_tax, 0) AS city_tax 	
           FROM hotelsreservationrules hrr, reservations r
-         WHERE r.id = #{reservations_id}
+         WHERE r.id = #{reservation_id}
            AND hrr.is_group = r.is_group
-           AND hrr.hotelsusers_id = r.hotelsusers_id 
+           AND hrr.hotel_id = r.hotel_id 
     </select>
     
     <select id="selectIssueBillReservationList" resultType="ReservationDetail">
@@ -57,15 +57,15 @@
     </select>
     
     <select id="selectIssueBillByReservation" parameterType="ReservationDetail" resultType="Bill">
-        SELECT id, reservations_id, 
-               hotelsusers_id AS hotelsusers_id, 
+        SELECT id, reservation_id, 
+               hotel_id AS hotel_id, 
                bill_date, credit, debit, description,
                credit as charge, 
                note, create_date, initiator_user_id,
-               reservationrooms_id AS "reserveroom.id"
+               reservationroom_id AS "reserveroom.id"
           FROM reservationbills
-         WHERE reservations_id = #{id}
-           AND hotelsusers_id = #{hotelsusers_id}
+         WHERE reservation_id = #{id}
+           AND hotel_id = #{hotel_id}
          ORDER BY id 
     </select>
     
@@ -104,7 +104,7 @@
 	<select id="selectIssueBillMealOption" parameterType="ReservationDetail" resultType="bigdecimal">
 	    SELECT SUM(COALESCE(mo.cost_per_person_per_night,0)) AS cost
 	      FROM mealoptions mo
-	     WHERE hotelsusers_id = #{hotelsusers_id}
+	     WHERE hotel_id = #{hotel_id}
 	     <if test="meal_options == 0">
 		      AND meal_type = #{meal_options} 
 	     </if>
@@ -124,14 +124,14 @@
 	<select id="selectIssueBillReservationRule" parameterType="ReservationDetail" resultType="ReservationRuleType">
 	    SELECT minimum_free_age, COALESCE(extra_bed_price_value, 0) AS extra_bed_price_value
 	      FROM hotelsreservationrules 
-	     WHERE hotelsusers_id = #{hotelsusers_id}
+	     WHERE hotel_id = #{hotel_id}
 	       AND is_group = #{is_group} 
 	</select>
 	
 	<select id="selectIssueBillChildrenAgeList" parameterType="ReservationDetail" resultType="ChildAge">
 	    SELECT child_index, date_part('year', age(now()::date, date_of_birth)) AS age 
 	      FROM children
-	     WHERE reservations_id = #{id}
+	     WHERE reservation_id = #{id}
 	</select>
 	
 	<select id="selectIssueBillPrintReservationDetail" parameterType="long" resultType="ReservationDetail">
@@ -155,9 +155,9 @@
 	           LEFT JOIN countries c ON a.countries_id = c.id
 	           LEFT JOIN cities ct ON a.cities_id = ct.id
 	     WHERE rr.id = #{id}
-	       AND h.users_id = rr.hotelsusers_id
+	       AND h.users_id = rr.hotel_id
 	       AND u.id = h.users_id
-	       AND hd.hotelsusers_id = u.id
+	       AND hd.hotel_id = u.id
 	       AND a.id = hd.addresses_id
 	</select>
 	
@@ -175,7 +175,7 @@
 	           LEFT JOIN countries c ON a.countries_id = c.id
 	           LEFT JOIN cities ct ON a.cities_id = ct.id
 	     WHERE rr.id = #{id}
-	       AND g.reservations_id = rr.id
+	       AND g.reservation_id = rr.id
 	       AND g.guest_index = 1
 	       AND a.id = g.addresses_id
 	</select>
@@ -186,13 +186,13 @@
                h.create_date, h.update_date, h.initiator_user_id
 	      FROM reservations r, hotels h
 	     WHERE r.id = #{value}
-	       AND h.users_id = r.hotelsusers_id 
+	       AND h.users_id = r.hotel_id 
 	</select>
 	
 	<select id="selectReserveRoomBill" parameterType="long" resultType="ReservationRoom">
 	    SELECT rr.id, r.room_number
 	      FROM reservationrooms rr, rooms r
 	     WHERE rr.rooms_id = r.id
-	       AND rr.reservations_id = #{id} 
+	       AND rr.reservation_id = #{id} 
 	</select>
 </mapper>    

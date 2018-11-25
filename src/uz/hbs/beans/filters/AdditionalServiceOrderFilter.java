@@ -6,7 +6,7 @@ public class AdditionalServiceOrderFilter implements IClusterable {
 	private static final long serialVersionUID = 1L;
 	private Long creator_user_id;
 	private Long id;
-	private Long reservations_id;
+	private Long reservation_id;
 	private Long touragent_id;
 	
 	public AdditionalServiceOrderFilter(long creator_user_id) {
@@ -34,11 +34,11 @@ public class AdditionalServiceOrderFilter implements IClusterable {
 	}
 
 	public Long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(Long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 
 	public Long getTouragent_id() {

@@ -48,11 +48,11 @@ public class ListRatePlanePanel extends MyBreadCrumbPanel {
 		super(id, breadCrumbModel);
 		this.hotel = hotel;
 
-		long hotelsusers_id;
+		long hotel_id;
 		if (hotel == null) {
-			hotelsusers_id = getMySession().getUser().getHotelsusers_id();
+			hotel_id = getMySession().getUser().getHotelsusers_id();
 		} else {
-			hotelsusers_id = hotel.getUsers_id();
+			hotel_id = hotel.getUsers_id();
 		}
 
 		add(feedback = new MyFeedbackPanel("feedback"));
@@ -68,7 +68,7 @@ public class ListRatePlanePanel extends MyBreadCrumbPanel {
 
 					@Override
 					public BreadCrumbPanel create(String componentId, IBreadCrumbModel model) {
-						return new RatePlanPanel(componentId, model, RatePlaneUtil.createRate(hotelsusers_id));
+						return new RatePlanPanel(componentId, model, RatePlaneUtil.createRate(hotel_id));
 					}
 				});
 			}
@@ -165,7 +165,7 @@ public class ListRatePlanePanel extends MyBreadCrumbPanel {
 									sql.delete("deleteRatePlaneSeasonByPlane", model.getObject().getId());
 									sql.delete("deleteRatePlane", model.getObject().getId());
 									sql.commit();
-									logger.info("Rate plan '" + model.getObject().getName() + "' deleted. HotelId=" + hotelsusers_id
+									logger.info("Rate plan '" + model.getObject().getName() + "' deleted. HotelId=" + hotel_id
 											+ ", InitiatorUserId=" + ((MySession) getSession()).getUser().getId());
 									feedback.success(getString("hotels.rate.plane.delete.success"));
 								} catch (Exception e) {
@@ -202,7 +202,7 @@ public class ListRatePlanePanel extends MyBreadCrumbPanel {
 				});
 			}
 		});
-		RatePlanesFilter filter = new RatePlanesFilter(hotelsusers_id);
+		RatePlanesFilter filter = new RatePlanesFilter(hotel_id);
 
 		SortableRatePlanesDataProvider provider = new SortableRatePlanesDataProvider();
 		provider.setFilterState(filter);

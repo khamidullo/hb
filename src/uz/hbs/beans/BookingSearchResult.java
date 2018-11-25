@@ -10,7 +10,7 @@ import uz.hbs.beans.Booking.RoomsCount;
 public class BookingSearchResult implements IClusterable {
 	private static final long serialVersionUID = 1L;
 
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	private String display_name;
 	private Integer stars;
 	private String region_name;
@@ -20,7 +20,7 @@ public class BookingSearchResult implements IClusterable {
 	private Short holding_capacity;
 	private Boolean additional_bed;
 	private String roomtypes_name;
-	private Integer roomtypes_id;
+	private Integer roomtype_id;
 	private Byte meal_type;
 	private Boolean meal_option_included_to_room_rate;
 	private Float room_area;
@@ -50,9 +50,9 @@ public class BookingSearchResult implements IClusterable {
 
 	@Override
 	public String toString() {
-		return "{hotelsusers_id=" + hotelsusers_id + ", display_name=" + display_name + ", stars=" + stars + ", region_name=" + region_name
+		return "{hotel_id=" + hotel_id + ", display_name=" + display_name + ", stars=" + stars + ", region_name=" + region_name
 				+ ", longitude=" + longitude + ", latitude=" + latitude + ", holding_capacity=" + holding_capacity + ", additional_bed="
-				+ additional_bed + ", roomtypes_name=" + roomtypes_name + ", roomtype_id=" + roomtypes_id + ", meal_type=" + meal_type
+				+ additional_bed + ", roomtypes_name=" + roomtypes_name + ", roomtype_id=" + roomtype_id + ", meal_type=" + meal_type
 				+ ", meal_option_included_to_room_rate=" + meal_option_included_to_room_rate + ", room_area=" + room_area + ", rooms_count="
 				+ rooms_count + ", room_rate=" + room_rate + ", room_equipments=" + (room_equipments == null ? 0 : room_equipments.size())
 				+ ", reserve type=" + is_group
@@ -60,11 +60,11 @@ public class BookingSearchResult implements IClusterable {
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public String getDisplay_name() {
@@ -180,11 +180,11 @@ public class BookingSearchResult implements IClusterable {
 	}
 
 	public Integer getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(Integer roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public Double getRoom_rate() {

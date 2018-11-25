@@ -13,7 +13,7 @@ public class RateDetails implements IClusterable {
 	private Short season_number;
 	private BigDecimal rate;// = new BigDecimal("1");
 	private BigDecimal rate_uz;// = new BigDecimal("1");
-	private Integer roomtypes_id;
+	private Integer roomtype_id;
 	private short person_number;
 	private boolean is_group;
 	private Integer rateplane_id;
@@ -25,9 +25,9 @@ public class RateDetails implements IClusterable {
 		this.person_number = person_number;
 	}
 	
-	public RateDetails(Short season_number, Integer roomtypes_id, short person_number, boolean is_group) {
+	public RateDetails(Short season_number, Integer roomtype_id, short person_number, boolean is_group) {
 		this.season_number = season_number;
-		this.roomtypes_id = roomtypes_id;
+		this.roomtype_id = roomtype_id;
 		this.person_number = person_number;
 		this.is_group = is_group;
 	}
@@ -41,11 +41,11 @@ public class RateDetails implements IClusterable {
 	}
 
 	public Integer getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(Integer roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public Short getSeason_number() {

@@ -386,7 +386,7 @@ public class TAIndividualReservationPanel extends MyBreadCrumbPanel {
 					boolean extra_bed = false;
 					_log.debug("Extra bed: " + item.getModelObject().isExtra_bed_needed());
 					final HashMap<String, Object> param = new HashMap<String, Object>();
-					param.put("hotelsusers_id", reserve.getHotelsusers_id());
+					param.put("hotel_id", reserve.getHotelsusers_id());
 
 					item.getModelObject().setIndex((short) (item.getIndex() + 1));
 
@@ -494,7 +494,7 @@ public class TAIndividualReservationPanel extends MyBreadCrumbPanel {
 					});
 
 					if (item.getModelObject().getGuestlist().isEmpty()) {
-						param.put("roomtypes_id", item.getModelObject().getRoomtype().getId());
+						param.put("roomtype_id", item.getModelObject().getRoomtype().getId());
 						short holding_capacity = new MyBatisHelper().selectOne("selectHoldingCapacityRoomType",
 								item.getModelObject().getRoomtype().getId());
 						_log.debug("Holding capacity: " + item.getModelObject().getHolding_capacity());
@@ -588,7 +588,7 @@ public class TAIndividualReservationPanel extends MyBreadCrumbPanel {
 						@Override
 						protected void onUpdate(AjaxRequestTarget target) {
 							try {
-								param.put("roomtypes_id", item.getModelObject().getRoomtype().getId());
+								param.put("roomtype_id", item.getModelObject().getRoomtype().getId());
 								param.put("check_in", reserve.getCheck_in());
 								param.put("check_out", reserve.getCheck_out());
 								param.put("reserve_id", reserve.getId());
@@ -828,8 +828,8 @@ public class TAIndividualReservationPanel extends MyBreadCrumbPanel {
 							ValueMap model = (ValueMap) form.getDefaultModelObject();
 							RoomType roomtype = (RoomType) model.get("roomtype");
 							HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-							param.put("roomtypes_id", roomtype.getId());
-							param.put("hotelsusers_id", reserve.getHotelsusers_id());
+							param.put("roomtype_id", roomtype.getId());
+							param.put("hotel_id", reserve.getHotelsusers_id());
 							short holding_capacity = new MyBatisHelper().selectOne("selectHoldingCapacityRoomType", roomtype.getId());
 							List<Guest> guestlist = getGuestDetail(holding_capacity);
 							ReservationRoom reserveroom = new ReservationRoom();
@@ -999,7 +999,7 @@ public class TAIndividualReservationPanel extends MyBreadCrumbPanel {
 							param.put("check_out", reserve.getCheck_out());
 							param.put("reserve_id", reserve.getId());
 							for (ReservationRoom reserveroom : reserve.getReserverooms()) {
-								param.put("roomtypes_id", reserveroom.getRoomtype().getId());
+								param.put("roomtype_id", reserveroom.getRoomtype().getId());
 								short count = new MyBatisHelper().selectOne("selectTAReserveAvailableRoomsByRoomType", param);
 								if (count != 0) {
 									feedback.error(new StringResourceModel("hotels.reservation.room.vacant.not.found", null,
@@ -1300,7 +1300,7 @@ public class TAIndividualReservationPanel extends MyBreadCrumbPanel {
 			feedback.setOutputMarkupId(true);
 
 			final HashMap<String, Object> param = new HashMap<String, Object>();
-			param.put("hotelsusers_id", reserve.getHotelsusers_id()); //selectTAReserveAvailableRoomsByRoomType
+			param.put("hotel_id", reserve.getHotelsusers_id()); //selectTAReserveAvailableRoomsByRoomType
 
 			final Form<ValueMap> form;
 			add(form = new Form<ValueMap>("form", new CompoundPropertyModel<ValueMap>(new ValueMap())));
@@ -1359,7 +1359,7 @@ public class TAIndividualReservationPanel extends MyBreadCrumbPanel {
 						RoomType roomtype = (RoomType) model.get("roomtype");
 						if (roomtype.getId() != null) {
 							HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-							param.put("roomtypes_id", roomtype.getId());
+							param.put("roomtype_id", roomtype.getId());
 							param.put("check_in", reserve.getCheck_in());
 							param.put("check_out", reserve.getCheck_out());
 							param.put("reserve_id", reserve.getId());

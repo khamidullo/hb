@@ -195,23 +195,23 @@
 	<select id="selectHotelsEquipments" parameterType="long" resultType="Equipment">
 	    SELECT e.id, 
 			   e.name, 
-			   he.hotelsusers_id
+			   he.hotel_id
 	      FROM equipments e, hotelsequipments he
 	     WHERE e.id = he.equipments_id
-	       AND he.hotelsusers_id = #{hotelsusers_id} 
+	       AND he.hotel_id = #{hotel_id} 
 	</select>
 	
 	<insert id="insertHotelsEquipments" parameterType="Equipment">
-	    INSERT INTO hotelsequipments (equipments_id, hotelsusers_id) 
-	    VALUES (#{id}, #{hotelsusers_id})
+	    INSERT INTO hotelsequipments (equipments_id, hotel_id) 
+	    VALUES (#{id}, #{hotel_id})
 	</insert>
 	
 	<delete id="deleteHotelsEquipments" parameterType="long">
-	    DELETE FROM hotelsequipments WHERE hotelsusers_id = #{hotelsusers_id}
+	    DELETE FROM hotelsequipments WHERE hotel_id = #{hotel_id}
 	</delete>
 	
 	<insert id="insertHotelsB2CPrices" parameterType="Hotel">
-		INSERT INTO hotelsb2cprices (hotelsusers_id, individual_price, group_price, is_enabled)
+		INSERT INTO hotelsb2cprices (hotel_id, individual_price, group_price, is_enabled)
 		VALUES (#{users_id}, #{b2c_individual_price}, #{b2c_group_price}, #{b2c_is_enabled})
 	</insert>
 
@@ -228,6 +228,6 @@
 		       is_enabled = #{b2c_is_enabled},
 		 	</if>	
 		</set>
-		 WHERE hotelsusers_id = #{users_id}
+		 WHERE hotel_id = #{users_id}
 	</update>
 </mapper>

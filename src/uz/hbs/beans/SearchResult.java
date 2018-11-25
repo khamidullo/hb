@@ -4,7 +4,7 @@ import org.apache.wicket.util.io.IClusterable;
 
 public class SearchResult implements IClusterable {
 	private static final long serialVersionUID = 1L;
-	private long hotelsusers_id;
+	private long hotel_id;
 	private RoomType roomtype;
 	private Short hotel_star;
 	private String holding_capacity_text;
@@ -14,11 +14,11 @@ public class SearchResult implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public RoomType getRoomtype() {

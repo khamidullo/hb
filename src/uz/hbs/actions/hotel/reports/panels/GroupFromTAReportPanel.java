@@ -46,7 +46,7 @@ public class GroupFromTAReportPanel extends ReservationReportPanel {
 	public GroupFromTAReportPanel(String id, IBreadCrumbModel breadCrumbModel, final ValueMap model) {
 		super(id, breadCrumbModel, model);
 		
-		model.put("hotelsusers_id", ((MySession) getSession()).getUser().getHotelsusers_id());
+		model.put("hotel_id", ((MySession) getSession()).getUser().getHotelsusers_id());
 		final List<HotelReservationReport> list = new MyBatisHelper().selectList("selectGroupByTAReport", model); 				
 		
 		IModel<List<HotelReservationReport>> reportListModel = new LoadableDetachableModel<List<HotelReservationReport>>() {

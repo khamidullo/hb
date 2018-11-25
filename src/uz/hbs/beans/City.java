@@ -5,8 +5,8 @@ import org.apache.wicket.util.io.IClusterable;
 public class City implements IClusterable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private Integer countries_id;
-	private Integer regions_id;
+	private Integer country_id;
+	private Integer region_id;
 	private String name;
 	private String name_uz;
 	private String name_en;
@@ -29,22 +29,6 @@ public class City implements IClusterable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getCountries_id() {
-		return countries_id;
-	}
-
-	public void setCountries_id(Integer countries_id) {
-		this.countries_id = countries_id;
-	}
-
-	public Integer getRegions_id() {
-		return regions_id;
-	}
-
-	public void setRegions_id(Integer regions_id) {
-		this.regions_id = regions_id;
 	}
 
 	public String getName() {
@@ -102,4 +86,22 @@ public class City implements IClusterable {
 	public void setRegion(Region region) {
 		this.region = region;
 	}
+
+	public Integer getCountry_id() {
+		return country_id;
+	}
+
+	public void setCountry_id(Integer country_id) {
+		this.country_id = country_id;
+	}
+
+	public Integer getRegion_id() {
+		return region_id;
+	}
+
+	public void setRegion_id(Integer region_id) {
+		this.region_id = region_id;
+	}
+	
+	
 }

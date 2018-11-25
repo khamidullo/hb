@@ -2,7 +2,7 @@ package uz.hbs.beans;
 
 public class Service extends IdAndName {
 	private static final long serialVersionUID = 1L;
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	
 	public Service() {
 		super();
@@ -20,10 +20,10 @@ public class Service extends IdAndName {
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 }

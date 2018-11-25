@@ -55,7 +55,7 @@ public class HotelInfoPanel extends Panel {
 					protected String load() {
 						HashMap<String, Serializable> param = new HashMap<String, Serializable>();
 						param.put("date", hotel.getOperday());
-						param.put("roomtypes_id", roomtype.getId());
+						param.put("roomtype_id", roomtype.getId());
 						param.put("type", 1);//-1
 						return new MyBatisHelper().selectOne("selectCountAvailableRoomsForReport", param);
 					}

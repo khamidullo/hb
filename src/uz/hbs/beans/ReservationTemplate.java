@@ -26,7 +26,7 @@ public class ReservationTemplate implements IClusterable {
 	private String guest_nationality;
 	private Integer adults;
 	private Integer children;
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	private Integer meal_options;
 	private String ta_email;
 	private String hotel_email;
@@ -182,11 +182,11 @@ public class ReservationTemplate implements IClusterable {
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public Integer getMeal_options() {

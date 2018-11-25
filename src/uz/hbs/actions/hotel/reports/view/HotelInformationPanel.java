@@ -78,10 +78,10 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 		roomIndex = 1;
 	}
 
-	public HotelInformationPanel(String id, IBreadCrumbModel breadCrumbModel, final long hotelsusers_id) {
+	public HotelInformationPanel(String id, IBreadCrumbModel breadCrumbModel, final long hotel_id) {
 		super(id, breadCrumbModel);
 
-		final Hotel hotel = new MyBatisHelper().selectOne("selectSearchResultView", hotelsusers_id);
+		final Hotel hotel = new MyBatisHelper().selectOne("selectSearchResultView", hotel_id);
 
 		final Date check_in = new MyBatisHelper().selectOne("selectSearchResultViewCheckIn", hotel.getUsers_id());
 		final Date check_out = new MyBatisHelper().selectOne("selectSearchResultViewCheckOut", hotel.getUsers_id());
@@ -120,7 +120,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 
 		/******* BEGIN Image Slider *******/
 		final Map<String, Object> param = new HashMap<String, Object>();
-		param.put("hotelsusers_id", hotel.getUsers_id());
+		param.put("hotel_id", hotel.getUsers_id());
 		// params.put("limit", 1);
 		List<KeyAndValue> imgLinkList = new MyBatisHelper().selectList("selectHotelUploadedFiles", param);
 
@@ -152,7 +152,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 		param.put("check_out", check_out);
 		param.put("resident", false);
 		param.put("reserve_is_group", false);
-		param.put("hotelsusers_id", hotel.getUsers_id());
+		param.put("hotel_id", hotel.getUsers_id());
 
 		logger.debug("SearchParams=" + param);
 
@@ -233,7 +233,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 						roomTypeLink.add(new Label("roomType", model.getRoomtypes_name()));
 
 						Map<String, Serializable> params = new HashMap<String, Serializable>();
-						params.put("roomtypes_id", model.getRoomtypes_id());
+						params.put("roomtype_id", model.getRoomtypes_id());
 						params.put("limit", 1);
 						KeyAndValue roomTypeImage = new MyBatisHelper().selectOne("selectRoomTypeImages", params);
 
@@ -304,7 +304,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 						param.put("resident", false);
 						param.put("internal", false);
 						param.put("is_group", false);
-						param.put("hotelsusers_id", hotel.getUsers_id());
+						param.put("hotel_id", hotel.getUsers_id());
 
 						ReservationRuleType rule = new MyBatisHelper().selectOne("selectReservationRuleByHotel", param);
 
@@ -313,7 +313,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 						Double first_rate = 0d;
 
 						param.put("check_date", check_in);
-						param.put("roomtypes_id", roomtype.getId());
+						param.put("roomtype_id", roomtype.getId());
 						param.put("holding_capacity", model.getGuests());
 						first_rate = CommonUtil.nvl((Double) new MyBatisHelper().selectOne("selectRateSaleReserve", param));
 
@@ -323,7 +323,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 						Double last_rate = 0d;
 
 						param.put("check_date", check_out);
-						param.put("roomtypes_id", roomtype.getId());
+						param.put("roomtype_id", roomtype.getId());
 						param.put("holding_capacity", model.getGuests());
 						last_rate = CommonUtil.nvl((Double) new MyBatisHelper().selectOne("selectRateSaleReserve", param));
 
@@ -412,7 +412,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 			@Override
 			protected List<ReservationCancellationPolicy> load() {
 				Map<String, Serializable> params = new HashMap<String, Serializable>();
-				params.put("hotelsusers_id", hotel.getUsers_id());
+				params.put("hotel_id", hotel.getUsers_id());
 				params.put("is_group", false);
 				return new MyBatisHelper().selectList("selectReservationCancellationPolicyByHotelId", params);
 			}
@@ -455,7 +455,7 @@ public class HotelInformationPanel extends MyBreadCrumbPanel {
 			@Override
 			protected ReservationRuleType load() {
 				Map<String, Serializable> params = new HashMap<String, Serializable>();
-				params.put("hotelsusers_id", hotel.getUsers_id());
+				params.put("hotel_id", hotel.getUsers_id());
 				params.put("is_group", false);
 				return new MyBatisHelper().selectOne("selectReservationRulesByHotelsId", params);
 			}

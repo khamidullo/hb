@@ -126,7 +126,7 @@
 			   t.phone_number, 
 			   t.destination
           FROM additionalservicedetails t, additionalserviceorders o
-         WHERE o.reservations_id = #{reservations_id}
+         WHERE o.reservation_id = #{reservation_id}
            AND t.additionalserviceorders_id = o.id 
            AND t.service_type = #{service_type}        
     </select>
@@ -288,7 +288,7 @@
 	            i.initiator_user_id
 	       FROM insurances i, additionalserviceorders aso
 	      WHERE i.additionalserviceorders_id = aso.id
-	        AND aso.reservations_id = #{reservations_id}
+	        AND aso.reservation_id = #{reservation_id}
 	      ORDER BY id    
     </select>
     
@@ -387,8 +387,8 @@
         <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="long">
             SELECT NEXTVAL('additionalserviceorders_id_seq')
         </selectKey>
-        INSERT INTO additionalserviceorders(id, creator_user_id, create_date, update_date, initiator_user_id, arrival_date, departure_date, reservations_id, total)
-        VALUES (#{id}, #{creator_user_id}, now(), now(), #{initiator_user_id}, #{arrival_date}, #{departure_date}, #{reservations_id}, #{total})
+        INSERT INTO additionalserviceorders(id, creator_user_id, create_date, update_date, initiator_user_id, arrival_date, departure_date, reservation_id, total)
+        VALUES (#{id}, #{creator_user_id}, now(), now(), #{initiator_user_id}, #{arrival_date}, #{departure_date}, #{reservation_id}, #{total})
     </insert>
     
     <update id="updateAdditionalServiceOrder" parameterType="AdditionalServiceOrder">
@@ -397,7 +397,7 @@
                arrival_date = #{arrival_date},
                departure_date = #{departure_date},
                initiator_user_id = #{initiator_user_id}
-         WHERE reservations_id = #{reservations_id}      
+         WHERE reservation_id = #{reservation_id}      
     </update>
     
     <update id="updateAdditionalServiceOrderById" parameterType="AdditionalServiceOrder">
@@ -411,7 +411,7 @@
     </update>
     
     <select id="selectAdditionalServiceOrderList" parameterType="map" resultType="AdditionalServiceOrder">
-        SELECT a.id, a.creator_user_id, a.create_date, a.update_date, a.initiator_user_id, a.arrival_date, a.departure_date, a.reservations_id, a.status,
+        SELECT a.id, a.creator_user_id, a.create_date, a.update_date, a.initiator_user_id, a.arrival_date, a.departure_date, a.reservation_id, a.status,
                CASE (SELECT COUNT(*) FROM insurances i WHERE i.additionalserviceorders_id = a.id) WHEN 0 THEN false ELSE true END as insurance,
 		       (SELECT STRING_AGG(DISTINCT(t.fullname),'<![CDATA[<br>]]>')
 		          FROM (SELECT COALESCE(g.first_name||' '||g.last_name,d.guest) AS fullname
@@ -432,8 +432,8 @@
         <if test="id != null">
             AND a.id = #{id}
         </if> 
-        <if test="reservations_id != null">
-            AND a.reservations_id = #{reservations_id}
+        <if test="reservation_id != null">
+            AND a.reservation_id = #{reservation_id}
         </if> 
         <trim prefix="ORDER BY">
 			<if test="sortField != null">
@@ -456,15 +456,15 @@
         <if test="id != null">
             AND a.id = #{id}
         </if> 
-        <if test="reservations_id != null">
-            AND a.reservations_id = #{reservations_id}
+        <if test="reservation_id != null">
+            AND a.reservation_id = #{reservation_id}
         </if> 
     </select>
     
     <select id="selectAdditionalServiceIdByReserveId" parameterType="long" resultType="long">
     	SELECT o.id
     	  FROM additionalserviceorders o
-    	 WHERE o.reservations_id = #{reservations_id} 
+    	 WHERE o.reservation_id = #{reservation_id} 
     </select>
     
     <select id="selectAdditionalServiceManageList" parameterType="map" resultType="AdditionalServiceManage">

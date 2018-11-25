@@ -7,7 +7,7 @@ import org.apache.wicket.util.io.IClusterable;
 
 public class GuestDetail implements IClusterable {
 	private static final long serialVersionUID = 1L;
-	private long reservations_id;
+	private long reservation_id;
 	private Guest selectedGuest;
 	
 	private List<Guest> guestlist = new ArrayList<Guest>();
@@ -32,11 +32,11 @@ public class GuestDetail implements IClusterable {
 	}
 	
 	public long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 	
 	public List<Guest> getGuestlist() {

@@ -55,7 +55,7 @@ public class NoShowPanel extends Panel {
 				@Override
 				protected List<RoomTypeDetails> load() {
 					Map<String, Serializable> param = new HashMap<String, Serializable>();
-					param.put("reservations_id", reservationDetail.getId());
+					param.put("reservation_id", reservationDetail.getId());
 					return new MyBatisHelper().selectList("selectReservationRoomsByReservationId", param);
 				}
 			};

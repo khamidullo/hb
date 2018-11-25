@@ -93,7 +93,7 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 		ValueMap roommodel = new ValueMap();
 		roommodel.put("roomtype", reserveroom.getRoomtype());
 		roommodel.put("room", reserveroom.getRoom());
-		roommodel.put("roomtypes_id", reserveroom.getRoomtype().getId());
+		roommodel.put("roomtype_id", reserveroom.getRoomtype().getId());
 		roommodel.put("rooms_id", reserveroom.getRoom().getId());
 //		roommodel.put("rate", reserve.getRate());
 //		roommodel.put("additional_bed", reserve.getAdditional_bed());
@@ -101,7 +101,7 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 		roommodel.put("adults", reserve.getAdults());
 		roommodel.put("children", reserve.getChildren());
 //		roommodel.put("meal_options", reserve.getMeal_options());
-		roommodel.put("hotelsusers_id", reserve.getHotelsusers_id());
+		roommodel.put("hotel_id", reserve.getHotelsusers_id());
 		
 		add(form = new MoveGuestForm("form", roommodel));
 		form.add(new IndicatingAjaxButton("move") {
@@ -128,7 +128,7 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 //						else 
 //							reserve.setExtra_bed((short) 0);  
 						
-//						sql.update("updateReservationRoom", new ReservationRoom(reserve, reserveroom2.getInt("roomtypes_id"), reserveroom2.getLong("rooms_id"), reserve.getInitiator_user_id()));
+//						sql.update("updateReservationRoom", new ReservationRoom(reserve, reserveroom2.getInt("roomtype_id"), reserveroom2.getLong("rooms_id"), reserve.getInitiator_user_id()));
 						sql.update("updateCurrentReserveDetail", reserve);
 						if (reserveroom.getRoom().getId().longValue() != reserveroom2.getLong("rooms_id")) {
 							HashMap<String, Serializable> param = new HashMap<String, Serializable>();
@@ -177,12 +177,12 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 		public MoveGuestForm(String id, final ValueMap model) {
 			super(id, new CompoundPropertyModel<ValueMap>(model));
 			final HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-			param.put("hotelsusers_id", reserve.getHotelsusers_id());
+			param.put("hotel_id", reserve.getHotelsusers_id());
 			param.put("check_out", reserve.getCheck_out());
 			param.put("reserved_id", reserve.getId());
 			param.put("isTA", Boolean.FALSE);
 			param.put("adults", reserve.getAdults());
-			param.put("roomtypes_id", reserveroom.getRoomtype().getId());
+			param.put("roomtype_id", reserveroom.getRoomtype().getId());
 			param.put("rooms_id", reserveroom.getRoom().getId());
 			
 			IModel<List<RoomType>> roomtypesListModel = new LoadableDetachableModel<List<RoomType>>() {
@@ -204,7 +204,7 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 			});
 			
 			final HiddenField<Integer> roomtype_id;
-			add(roomtype_id = new HiddenField<Integer>("roomtypes_id"));
+			add(roomtype_id = new HiddenField<Integer>("roomtype_id"));
 			roomtype_id.setLabel(new StringResourceModel("hotels.reservation.details.room.type", null));
 			roomtype_id.setRequired(true);
 			roomtype_id.setOutputMarkupId(true);
@@ -215,9 +215,9 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 				@Override
 				protected List<Room> load() {
 					ValueMap model = (ValueMap) getDefaultModelObject();
-					model.put("roomtypes_id", ((RoomType) model.get("roomtype")).getId());
-					if (model.get("roomtypes_id") != null) {
-						param.put("roomtypes_id", model.getInt("roomtypes_id"));
+					model.put("roomtype_id", ((RoomType) model.get("roomtype")).getId());
+					if (model.get("roomtype_id") != null) {
+						param.put("roomtype_id", model.getInt("roomtype_id"));
 						param.put("adults", (short) model.getInt("adults"));
 						param.put("additional_bed", ((AdditionalBed) model.get("additional_bed")).isId());
 						param.put("check_in", CommonUtil.now());
@@ -320,8 +320,8 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
 					ValueMap model = (ValueMap) getDefaultModelObject();
-					if (model.get("roomtype") != null) model.put("roomtypes_id", ((RoomType) model.get("roomtype")).getId());
-					else model.put("roomtypes_id", null);
+					if (model.get("roomtype") != null) model.put("roomtype_id", ((RoomType) model.get("roomtype")).getId());
+					else model.put("roomtype_id", null);
 					model.put("room", null);
 					model.put("rooms_id", null);
 					target.add(adults);
@@ -337,7 +337,7 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 				protected void onUpdate(AjaxRequestTarget target) {
 					ValueMap model = (ValueMap) getDefaultModelObject();
 					if (model.get("room") != null) model.put("rooms_id", ((Room) model.get("room")).getId()); else model.put("rooms_id", null);
-					RateDetails roomrate = getCurrentRate(reserve.getHotelsusers_id(), (short) model.getInt("adults"), reserve.isIs_group(), model.getInt("roomtypes_id"));
+					RateDetails roomrate = getCurrentRate(reserve.getHotelsusers_id(), (short) model.getInt("adults"), reserve.isIs_group(), model.getInt("roomtype_id"));
 					if (roomrate != null) {
 //						reserve.setRate(roomrate.getRate(reserve.isResident()));
 						reserve.setRateplane(new RatePlane(roomrate.getRateplane_id()));
@@ -388,7 +388,7 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
 					ValueMap model = (ValueMap) getDefaultModelObject();
-					RateDetails roomrate = getCurrentRate(reserve.getHotelsusers_id(), (short) model.getInt("adults"), reserve.isIs_group(), model.getInt("roomtypes_id"));
+					RateDetails roomrate = getCurrentRate(reserve.getHotelsusers_id(), (short) model.getInt("adults"), reserve.isIs_group(), model.getInt("roomtype_id"));
 					if (roomrate != null) model.put("rate", roomrate.getRate(reserve.isResident()));
 					target.add(rate);
 				}
@@ -408,12 +408,12 @@ public class ChangeRoomPanel extends MyBreadCrumbPanel {
 		return new StringResourceModel("hotels.reservation.room.change.title", new Model<ReservationDetail>(reserve));
 	}
 	
-	public RateDetails getCurrentRate(long hotelsusers_id, short person_number, boolean is_group, int roomtypes_id){
+	public RateDetails getCurrentRate(long hotel_id, short person_number, boolean is_group, int roomtype_id){
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("hotelsusers_id", hotelsusers_id);
+		param.put("hotel_id", hotel_id);
 		param.put("person_number", person_number);
 		param.put("is_group", is_group);
-		param.put("roomtypes_id", roomtypes_id);
+		param.put("roomtype_id", roomtype_id);
 		return ((RateDetails) new MyBatisHelper().selectOne("selectCurrentRatePlane", param));
 	}
 }

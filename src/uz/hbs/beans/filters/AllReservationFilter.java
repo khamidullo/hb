@@ -11,7 +11,7 @@ import uz.hbs.beans.ReservationType;
 
 public class AllReservationFilter implements IClusterable {
 	private static final long serialVersionUID = 1L;
-	private Long reservations_id;
+	private Long reservation_id;
 	private Date created_from;
 	private Date created_to;
 	private Date checkin_from;
@@ -161,11 +161,11 @@ public class AllReservationFilter implements IClusterable {
 	}
 
 	public Long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(Long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 
 	public City getCity() {

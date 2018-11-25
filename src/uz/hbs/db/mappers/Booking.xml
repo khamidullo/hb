@@ -21,7 +21,7 @@
     <select id="selectHotelRoomsListByFilterForBooking" parameterType="map" resultType="BookingSearchResult">
 		SELECT * 
 		  FROM (
-	        SELECT hd.hotelsusers_id,
+	        SELECT hd.hotel_id,
 				   COALESCE(hd.display_name, u.name) AS display_name,
 				   hs.id AS stars,
 				   (SELECT r.name FROM regions r WHERE r.id = ad.regions_id) AS region_name,
@@ -31,27 +31,27 @@
 				   r.holding_capacity,
 				   r.additional_bed,
 				   rt.name AS roomtypes_name,
-				   rt.id AS roomtypes_id,
+				   rt.id AS roomtype_id,
 				   COALECE(mo.meal_type, -1) AS meal_type,
 				   COEALECE(mo.included_to_room_rate,0) AS meal_option_included_to_room_rate,
 				   r.room_area,
-				   get_available_room_count_ta(r.roomtypes_id, #{check_in}::TIMESTAMP, #{check_out}::TIMESTAMP, null) AS rooms_count,
-				   (SELECT COALESCE(rs.sale, rs.rate) FROM get_rate_and_sale_room(hd.hotelsusers_id::BIGINT, #{holding_capacity}::SMALLINT, #{resident}, #{check_in}::timestamp, r.roomtypes_id, #{is_group}) AS rs) AS room_rate,
-				   (SELECT COALESCE(rcp.no_penalty_before_days, -1) AS days FROM hotelsreservationrules hrr LEFT JOIN reservationcancellationpolicy rcp ON hrr.reservationcancellationpolicy_id = rcp.id WHERE hrr.hotelsusers_id = #{hotelsusers_id} AND hrr.is_group = FALSE LIMIT 1) AS no_penalty_before_days
+				   get_available_room_count_ta(r.roomtype_id, #{check_in}::TIMESTAMP, #{check_out}::TIMESTAMP, null) AS rooms_count,
+				   (SELECT COALESCE(rs.sale, rs.rate) FROM get_rate_and_sale_room(hd.hotel_id::BIGINT, #{holding_capacity}::SMALLINT, #{resident}, #{check_in}::timestamp, r.roomtype_id, #{is_group}) AS rs) AS room_rate,
+				   (SELECT COALESCE(rcp.no_penalty_before_days, -1) AS days FROM hotelsreservationrules hrr LEFT JOIN reservationcancellationpolicy rcp ON hrr.reservationcancellationpolicy_id = rcp.id WHERE hrr.hotel_id = #{hotel_id} AND hrr.is_group = FALSE LIMIT 1) AS no_penalty_before_days
 			  FROM users u, 
 				   hotels h
-				   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+				   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id
 				   LEFT JOIN hotelstars hs ON hd.hotelstars_id = hs.id
 				   LEFT JOIN addresses ad ON hd.addresses_id = ad.id
 				   LEFT JOIN (SELECT r2.*
 				   				FROM rooms r2
 				   			   WHERE r2.holding_capacity <![CDATA[>=]]> #{holding_capacity}
 				   			     AND NOT EXISTS (SELECT *
-				   			     				   FROM reservationrooms rr JOIN reservations rv ON rr.reservations_id = rv.id
+				   			     				   FROM reservationrooms rr JOIN reservations rv ON rr.reservation_id = rv.id
 				   			     				  WHERE ((rv.check_in,rv.check_out) OVERLAPS (TO_DATE(#{check_in}, 'DD/MM/YYYY HH24:MI')::TIMESTAMP, TO_DATE(#{check_out}, 'DD/MM/YYYY HH24:MI')))
-				   			     				    AND COALESCE(rr.rooms_id, previously_rooms_id) = r2.id)) r ON h.users_id = r.hotelsusers_id
-				   LEFT JOIN roomtypes rt ON r.roomtypes_id = rt.id
-				   LEFT JOIN mealoptions mo ON h.users_id = mo.hotelsusers_id
+				   			     				    AND COALESCE(rr.rooms_id, previously_rooms_id) = r2.id)) r ON h.users_id = r.hotel_id
+				   LEFT JOIN roomtypes rt ON r.roomtype_id = rt.id
+				   LEFT JOIN mealoptions mo ON h.users_id = mo.hotel_id
 				 <if test="hotel_facilities_list != null and hotel_facilities_list.size > 0">
 				   JOIN hotelsfacilities hf ON h.users_id IN 
 				   <foreach collection="hotel_facilities_list" item="item" index="index" open="(" separator="," close=")">
@@ -59,14 +59,14 @@
 	               </foreach>
 				 </if> 
 				 <if test="room_equipments_list != null and room_equipments_list.size > 0">
-				   JOIN roomsequipments re ON r.roomtypes_id = re.roomtypes_id AND re.equipments_id IN 
+				   JOIN roomsequipments re ON r.roomtype_id = re.roomtype_id AND re.equipments_id IN 
 				   <foreach collection="room_equipments_list" item="item" index="index" open="(" separator="," close=")">
 	                  #{item.id}
 	               </foreach>
 				 </if> 
 			 WHERE u.id = h.users_id
 			   AND u.status = 1
-			   AND h.users_id = #{hotelsusers_id}
+			   AND h.users_id = #{hotel_id}
 			   AND r.holding_capacity <![CDATA[>=]]> #{holding_capacity}
 			  <if test="additional_bed != null">
 			   AND r.additional_bed = #{additional_bed}
@@ -92,14 +92,14 @@
 	</select>
     
     <select id="selectRoomRate" parameterType="map" resultType="BigDecimal">
-        SELECT get_rate_sale(TO_DATE(#{check_in}, 'DD/MM/YYYY HH24:MI')::TIMESTAMP, TO_DATE(#{check_out}, 'DD/MM/YYYY HH24:MI')::TIMESTAMP, #{hotelsusers_id}::BIGINT, #{roomtypes_id}::INTEGER, #{is_group}, #{holding_capacity}::SMALLINT, FALSE, TRUE) AS room_rate
+        SELECT get_rate_sale(TO_DATE(#{check_in}, 'DD/MM/YYYY HH24:MI')::TIMESTAMP, TO_DATE(#{check_out}, 'DD/MM/YYYY HH24:MI')::TIMESTAMP, #{hotel_id}::BIGINT, #{roomtype_id}::INTEGER, #{is_group}, #{holding_capacity}::SMALLINT, FALSE, TRUE) AS room_rate
     </select>
     
     <select id="selectHotelRoomCancelationState" parameterType="long" resultType="int">
 		SELECT COALESCE(rcp.no_penalty_before_days, -1) AS days
 		  FROM hotelsreservationrules hrr 
 		       LEFT JOIN reservationcancellationpolicy rcp ON hrr.reservationcancellationpolicy_id = rcp.id
-		 WHERE hrr.hotelsusers_id = #{hotelsusers_id}
+		 WHERE hrr.hotel_id = #{hotel_id}
 		   AND hrr.is_group = FALSE
     </select>
     
@@ -108,7 +108,7 @@
           FROM hotelsuploadedfiles  hf, 
                uploadedfiles uf
          WHERE hf.uploadedfiles_id = uf.id 
-           AND hf.hotelsusers_id = #{hotelsusers_id}
+           AND hf.hotel_id = #{hotel_id}
          ORDER BY uf.create_date
         <if test="limit != null">
          LIMIT #{limit}    
@@ -122,7 +122,7 @@
 		          FROM hotelsuploadedfiles  hf, 
 		               uploadedfiles uf
 		         WHERE hf.uploadedfiles_id = uf.id 
-		           AND hf.hotelsusers_id = #{hotelsusers_id}) AS img
+		           AND hf.hotel_id = #{hotel_id}) AS img
 		 WHERE img.rw = 1
     </select>
     
@@ -133,7 +133,7 @@
 		          FROM roomtypesuploadedfiles  ru, 
 		               uploadedfiles uf
 	             WHERE ru.uploadedfiles_id = uf.id
-	       		   AND ru.roomtypes_id = #{roomtypes_id}) AS img
+	       		   AND ru.roomtype_id = #{roomtype_id}) AS img
 		 WHERE img.rw = 1
     </select>
     
@@ -145,30 +145,30 @@
     <select id="selectAvailableRooms" parameterType="map" resultType="BookingSearchResult">
         SELECT * FROM (
 			SELECT r.id AS rooms_id,
-				   r.hotelsusers_id,
-				   r.roomtypes_id,
+				   r.hotel_id,
+				   r.roomtype_id,
 				   rt.name AS roomtypes_name,
 				   r.holding_capacity,
 				   COALECE(mo.meal_type, -1) AS meal_type,
 				   COEALECE(mo.included_to_room_rate,0) AS meal_option_included_to_room_rate,
 				   r.room_area,
-				   get_available_room_count_ta(r.roomtypes_id, #{check_in}::TIMESTAMP, #{check_out}::TIMESTAMP, null) AS rooms_count,
-				   (SELECT COALESCE(rs.sale, rs.rate) FROM get_rate_and_sale_room(r.hotelsusers_id::BIGINT, #{holding_capacity}::SMALLINT, #{resident}, #{check_in}::timestamp, r.roomtypes_id, #{is_group}) AS rs) AS room_rate,
+				   get_available_room_count_ta(r.roomtype_id, #{check_in}::TIMESTAMP, #{check_out}::TIMESTAMP, null) AS rooms_count,
+				   (SELECT COALESCE(rs.sale, rs.rate) FROM get_rate_and_sale_room(r.hotel_id::BIGINT, #{holding_capacity}::SMALLINT, #{resident}, #{check_in}::timestamp, r.roomtype_id, #{is_group}) AS rs) AS room_rate,
 				   false AS selected
 			  FROM hotels h 
-				   <!-- LEFT JOIN rooms r ON h.users_id = r.hotelsusers_id -->
+				   <!-- LEFT JOIN rooms r ON h.users_id = r.hotel_id -->
 				   LEFT JOIN (SELECT r2.*
 				   				FROM rooms r2
 				   			   WHERE r2.holding_capacity <![CDATA[>=]]> #{holding_capacity}
 				   			     AND NOT EXISTS (SELECT *
-				   			     				   FROM reservationrooms rr JOIN reservations rv ON rr.reservations_id = rv.id
+				   			     				   FROM reservationrooms rr JOIN reservations rv ON rr.reservation_id = rv.id
 				   			     				  WHERE ((rv.check_in,rv.check_out) OVERLAPS (TO_TIMESTAMP(#{check_in}, 'DD/MM/YYYY HH24:MI')::TIMESTAMP, TO_TIMESTAMP(#{check_out}, 'DD/MM/YYYY HH24:MI')))
-				   			     				    AND COALESCE(rr.rooms_id, previously_rooms_id) = r2.id)) r ON h.users_id = r.hotelsusers_id
-				   LEFT JOIN roomtypes rt ON r.roomtypes_id = rt.id
-				   LEFT JOIN mealoptions mo ON h.users_id = mo.hotelsusers_id
-			 WHERE h.users_id = #{hotelsusers_id}
+				   			     				    AND COALESCE(rr.rooms_id, previously_rooms_id) = r2.id)) r ON h.users_id = r.hotel_id
+				   LEFT JOIN roomtypes rt ON r.roomtype_id = rt.id
+				   LEFT JOIN mealoptions mo ON h.users_id = mo.hotel_id
+			 WHERE h.users_id = #{hotel_id}
 			   AND r.holding_capacity <![CDATA[>=]]> #{holding_capacity}
-			 ORDER BY r.roomtypes_id DESC, r.holding_capacity) AS t 
+			 ORDER BY r.roomtype_id DESC, r.holding_capacity) AS t 
 		 WHERE rooms_count > 0
     </select>
 </mapper>

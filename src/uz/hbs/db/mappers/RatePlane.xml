@@ -3,34 +3,34 @@
 
 <mapper namespace="uz.hbs.db.mappers.RatePlanes">
     <select id="selectRatePlaneRoomTypeId" parameterType="long" resultType="int">
-        SELECT roomtypes_id
+        SELECT roomtype_id
           FROM hotelsroomtypes
-         WHERE hotelsusers_id = #{value}
+         WHERE hotel_id = #{value}
     </select>
     
     <select id="selectRatePlaneRoomType" parameterType="long" resultType="IdAndName">
         SELECT rt.id, rt.name
-          FROM roomtypes rt JOIN hotelsroomtypes hrt ON hrt.roomtypes_id = rt.id
-         WHERE hrt.hotelsusers_id = #{value}
+          FROM roomtypes rt JOIN hotelsroomtypes hrt ON hrt.roomtype_id = rt.id
+         WHERE hrt.hotel_id = #{value}
          ORDER BY rt.name
     </select>
     
     <select id="selectMaxHoldingCapacity" parameterType="long" resultType="short">
         SELECT COALESCE(MAX(holding_capacity),0)
           FROM hotelsroomtypes r
-         WHERE hotelsusers_id = #{hotelsusers_id}
+         WHERE hotel_id = #{hotel_id}
     </select>
     
     <select id="selectHoldingCapacityRoomType" parameterType="int" resultType="short">
         SELECT COALESCE(holding_capacity, 0) AS holding_capacity
           FROM hotelsroomtypes r
-         WHERE roomtypes_id = #{roomtypes_id}
+         WHERE roomtype_id = #{roomtype_id}
     </select>
     
     <select id="selectMaxSeasonNumber" parameterType="long" resultType="short">
         SELECT COALESCE(MAX(season_number), 0)
           FROM rateplaneseasons rs, rateplanes r 
-         WHERE r.hotelsusers_id = #{hotelsusers_id}
+         WHERE r.hotel_id = #{hotel_id}
            AND rs.rateplanes_id = r.id
     </select>
     
@@ -38,8 +38,8 @@
         <selectKey order="BEFORE" resultType="int" keyProperty="id">
             SELECT NEXTVAL('rateplanes_id_seq')
         </selectKey>
-        INSERT INTO rateplanes(id, hotelsusers_id, name, description, internal, create_date, update_date, initiator_user_id)
-        VALUES (#{id}, #{hotelsusers_id}, #{name}, #{description}, #{internal}, now(), now(), #{initiator_user_id})
+        INSERT INTO rateplanes(id, hotel_id, name, description, internal, create_date, update_date, initiator_user_id)
+        VALUES (#{id}, #{hotel_id}, #{name}, #{description}, #{internal}, now(), now(), #{initiator_user_id})
     </insert>
     
     <update id="updateRatePlane" parameterType="RatePlane">
@@ -57,7 +57,7 @@
     </delete>
     
     <select id="selectRatePlane" parameterType="int" resultType="RatePlane">
-        SELECT id, hotelsusers_id, name, description, internal, create_date, 
+        SELECT id, hotel_id, name, description, internal, create_date, 
                update_date, initiator_user_id
           FROM rateplanes
          <where>
@@ -68,10 +68,10 @@
     </select>
     
     <select id="selectRatePlaneList" parameterType="map" resultType="RatePlane">
-        SELECT id, hotelsusers_id, name, description, internal, create_date, 
+        SELECT id, hotel_id, name, description, internal, create_date, 
                update_date, initiator_user_id
           FROM rateplanes
-  		 WHERE hotelsusers_id = #{hotelsusers_id}
+  		 WHERE hotel_id = #{hotel_id}
   		 <if test="name != null">
   		   AND LOWER(name) LIKE '%'||LOWER(#{name})||'%'
   		 </if>  
@@ -89,7 +89,7 @@
     <select id="selectRatePlaneListCount" parameterType="map" resultType="long">
         SELECT COUNT(*)
           FROM rateplanes
-  		 WHERE hotelsusers_id = #{hotelsusers_id}
+  		 WHERE hotel_id = #{hotel_id}
   		 <if test="name != null">
   		   AND LOWER(name) LIKE '%'||LOWER(#{name})||'%'
   		 </if>  
@@ -107,7 +107,7 @@
     <select id="selectCheckRatePlanePeriod" parameterType="map" resultType="boolean">
         SELECT CASE COUNT(*) WHEN 0 THEN true ELSE false END AS bool
           FROM rateplanes rp, rateplaneseasons rps
-         WHERE rp.hotelsusers_id = #{hotelsusers_id}
+         WHERE rp.hotel_id = #{hotel_id}
            AND rp.internal = #{internal}
            AND rps.rateplanes_id = rp.id
            AND ((rps.season_from, rps.season_to) OVERLAPS (#{season_from}::date, #{season_to}::date))
@@ -150,8 +150,8 @@
         <selectKey order="BEFORE" resultType="int" keyProperty="id">
             SELECT NEXTVAL('rateplanedetails_id_seq')
         </selectKey>
-        INSERT INTO rateplanedetails(id, rateplaneseasons_id, season_number, person_number, rate, rate_uz, roomtypes_id, is_group)
-        VALUES (#{id}, #{rateplaneseasons_id}, #{season_number}, #{person_number}, #{rate}, #{rate_uz}, #{roomtypes_id}, #{is_group})
+        INSERT INTO rateplanedetails(id, rateplaneseasons_id, season_number, person_number, rate, rate_uz, roomtype_id, is_group)
+        VALUES (#{id}, #{rateplaneseasons_id}, #{season_number}, #{person_number}, #{rate}, #{rate_uz}, #{roomtype_id}, #{is_group})
     </insert>
     
     <update id="updateRateDetails" parameterType="RateDetails">
@@ -168,15 +168,15 @@
          WHERE rateplaneseasons_id = #{rateplaneseasons_id} 
            AND season_number = #{season_number} 
            AND person_number = #{person_number} 
-           AND roomtypes_id = #{roomtypes_id} 
+           AND roomtype_id = #{roomtype_id} 
            AND is_group = #{is_group} 
     </update>
     
     <select id="selectRatePlaneDetails" parameterType="map" resultType="RateDetails">
-        SELECT id, rateplaneseasons_id, season_number, person_number, rate, rate_uz, roomtypes_id, is_group
+        SELECT id, rateplaneseasons_id, season_number, person_number, rate, rate_uz, roomtype_id, is_group
           FROM rateplanedetails
          WHERE rateplaneseasons_id = #{rateplaneseasons_id}
-           AND roomtypes_id = #{roomtypes_id}
+           AND roomtype_id = #{roomtype_id}
            AND person_number <![CDATA[<=]]> #{holding_capacity}
            ORDER BY season_number, person_number 
     </select>

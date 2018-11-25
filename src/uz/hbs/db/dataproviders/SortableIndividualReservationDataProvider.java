@@ -35,7 +35,7 @@ public class SortableIndividualReservationDataProvider extends SortableDataProvi
 		List<ReservationDetail> list;
 		try {
 			Map<String, Serializable> param = new HashMap<String, Serializable>();
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			param.put("last_name", filter.getLast_name());
 			param.put("first_name", filter.getFirst_name());
 			param.put("check_in", filter.getCheck_in());
@@ -72,7 +72,7 @@ public class SortableIndividualReservationDataProvider extends SortableDataProvi
 	public long size() {
 		try {
 			Map<String, Serializable> param = new HashMap<String, Serializable>();
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			param.put("last_name", filter.getLast_name());
 			param.put("first_name", filter.getFirst_name());
 			param.put("check_in", filter.getCheck_in());

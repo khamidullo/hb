@@ -8,7 +8,7 @@ import uz.hbs.utils.CommonUtil;
 
 public class TourAgentAvailableRooms implements IClusterable {
 	private static final long serialVersionUID = 1L;
-	private Integer roomtypes_id;
+	private Integer roomtype_id;
 	private Integer available_count;
 	private Date available_date;
 	private Date create_date;
@@ -20,11 +20,11 @@ public class TourAgentAvailableRooms implements IClusterable {
 	}
 
 	public Integer getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(Integer roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public Date getAvailable_date() {

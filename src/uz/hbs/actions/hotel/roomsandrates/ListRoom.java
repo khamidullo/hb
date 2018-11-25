@@ -48,7 +48,7 @@ public class ListRoom extends MyBreadCrumbPanel {
 	private ModalWindow dialog;
 	private WebMarkupContainer container;
 
-	public ListRoom(String id, IBreadCrumbModel breadCrumbModel, final long hotelsusers_id) {
+	public ListRoom(String id, IBreadCrumbModel breadCrumbModel, final long hotel_id) {
 		super(id, breadCrumbModel);
 		
 		add(dialog = new ModalWindow("dialog"));
@@ -146,7 +146,7 @@ public class ListRoom extends MyBreadCrumbPanel {
 		});
 		
 		SortableRoomDataProvider provider = new SortableRoomDataProvider();
-		RoomFilter filter = new RoomFilter(hotelsusers_id);
+		RoomFilter filter = new RoomFilter(hotel_id);
 		provider.setFilterState(filter);
 		
 		

@@ -23,24 +23,24 @@ public class RatePlaneUtil {
 	private static final Logger _log = LoggerFactory.getLogger(RatePlaneUtil.class);
 	public static final long ONE_DAY = 24 * 60 * 60 * 1000;
 	
-	public static RatePlane createRate(long hotelsusers_id){
-		RatePlane plane = new RatePlane(hotelsusers_id);
-		plane.getSeasonlist().add(createSeason(plane.getId(), hotelsusers_id, RateSeason.FIRST_SEASON));
+	public static RatePlane createRate(long hotel_id){
+		RatePlane plane = new RatePlane(hotel_id);
+		plane.getSeasonlist().add(createSeason(plane.getId(), hotel_id, RateSeason.FIRST_SEASON));
 		return plane;
 	}
 	
-	public static RateSeason createSeason(Integer plane_id, long hotelsusers_id, short season_number) {
+	public static RateSeason createSeason(Integer plane_id, long hotel_id, short season_number) {
 		RateSeason season = new RateSeason(plane_id, season_number);
-		season.getDetails().put(season_number, getNewRateDetails(hotelsusers_id, season_number));
+		season.getDetails().put(season_number, getNewRateDetails(hotel_id, season_number));
 		return season;
 	}
 	
-	public static HashMap<Integer, List<RateDetails>> getNewRateDetails(long hotelsusers_id, short season_number){
+	public static HashMap<Integer, List<RateDetails>> getNewRateDetails(long hotel_id, short season_number){
 		HashMap<Integer, List<RateDetails>> result = new HashMap<Integer, List<RateDetails>>();
-		List<Integer> roomtypelist = new MyBatisHelper().selectList("selectRatePlaneRoomTypeId", hotelsusers_id);
+		List<Integer> roomtypelist = new MyBatisHelper().selectList("selectRatePlaneRoomTypeId", hotel_id);
 		for (Integer roomtype_id : roomtypelist) {
 			List<RateDetails> list = new ArrayList<RateDetails>();
-			short max_holding_capacity = new MyBatisHelper().selectOne("selectMaxHoldingCapacity", hotelsusers_id);
+			short max_holding_capacity = new MyBatisHelper().selectOne("selectMaxHoldingCapacity", hotel_id);
 			for (short person = 1; person <= max_holding_capacity; person++){
 				list.add(new RateDetails(season_number, roomtype_id, person, RateDetails.INDIVIDUAL));
 			}
@@ -52,11 +52,11 @@ public class RatePlaneUtil {
 		return result;
 	}
 	
-	public static List<Short> personlist(long hotelsusers_id){
+	public static List<Short> personlist(long hotel_id){
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("hotelsusers_id", hotelsusers_id);
+		param.put("hotel_id", hotel_id);
 		List<Short> list = new ArrayList<Short>();
-		short max_holding_capacity = new MyBatisHelper().selectOne("selectMaxHoldingCapacity", hotelsusers_id);
+		short max_holding_capacity = new MyBatisHelper().selectOne("selectMaxHoldingCapacity", hotel_id);
 		for (short person = 1; person <= max_holding_capacity; person++){
 			list.add(person);
 		}
@@ -66,8 +66,8 @@ public class RatePlaneUtil {
 		return list;
 	}
 	
-	public static List<IdAndName> getRoomTypeListByHotel(long hotelsusers_id) {
-		return new MyBatisHelper().selectList("selectRatePlaneRoomType", hotelsusers_id);
+	public static List<IdAndName> getRoomTypeListByHotel(long hotel_id) {
+		return new MyBatisHelper().selectList("selectRatePlaneRoomType", hotel_id);
 	}
 	
 	public static List<RateDetails> getRateDetailList(List<RateDetails> list, short max_person){
@@ -81,7 +81,7 @@ public class RatePlaneUtil {
 	private static boolean checkRatePlane(RatePlane plane){
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
 		param.put("plane_id", plane.getId());
-		param.put("hotelsusers_id", plane.getHotelsusers_id());
+		param.put("hotel_id", plane.getHotelsusers_id());
 		param.put("internal", plane.isInternal());
 		List<RateSeason> list = plane.getSeasonlist();
 		param.put("season_from", ((RateSeason) list.get(0)).getSeason_from());
@@ -190,7 +190,7 @@ public class RatePlaneUtil {
 			param.put("rateplaneseasons_id", season.getId());
 			for (Integer roomtype_id : roomtypelist) {
 				short holding_capacity = new MyBatisHelper().selectOne("selectMaxHoldingCapacity", plane.getHotelsusers_id());
-				param.put("roomtypes_id", roomtype_id);
+				param.put("roomtype_id", roomtype_id);
 				param.put("holding_capacity", holding_capacity);
 				List<RateDetails> list = new MyBatisHelper().selectList("selectRatePlaneDetails", param);
 				if (list.isEmpty()) {
@@ -204,7 +204,7 @@ public class RatePlaneUtil {
 				} else {
 					holding_capacity = new MyBatisHelper().selectOne("selectHoldingCapacityRoomType", roomtype_id);
 
-					param.put("roomtypes_id", roomtype_id);
+					param.put("roomtype_id", roomtype_id);
 					param.put("holding_capacity", holding_capacity);
 					list = new MyBatisHelper().selectList("selectRatePlaneDetails", param);
 					

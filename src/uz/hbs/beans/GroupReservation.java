@@ -18,7 +18,7 @@ public class GroupReservation extends ReservationDetail {
 		setChildAgeList(new ArrayList<ChildAge>());
 	}
 
-	public GroupReservation(long hotelsusers_id) {
+	public GroupReservation(long hotel_id) {
 		reserverooms = new ArrayList<ReservationRoom>();
 		reserverooms.add(new ReservationRoom());
 		reservation_type = ReservationType.DEFINITE;
@@ -29,7 +29,7 @@ public class GroupReservation extends ReservationDetail {
 		adults = 0;
 		auto_cancel_time = "23:59";
 		setChildAgeList(new ArrayList<ChildAge>());
-		this.hotelsusers_id = hotelsusers_id;
+		this.hotel_id = hotel_id;
 	}
 	
 	public GroupReservation(ReservationDetail reserve) {
@@ -45,7 +45,7 @@ public class GroupReservation extends ReservationDetail {
 		additional_bed = reserve.getAdditional_bed();
 		guest_comments = reserve.getGuest_comments();
 		reception_comments = reserve.getReception_comments();
-		hotelsusers_id = reserve.getHotelsusers_id(); 
+		hotel_id = reserve.getHotelsusers_id(); 
 		total = reserve.getTotal();
 		tour_agent = reserve.getTour_agent();
 		auto_cancel_time = reserve.getAuto_cancel_time();

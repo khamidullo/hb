@@ -65,7 +65,7 @@ public class HotelCheckerboardPanel extends MyBreadCrumbPanel {
 		super.onBeforeRender();
 	}
 
-	public HotelCheckerboardPanel(String id, IBreadCrumbModel breadCrumbModel, final long hotelsusers_id) {
+	public HotelCheckerboardPanel(String id, IBreadCrumbModel breadCrumbModel, final long hotel_id) {
 		super(id, breadCrumbModel);
 		model = new ValueMap();
 		final Date fromDate = new MyBatisHelper().selectOne("selectCurrentDate");
@@ -154,7 +154,7 @@ public class HotelCheckerboardPanel extends MyBreadCrumbPanel {
 			@Override
 			protected List<RoomType> load() {
 				if (!dateList.isEmpty())
-					return new MyBatisHelper().selectList("selectRoomTypesByHotel", hotelsusers_id);
+					return new MyBatisHelper().selectList("selectRoomTypesByHotel", hotel_id);
 				else
 					return Collections.emptyList();
 			}
@@ -172,8 +172,8 @@ public class HotelCheckerboardPanel extends MyBreadCrumbPanel {
 				final HashMap<String, Serializable> param = new HashMap<String, Serializable>();
 				param.put("date_from", (Date) model.get("date_from"));
 				param.put("date_to", (Date) model.get("date_to"));
-				param.put("roomtypes_id", item.getModelObject().getId());
-				param.put("hotelsusers_id", hotelsusers_id);
+				param.put("roomtype_id", item.getModelObject().getId());
+				param.put("hotel_id", hotel_id);
 				
 				final List<Room> roomlist = new MyBatisHelper().selectList("selectHotelRoomTypesRoomsByHotels", param);
 				

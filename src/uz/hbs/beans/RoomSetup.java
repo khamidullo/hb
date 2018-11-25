@@ -14,12 +14,12 @@ public class RoomSetup implements IClusterable {
 		roomtypes = new HashMap<Integer, RoomType>();
 	}
 	
-	public void addMap(int roomtypes_id, RoomType roomtype){
-		roomtypes.put(roomtypes_id, roomtype);
+	public void addMap(int roomtype_id, RoomType roomtype){
+		roomtypes.put(roomtype_id, roomtype);
 	}
 	
-	public RoomType getMap(int roomtypes_id){
-		return roomtypes.get(roomtypes_id);
+	public RoomType getMap(int roomtype_id){
+		return roomtypes.get(roomtype_id);
 	}
 
 	public HashMap<Integer, RoomType> getRoom_types() {

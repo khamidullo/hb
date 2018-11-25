@@ -29,12 +29,12 @@ public class CalendarGridPanel extends Panel {
 	private GridView<SalePlane> gridView;
 	private boolean resident;
 
-	public CalendarGridPanel(String id, final HashMap<String, Serializable> param, final long hotelsusers_id, final int roomtypes_id, final List<SalePlane> salelist, final ModalWindow dialog) {
+	public CalendarGridPanel(String id, final HashMap<String, Serializable> param, final long hotel_id, final int roomtype_id, final List<SalePlane> salelist, final ModalWindow dialog) {
 		super(id);
-		param.put("hotelsusers_id", hotelsusers_id);
-		param.put("roomtypes_id", roomtypes_id);
+		param.put("hotel_id", hotel_id);
+		param.put("roomtype_id", roomtype_id);
 		
-		resident = (Boolean) new MyBatisHelper().selectOne("selectSupportResidentRate", hotelsusers_id);
+		resident = (Boolean) new MyBatisHelper().selectOne("selectSupportResidentRate", hotel_id);
 		
 		add(new Label("month", new AbstractReadOnlyModel<String>() {
 			private static final long serialVersionUID = 1L;

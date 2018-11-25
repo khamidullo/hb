@@ -561,12 +561,12 @@ public class HotelUtil {
 		return result;
 	}
 	
-	public static int getReservationCount(Byte type, Byte status, Long touragentsusers_id, Long hotelsusers_id, Byte userType) {
+	public static int getReservationCount(Byte type, Byte status, Long touragentsusers_id, Long hotel_id, Byte userType) {
 		Map<String, Serializable> params = new HashMap<String, Serializable>();
 		params.put("reservation_type", type);
 		params.put("status", status);
 		params.put("creator_user_id", touragentsusers_id);
-		params.put("hotelsusers_id", hotelsusers_id);
+		params.put("hotel_id", hotel_id);
 		params.put("user_type", userType);
 		Integer result = new MyBatisHelper().selectOne("selectReservationsCountByTypeOrStatus", params);
 		

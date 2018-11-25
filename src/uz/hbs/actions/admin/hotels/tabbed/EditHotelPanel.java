@@ -50,8 +50,8 @@ public class EditHotelPanel extends MyBreadCrumbPanel {
 	private static final long serialVersionUID = 1L;
 	private Hotel hotel;
 	
-	public EditHotelPanel(String id, IBreadCrumbModel breadCrumbModel, long hotelsusers_id) {
-		this(id, breadCrumbModel, (Hotel) new MyBatisHelper().selectOne("selectHotelByUserId", hotelsusers_id));
+	public EditHotelPanel(String id, IBreadCrumbModel breadCrumbModel, long hotel_id) {
+		this(id, breadCrumbModel, (Hotel) new MyBatisHelper().selectOne("selectHotelByUserId", hotel_id));
 	}
 	
 	public EditHotelPanel(String id, IBreadCrumbModel breadCrumbModel, final Hotel hotel) {
@@ -217,7 +217,7 @@ public class EditHotelPanel extends MyBreadCrumbPanel {
 			@Override
 			public WebMarkupContainer getPanel(String componentId) {
 				HashMap<String, Object> param = new HashMap<String, Object>();
-				param.put("hotelsusers_id", model.getObject().getUsers_id());
+				param.put("hotel_id", model.getObject().getUsers_id());
 				param.put("is_group", false);
 				
 				ReservationRuleType individual = new MyBatisHelper().selectOne("selectReservationRulesByHotelsId", param);
@@ -492,11 +492,11 @@ public class EditHotelPanel extends MyBreadCrumbPanel {
 			public WebMarkupContainer getPanel(String componentId) {
 				List<RoomType> roomtypelist = new MyBatisHelper().selectList("selectRoomTypesByHotel", hotel.getUsers_id());
 				HashMap<String, Object> param = new HashMap<String, Object>();
-				param.put("hotelsusers_id", hotel.getUsers_id());
+				param.put("hotel_id", hotel.getUsers_id());
 				if (! roomtypelist.isEmpty()) setup = new RoomSetup(); 
 				
 				for (RoomType roomtype : roomtypelist){
-					param.put("roomtypes_id", roomtype.getId());
+					param.put("roomtype_id", roomtype.getId());
 					List<Equipment> equipments = new MyBatisHelper().selectList("selectEquipmentListByRoomTypeHotel", param);
 					List<Condition> conditions = new MyBatisHelper().selectList("selectConditionsListByRoomTypeHotel", param);
 					List<Room> rooms = new MyBatisHelper().selectList("selectHotelRoomTypesRoomsByHotels", param);

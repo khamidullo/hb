@@ -6,10 +6,10 @@ public class RoomRatesFilter implements IClusterable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;
-	private long hotelsusers_id;
+	private long hotel_id;
 	
-	public RoomRatesFilter(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public RoomRatesFilter(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public String getName() {
@@ -29,10 +29,10 @@ public class RoomRatesFilter implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 }

@@ -7,49 +7,49 @@ import org.apache.wicket.util.io.IClusterable;
 
 public class ReservationSale implements IClusterable {
 	private static final long serialVersionUID = 1L;
-	private Long reservations_id;
+	private Long reservation_id;
 	private Long saleplanes_id;
 	private Date sale_date;
 	private BigDecimal sale;
-	private Integer roomtypes_id;
+	private Integer roomtype_id;
 	private boolean is_group;
 	private Short person_number;
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	
 	
 	public ReservationSale() {
 	}
 	
-	public ReservationSale(Long reservations_id, Integer roomtypes_id, Short person_number, boolean is_group, long hotelsusers_id) {
-		this.reservations_id = reservations_id;
-		this.roomtypes_id = roomtypes_id;
+	public ReservationSale(Long reservation_id, Integer roomtype_id, Short person_number, boolean is_group, long hotel_id) {
+		this.reservation_id = reservation_id;
+		this.roomtype_id = roomtype_id;
 		this.person_number = person_number;
 		this.is_group = is_group;
-		this.hotelsusers_id = hotelsusers_id;
+		this.hotel_id = hotel_id;
 	}
 	
-	public ReservationSale(IndividualReservation reserve, Integer roomtypes_id, Short person_number) {
-		this.reservations_id = reserve.getId();
-		this.roomtypes_id = roomtypes_id;
+	public ReservationSale(IndividualReservation reserve, Integer roomtype_id, Short person_number) {
+		this.reservation_id = reserve.getId();
+		this.roomtype_id = roomtype_id;
 		this.person_number = person_number;
 		this.is_group = reserve.isIs_group();
-		this.hotelsusers_id = reserve.getHotelsusers_id();
+		this.hotel_id = reserve.getHotelsusers_id();
 	}
 
-	public ReservationSale(GroupReservation reserve, Integer roomtypes_id, Short person_number) {
-		this.reservations_id = reserve.getId();
-		this.roomtypes_id = roomtypes_id;
+	public ReservationSale(GroupReservation reserve, Integer roomtype_id, Short person_number) {
+		this.reservation_id = reserve.getId();
+		this.roomtype_id = roomtype_id;
 		this.person_number = person_number;
 		this.is_group = reserve.isIs_group();
-		this.hotelsusers_id = reserve.getHotelsusers_id();
+		this.hotel_id = reserve.getHotelsusers_id();
 	}
 	
 	public Long getReservations_id() {
-		return reservations_id;
+		return reservation_id;
 	}
 
-	public void setReservations_id(Long reservations_id) {
-		this.reservations_id = reservations_id;
+	public void setReservations_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
 	}
 
 	public Long getSaleplanes_id() {
@@ -77,11 +77,11 @@ public class ReservationSale implements IClusterable {
 	}
 
 	public Integer getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(Integer roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public boolean isIs_group() {
@@ -101,10 +101,10 @@ public class ReservationSale implements IClusterable {
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 }

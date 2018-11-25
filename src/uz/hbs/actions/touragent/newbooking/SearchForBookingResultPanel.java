@@ -151,8 +151,8 @@ public class SearchForBookingResultPanel extends Panel {
 				item.add(new Label("roomType", parseRoomTypes.getRoomtypes_name()).setEscapeModelStrings(false));
 
 				Map<String, Serializable> params = new HashMap<String, Serializable>();
-				params.put("hotelsusers_id", modelObject.getHotelsusers_id());
-				// params.put("roomtypes_id", modelObject.getRoomtypes_id());
+				params.put("hotel_id", modelObject.getHotelsusers_id());
+				// params.put("roomtype_id", modelObject.getRoomtypes_id());
 				//
 				// List<Equipment> roomEquipmentList = new MyBatisHelper().selectList("selectEquipmentListByRoomTypeHotel", params);
 				//
@@ -174,14 +174,14 @@ public class SearchForBookingResultPanel extends Panel {
 //				param.put("resident", model.isResident());
 //				param.put("internal", false);
 //				param.put("is_group", modelObject.getIs_group());
-//				param.put("hotelsusers_id", modelObject.getHotelsusers_id());
+//				param.put("hotel_id", modelObject.getHotelsusers_id());
 				
 //				ReservationRuleType rule = new MyBatisHelper().selectOne("selectReservationRuleByHotel", param);
 				
 //				Double first_rate = 0d;
 //				
 //				for (RoomType roomtype: parseRoomTypes.getRoomtypeslist()) {
-//					param.put("roomtypes_id", roomtype.getId());
+//					param.put("roomtype_id", roomtype.getId());
 //					param.put("holding_capacity", roomtype.getHolding_capacity().getId());
 //					Double d = CommonUtil.nvl((Double) new MyBatisHelper().selectOne("selectRateSaleReserve", param));
 //					if (roomtype.getAdditional_bed().isId()) d += CommonUtil.nvl(rule.getExtra_bed_price_type_value());
@@ -196,7 +196,7 @@ public class SearchForBookingResultPanel extends Panel {
 //				Double last_rate = 0d;
 //				
 //				for (RoomType roomtype: parseRoomTypes.getRoomtypeslist()) {
-//					param.put("roomtypes_id", roomtype.getId());
+//					param.put("roomtype_id", roomtype.getId());
 //					param.put("holding_capacity", roomtype.getHolding_capacity().getId());
 //					Double d = CommonUtil.nvl((Double) new MyBatisHelper().selectOne("selectRateSaleReserve", param));
 //					if (roomtype.getAdditional_bed().isId()) d += CommonUtil.nvl(rule.getExtra_bed_price_type_value());
@@ -415,9 +415,9 @@ public class SearchForBookingResultPanel extends Panel {
 			}
 			holdingCapacity += "</span>";
 			String roomcount = token.substring(0, token.indexOf(" x "));
-			int roomtypes_id = Integer.parseInt(token.substring(token.indexOf(" x ") + 3, token.indexOf("[#]")).trim());
-			String roomType = (!roomcount.equals("1") ? (roomcount + " x ") : "") + new MyBatisHelper().selectOne("selectRoomTypeNameById", roomtypes_id);
-			result.getRoomtypeslist().add(new RoomType(roomtypes_id, roomType, Byte.parseByte(countStr), addBed, Integer.parseInt(roomcount.trim())));
+			int roomtype_id = Integer.parseInt(token.substring(token.indexOf(" x ") + 3, token.indexOf("[#]")).trim());
+			String roomType = (!roomcount.equals("1") ? (roomcount + " x ") : "") + new MyBatisHelper().selectOne("selectRoomTypeNameById", roomtype_id);
+			result.getRoomtypeslist().add(new RoomType(roomtype_id, roomType, Byte.parseByte(countStr), addBed, Integer.parseInt(roomcount.trim())));
 			roomTypeInfo +=  (roomTypeInfo.isEmpty() ? "" : "<br>")  + (holdingCapacity + " " + roomType);
 		}
 		result.setIs_group(is_group);

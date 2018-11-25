@@ -160,7 +160,7 @@
 			   u.create_date,
 			   u.update_date,
 			   u.workusers_id AS "work.id",
-			   u.workusers_id AS hotelsusers_id,
+			   u.workusers_id AS hotel_id,
 			   u.workusers_id AS touragency_user_id,
 			   u.phone_number,
 			   u.workable,

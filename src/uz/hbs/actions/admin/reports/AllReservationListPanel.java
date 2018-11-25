@@ -307,7 +307,7 @@ public class AllReservationListPanel extends MyBreadCrumbPanel {
 						}).add(new AttributeModifier("style", "white-space: nowrap"));
 					}
 				});
-		columns.add(new PropertyColumn<ReservationDetail, String>(new StringResourceModel("touragents.newbooking.hotel", null), "hotelsusers_id") {
+		columns.add(new PropertyColumn<ReservationDetail, String>(new StringResourceModel("touragents.newbooking.hotel", null), "hotel_id") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -700,7 +700,7 @@ public class AllReservationListPanel extends MyBreadCrumbPanel {
 					target.add(hotelField);
 				}
 			});
-			add(new TextField<String>("reservations_id"));
+			add(new TextField<String>("reservation_id"));
 		}
 	}
 }

@@ -35,7 +35,7 @@ public class SortableGroupReservationDataProvider extends SortableDataProvider<R
 		List<ReservationDetail> list;
 		try {
 			Map<String, Serializable> param = new HashMap<String, Serializable>();
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			param.put("group_name", filter.getGroup_name());
 			param.put("last_name", filter.getLast_name());
 			param.put("first_name", filter.getFirst_name());
@@ -71,7 +71,7 @@ public class SortableGroupReservationDataProvider extends SortableDataProvider<R
 	public long size() {
 		try {
 			Map<String, Serializable> param = new HashMap<String, Serializable>();
-			param.put("hotelsusers_id", filter.getHotelsusers_id());
+			param.put("hotel_id", filter.getHotelsusers_id());
 			param.put("group_name", filter.getGroup_name());
 			param.put("last_name", filter.getLast_name());
 			param.put("first_name", filter.getFirst_name());

@@ -126,35 +126,35 @@ public class HotelModels {
 		};
 	}
 
-	public static LoadableDetachableModel<List<? extends Facility>> getHotelFacilities(final Long hotelsusers_id) {
+	public static LoadableDetachableModel<List<? extends Facility>> getHotelFacilities(final Long hotel_id) {
 		return new LoadableDetachableModel<List<? extends Facility>>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<? extends Facility> load() {
-				return new MyBatisHelper().selectList("selectHotelFacilitiesList", hotelsusers_id);
+				return new MyBatisHelper().selectList("selectHotelFacilitiesList", hotel_id);
 			}
 		};
 	}
 
-	public static LoadableDetachableModel<List<? extends Service>> getServicesInRooms(final Long hotelsusers_id) {
+	public static LoadableDetachableModel<List<? extends Service>> getServicesInRooms(final Long hotel_id) {
 		return new LoadableDetachableModel<List<? extends Service>>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<? extends Service> load() {
-				return new MyBatisHelper().selectList("selectHotelRoomService", hotelsusers_id);
+				return new MyBatisHelper().selectList("selectHotelRoomService", hotel_id);
 			}
 		};
 	}
 
-	public static LoadableDetachableModel<List<? extends HotelNearByPlace>> getHotelNearbyPlaces(final Long hotelsusers_id) {
+	public static LoadableDetachableModel<List<? extends HotelNearByPlace>> getHotelNearbyPlaces(final Long hotel_id) {
 		return new LoadableDetachableModel<List<? extends HotelNearByPlace>>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected List<? extends HotelNearByPlace> load() {
-				return new MyBatisHelper().selectList("selectHotelNearByPlacesByHotelId", hotelsusers_id);
+				return new MyBatisHelper().selectList("selectHotelNearByPlacesByHotelId", hotel_id);
 			}
 		};
 	}

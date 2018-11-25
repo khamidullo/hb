@@ -4,17 +4,15 @@ import java.util.Date;
 
 import org.apache.wicket.util.io.IClusterable;
 
+import uz.hbs.beans.types.Status;
+
 public class Account implements IClusterable {
 	private static final long serialVersionUID = 1L;
-	
-	public static final Byte STATUS_NEW = 0;
-	public static final Byte STATUS_ACTIVE = 1;
-	public static final Byte STATUS_DISABLED = 2;
 
 	private Long id;
-	private Long users_id;
+	private long user_id;
 	private Double balance;
-	private Byte status;
+	private Status status;
 	private Date create_date;
 	private Date update_date;
 
@@ -29,12 +27,12 @@ public class Account implements IClusterable {
 		this.id = id;
 	}
 
-	public Long getUsers_id() {
-		return users_id;
+	public long getUser_id() {
+		return user_id;
 	}
 
-	public void setUsers_id(Long users_id) {
-		this.users_id = users_id;
+	public void setUser_id(long user_id) {
+		this.user_id = user_id;
 	}
 
 	public Double getBalance() {
@@ -45,11 +43,11 @@ public class Account implements IClusterable {
 		this.balance = balance;
 	}
 
-	public Byte getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(Byte status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
@@ -67,5 +65,11 @@ public class Account implements IClusterable {
 
 	public void setUpdate_date(Date update_date) {
 		this.update_date = update_date;
+	}
+
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", user_id=" + user_id + ", balance=" + balance + ", status=" + status
+				+ ", create_date=" + create_date + ", update_date=" + update_date + "]";
 	}
 }

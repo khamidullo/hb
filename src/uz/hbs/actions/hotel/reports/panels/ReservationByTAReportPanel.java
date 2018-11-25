@@ -48,7 +48,7 @@ public class ReservationByTAReportPanel extends ReservationReportPanel {
 	public ReservationByTAReportPanel(String id, IBreadCrumbModel breadCrumbModel, final ValueMap model) {
 		super(id, breadCrumbModel, model);
 		
-		model.put("hotelsusers_id", ((MySession) getSession()).getUser().getHotelsusers_id());
+		model.put("hotel_id", ((MySession) getSession()).getUser().getHotelsusers_id());
 		final List<TourAgent> touragentlist = new MyBatisHelper().selectList("selectReportTourAgentList", model); 
 		
 		add(new ListView<TourAgent>("touragentlist", new LoadableDetachableModel<List<TourAgent>>() {
@@ -71,7 +71,7 @@ public class ReservationByTAReportPanel extends ReservationReportPanel {
 					@Override
 					protected List<HotelReservationReport> load() {
 						model.put("touragentuser_id", tourAgentItem.getModelObject().getUsers_id());
-						model.put("hotelsusers_id", ((MySession) getSession()).getUser().getHotelsusers_id());
+						model.put("hotel_id", ((MySession) getSession()).getUser().getHotelsusers_id());
 						return new MyBatisHelper().selectList("selectReservationByTAReport", model);
 					}
 				};
@@ -239,7 +239,7 @@ public class ReservationByTAReportPanel extends ReservationReportPanel {
 								s.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 7));
 								
 								model.put("touragentuser_id", touragent.getUsers_id());
-								model.put("hotelsusers_id", ((MySession) getSession()).getUser().getHotelsusers_id());
+								model.put("hotel_id", ((MySession) getSession()).getUser().getHotelsusers_id());
 								List<HotelReservationReport> list = new MyBatisHelper().selectList("selectReservationByTAReport", model);
 								
 								_col = 0;

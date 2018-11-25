@@ -6,8 +6,8 @@
 	    <selectKey order="BEFORE" resultType="long" keyProperty="id">
 	        SELECT NEXTVAL('rooms_id_seq')
 	    </selectKey>
-	    INSERT INTO rooms(id, hotelsusers_id, roomtypes_id, room_number, room_floor, bed_type, initiator_user_id, clean_state, onsale_state)
-        VALUES (#{id}, #{hotelsusers_id}, #{roomtypes_id}, #{room_number}, #{room_floor}, #{bed_type.id}, #{initiator_user_id}, 0, 0)
+	    INSERT INTO rooms(id, hotel_id, roomtype_id, room_number, room_floor, bed_type, initiator_user_id, clean_state, onsale_state)
+        VALUES (#{id}, #{hotel_id}, #{roomtype_id}, #{room_number}, #{room_floor}, #{bed_type.id}, #{initiator_user_id}, 0, 0)
 	</insert>
 	
 	<update id="updateRoom" parameterType="Room">
@@ -27,7 +27,7 @@
 	<update id="updateRoomTypeRoomNumber" parameterType="int">
 	    UPDATE hotelsroomtypes
 	       SET number_of_rooms = number_of_rooms - 1
-	     WHERE roomtypes_id = #{roomtypes_id}  
+	     WHERE roomtype_id = #{roomtype_id}  
 	</update>
     
     <select id="selectRoomManagementList" parameterType="map" resultType="Room">
@@ -38,8 +38,8 @@
 	               rt.name as roomtype,
 	               r.update_date 
 	          FROM rooms r, roomtypes rt
-	         WHERE hotelsusers_id = #{hotelsusers_id}
-	           AND roomtypes_id = rt.id
+	         WHERE hotel_id = #{hotel_id}
+	           AND roomtype_id = rt.id
 	         <if test="clean_state != null">
 	             AND clean_state = #{clean_state.id}
 	         </if>  
@@ -66,8 +66,8 @@
     <select id="selectRoomManagementListCount" parameterType="map" resultType="long">
         SELECT COUNT(*)
           FROM rooms r, roomtypes rt
-         WHERE hotelsusers_id = #{hotelsusers_id}
-           AND roomtypes_id = rt.id
+         WHERE hotel_id = #{hotel_id}
+           AND roomtype_id = rt.id
          <if test="clean_state != null">
              AND clean_state = #{clean_state.id}
          </if>  
@@ -116,35 +116,35 @@
     </select>
     
     <delete id="deleteRoomByRoomTypeId" parameterType="int">
-    	DELETE FROM rooms WHERE roomtypes_id = #{id}
+    	DELETE FROM rooms WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteRoomEquipmentByRoomTypeId" parameterType="int">
-    	DELETE FROM roomsequipments WHERE roomtypes_id = #{id}
+    	DELETE FROM roomsequipments WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteHotelRoomTypeByRoomTypeId" parameterType="int">
-    	DELETE FROM hotelsroomtypes WHERE roomtypes_id = #{id}
+    	DELETE FROM hotelsroomtypes WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteHotelConditionByRoomTypeId" parameterType="int">
-    	DELETE FROM hotelsroomsconditions WHERE roomtypes_id = #{id}
+    	DELETE FROM hotelsroomsconditions WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteRatePlanDetailByRoomTypeId" parameterType="int">
-    	DELETE FROM rateplanedetails WHERE roomtypes_id = #{id}
+    	DELETE FROM rateplanedetails WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteSalePlanByRoomTypeId" parameterType="int">
-    	DELETE FROM saleplanes WHERE roomtypes_id = #{id}
+    	DELETE FROM saleplanes WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteReservationRoomByRoomTypeId" parameterType="int">
-    	DELETE FROM reservationrooms WHERE roomtypes_id = #{id}
+    	DELETE FROM reservationrooms WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteRoomTypeUploadFileByRoomTypeId" parameterType="int">
-    	DELETE FROM roomtypesuploadedfiles WHERE roomtypes_id = #{id}
+    	DELETE FROM roomtypesuploadedfiles WHERE roomtype_id = #{id}
     </delete>
     
     <delete id="deleteRoomtypeByRoomtypeId" parameterType="int">

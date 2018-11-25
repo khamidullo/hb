@@ -17,7 +17,7 @@ import uz.hbs.db.MyBatisHelper;
 public class RoomTypeEquipmentPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
-	public RoomTypeEquipmentPanel(String id, Long hotelsusers_id, Integer roomtypes_id, boolean isFromFilterForm) {
+	public RoomTypeEquipmentPanel(String id, Long hotel_id, Integer roomtype_id, boolean isFromFilterForm) {
 		super(id);
 		
 		LoadableDetachableModel<List<Equipment>> listModel = new LoadableDetachableModel<List<Equipment>>() {
@@ -26,8 +26,8 @@ public class RoomTypeEquipmentPanel extends Panel {
 			@Override
 			protected List<Equipment> load() {
 				Map<String, Serializable> params = new HashMap<String, Serializable>();
-				params.put("hotelsusers_id", hotelsusers_id);
-				params.put("roomtypes_id", roomtypes_id);
+				params.put("hotel_id", hotel_id);
+				params.put("roomtype_id", roomtype_id);
 				if (isFromFilterForm)
 					params.put("filter", true);
 				return new MyBatisHelper().selectList("selectEquipmentListByRoomTypeHotel", params);

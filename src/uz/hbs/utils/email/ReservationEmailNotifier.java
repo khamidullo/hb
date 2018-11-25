@@ -53,7 +53,7 @@ public class ReservationEmailNotifier {
 			currency.setValue(1.0);
 
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("reservations_id", reservationId);
+			params.put("reservation_id", reservationId);
 			params.put("currency", currency.getValue());
 
 			ReservationTemplate template = new MyBatisHelper().selectOne("selectReservationByOrderIdForSendingToHotel", params);
@@ -407,32 +407,32 @@ public class ReservationEmailNotifier {
 		}.start();
 	}
 
-	public synchronized static boolean newReservation(long reservations_id) {
-		long reservationEmailId = createReservationEmails(reservations_id, ReservationEmailType.CREATED);
+	public synchronized static boolean newReservation(long reservation_id) {
+		long reservationEmailId = createReservationEmails(reservation_id, ReservationEmailType.CREATED);
 
-		return reservation(reservations_id, reservationEmailId, false, false);
+		return reservation(reservation_id, reservationEmailId, false, false);
 	}
 
-	public synchronized static boolean changeReservation(long reservations_id) {
-		long reservationEmailId = createReservationEmails(reservations_id, ReservationEmailType.UPDATED);
+	public synchronized static boolean changeReservation(long reservation_id) {
+		long reservationEmailId = createReservationEmails(reservation_id, ReservationEmailType.UPDATED);
 
-		return reservation(reservations_id, reservationEmailId, true, false);
+		return reservation(reservation_id, reservationEmailId, true, false);
 	}
 
-	public synchronized static boolean cancelReservation(long reservations_id) {
-		long reservationEmailId = createReservationEmails(reservations_id, ReservationEmailType.CANCELLED);
+	public synchronized static boolean cancelReservation(long reservation_id) {
+		long reservationEmailId = createReservationEmails(reservation_id, ReservationEmailType.CANCELLED);
 
-		return reservation(reservations_id, reservationEmailId, false, true);
+		return reservation(reservation_id, reservationEmailId, false, true);
 	}
 
-	private static long createReservationEmails(long reservations_id, ReservationEmailType type) {
+	private static long createReservationEmails(long reservation_id, ReservationEmailType type) {
 		try {
 			ReservationEmail reservationEmail = new ReservationEmail();
-			reservationEmail.setReservations_id(reservations_id);
+			reservationEmail.setReservations_id(reservation_id);
 			reservationEmail.setType(type);
 			reservationEmail.setStatus(ReservationEmailStatus.NEW);
 			new MyBatisHelper().insert("insertReservationEmails", reservationEmail);
-			logger.debug("ReservationEmails inserted, ReservationsId=" + reservations_id);
+			logger.debug("ReservationEmails inserted, ReservationsId=" + reservation_id);
 			return reservationEmail.getId();
 		} catch (Exception e) {
 			logger.error("Exception", e);

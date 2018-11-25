@@ -43,7 +43,7 @@ public abstract class ChangeAvailableRoomsPanel extends Panel {
 	private Date date;
 	private DropDownChoice<Integer> number_of_rooms;
 
-	public ChangeAvailableRoomsPanel(String id, final FeedbackPanel feedback, long hotelsusers_id, final Date dateValue, final RoomType roomType) {
+	public ChangeAvailableRoomsPanel(String id, final FeedbackPanel feedback, long hotel_id, final Date dateValue, final RoomType roomType) {
 		super(id);
 
 		date = dateValue;
@@ -56,10 +56,10 @@ public abstract class ChangeAvailableRoomsPanel extends Panel {
 		}
 
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("roomtypes_id", roomType.getId());
-		param.put("hotelsusers_id", hotelsusers_id);
+		param.put("roomtype_id", roomType.getId());
+		param.put("hotel_id", hotel_id);
 
-		valueMap.put("roomtypes_id", roomType.getId());
+		valueMap.put("roomtype_id", roomType.getId());
 		valueMap.put("date_from", date);
 		valueMap.put("date_to", date);
 		valueMap.put("number_of_rooms", 0);
@@ -199,12 +199,12 @@ public abstract class ChangeAvailableRoomsPanel extends Panel {
 					availableRooms.setInitiator_user_id(((MySession) getSession()).getUser().getId());
 					if (new MyBatisHelper().update("updateTourAgentAvailableRooms", availableRooms) == 0) {
 						new MyBatisHelper().insert("insertTourAgentAvailableRooms", availableRooms);
-						logger.info("Available rooms inserted(single): HotelId=" + hotelsusers_id + ", Date="
+						logger.info("Available rooms inserted(single): HotelId=" + hotel_id + ", Date="
 								+ DateUtil.toString(availableRooms.getAvailable_date(), "dd/MM/yyyy") + ", Count="
 								+ availableRooms.getAvailable_count() + ", RoomType=" + availableRooms.getRoomtypes_id() + ", InitiatorUserId="
 								+ availableRooms.getInitiator_user_id());
 					} else {
-						logger.info("Available rooms updated(single): HotelId=" + hotelsusers_id + ", Date="
+						logger.info("Available rooms updated(single): HotelId=" + hotel_id + ", Date="
 								+ DateUtil.toString(availableRooms.getAvailable_date(), "dd/MM/yyyy") + ", Count="
 								+ availableRooms.getAvailable_count() + ", RoomType=" + availableRooms.getRoomtypes_id() + ", InitiatorUserId="
 								+ availableRooms.getInitiator_user_id());
@@ -221,11 +221,11 @@ public abstract class ChangeAvailableRoomsPanel extends Panel {
 							room.setInitiator_user_id(((MySession) getSession()).getUser().getId());
 							if (sql.update("updateTourAgentAvailableRooms", room) == 0) {
 								sql.insert("insertTourAgentAvailableRooms", room);
-								logger.info("Available rooms inserted: HotelId=" + hotelsusers_id + ", Date="
+								logger.info("Available rooms inserted: HotelId=" + hotel_id + ", Date="
 										+ DateUtil.toString(room.getAvailable_date(), "dd/MM/yyyy") + ", Count=" + room.getAvailable_count()
 										+ ", RoomType=" + room.getRoomtypes_id() + ", InitiatorUserId=" + room.getInitiator_user_id());
 							} else {
-								logger.info("Available rooms updated: HotelId=" + hotelsusers_id + ", Date="
+								logger.info("Available rooms updated: HotelId=" + hotel_id + ", Date="
 										+ DateUtil.toString(room.getAvailable_date(), "dd/MM/yyyy") + ", Count=" + room.getAvailable_count()
 										+ ", RoomType=" + room.getRoomtypes_id() + ", InitiatorUserId=" + room.getInitiator_user_id());
 

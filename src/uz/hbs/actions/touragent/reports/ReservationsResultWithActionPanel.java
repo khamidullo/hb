@@ -130,7 +130,7 @@ public class ReservationsResultWithActionPanel extends ReservationsResultPanel {
 												GroupReservation groupReserve = new GroupReservation(reserve);
 
 												HashMap<String, Object> param = new HashMap<String, Object>();
-												param.put("reservations_id", groupReserve.getId());
+												param.put("reservation_id", groupReserve.getId());
 												param.put("service_type", AdditionalServiceDetail.SERVICE_TYPE_ARRIVED);
 												
 												AdditionalServiceDetail addservice = new MyBatisHelper().selectOne("selectAdditionalServiceDetail", param);
@@ -159,7 +159,7 @@ public class ReservationsResultWithActionPanel extends ReservationsResultPanel {
 												IndividualReservation indvReserve = ReserveUtil.getIndividualReserve(reserve);
 												
 												HashMap<String, Object> param = new HashMap<String, Object>();
-												param.put("reservations_id", indvReserve.getId());
+												param.put("reservation_id", indvReserve.getId());
 												
 												param.put("service_type", AdditionalServiceDetail.SERVICE_TYPE_ARRIVED);
 												AdditionalServiceDetail addservice = new MyBatisHelper().selectOne("selectAdditionalServiceDetail", param);
@@ -215,7 +215,7 @@ public class ReservationsResultWithActionPanel extends ReservationsResultPanel {
 												IndividualReservation indvReserve = ReserveUtil.getIndividualReserve(reserve);
 												
 												HashMap<String, Object> param = new HashMap<String, Object>();
-												param.put("reservations_id", indvReserve.getId());
+												param.put("reservation_id", indvReserve.getId());
 												
 												param.put("service_type", AdditionalServiceDetail.SERVICE_TYPE_ARRIVED);
 												AdditionalServiceDetail addservice = new MyBatisHelper().selectOne("selectAdditionalServiceDetail", param);

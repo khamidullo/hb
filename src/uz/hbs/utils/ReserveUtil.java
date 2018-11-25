@@ -49,8 +49,8 @@ public class ReserveUtil {
 			if (reserveroom.getRoom_count() != null) {
 				RoomType roomtype = reserveroom.getRoomtype();
 				HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-				param.put("hotelsusers_id", reserve.getHotelsusers_id());
-				param.put("roomtypes_id", roomtype.getId());
+				param.put("hotel_id", reserve.getHotelsusers_id());
+				param.put("roomtype_id", roomtype.getId());
 				short holding_capacity = new MyBatisHelper().selectOne("selectHoldingCapacityRoomType", roomtype.getId());
 				for (short sh = 1; sh <= reserveroom.getRoom_count(); sh++) {
 					if (adults - holding_capacity > 0) {
@@ -101,7 +101,7 @@ public class ReserveUtil {
 			
 			reserveroom.setRate(CommonUtil.nvl(getTAIndividualRate(reserve, reserveroom)));
 			
-			param.put("roomtypes_id", reserveroom.getRoomtype().getId());
+			param.put("roomtype_id", reserveroom.getRoomtype().getId());
 
 			Double d = 0d;
 			if (reserveroom.getMeal_options() == 3) {
@@ -148,8 +148,8 @@ public class ReserveUtil {
 		for (ReservationRoom reserveroom : reserve.getReserverooms()){
 			RoomType roomtype = reserveroom.getRoomtype();
 			HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-			param.put("hotelsusers_id", reserve.getHotelsusers_id());
-			param.put("roomtypes_id", roomtype.getId());
+			param.put("hotel_id", reserve.getHotelsusers_id());
+			param.put("roomtype_id", roomtype.getId());
 			short holding_capacity = (short) reserveroom.getGuestlist().size();
 			param.put("person_number", holding_capacity);
 			param.put("resident",  reserve.isResident());
@@ -184,8 +184,8 @@ public class ReserveUtil {
 			RoomType roomtype = reserveroom.getRoomtype();
 			if (roomtype.getId() == roomtype_id) {
 				HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-				param.put("hotelsusers_id", reserve.getHotelsusers_id());
-				param.put("roomtypes_id", roomtype.getId());
+				param.put("hotel_id", reserve.getHotelsusers_id());
+				param.put("roomtype_id", roomtype.getId());
 				param.put("person_number", (short)(reserveroom.getHolding_capacity() - (reserveroom.isExtra_bed_needed()? 1 : 0)));
 				param.put("resident", reserve.isResident());
 				param.put("check_in", reserve.getCheck_in());
@@ -202,8 +202,8 @@ public class ReserveUtil {
 	public static BigDecimal getTAIndividualRate(ReservationDetail reserve, ReservationRoom reserveroom){
 		RoomType roomtype = reserveroom.getRoomtype();
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("hotelsusers_id", reserve.getHotelsusers_id());
-		param.put("roomtypes_id", roomtype.getId());
+		param.put("hotel_id", reserve.getHotelsusers_id());
+		param.put("roomtype_id", roomtype.getId());
 		if (reserveroom.isExtra_bed_needed()) param.put("person_number", (short) (reserveroom.getAdults_count() - 1));
 		else param.put("person_number", reserveroom.getAdults_count());
 		param.put("resident", reserve.isResident());
@@ -218,11 +218,11 @@ public class ReserveUtil {
 	public static RateSale getIndividualReserveRate(IndividualReservation reserve) {
 		if (reserve.getRoomtype() != null) {
 			HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-			param.put("hotelsusers_id", reserve.getHotelsusers_id());
+			param.put("hotel_id", reserve.getHotelsusers_id());
 			param.put("person_number", reserve.getAdults());
 			param.put("resident", reserve.isResident());
 			param.put("check_in", reserve.getCheck_in());
-			param.put("roomtypes_id", reserve.getRoomtype().getId());
+			param.put("roomtype_id", reserve.getRoomtype().getId());
 			param.put("is_group", reserve.isIs_group());
 			param.put("is_internal", false);
 			return (RateSale) new MyBatisHelper().selectOne("selectRateSale", param);
@@ -232,16 +232,16 @@ public class ReserveUtil {
 	
 	public static BigDecimal getCheckInCharge(ReservationDetail reserve, BigDecimal rate) {
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("hotelsusers_id", reserve.getHotelsusers_id());
+		param.put("hotel_id", reserve.getHotelsusers_id());
 		param.put("is_group", reserve.isIs_group());
 		param.put("check_in", reserve.getCheck_in());
 		param.put("rate", rate);
 		return (BigDecimal) new MyBatisHelper().selectOne("getCheckInCharge", param);
 	}
 	
-	public static BigDecimal getCheckInCharge(long hotelsusers_id, Date check_in, boolean is_group, BigDecimal rate) {
+	public static BigDecimal getCheckInCharge(long hotel_id, Date check_in, boolean is_group, BigDecimal rate) {
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("hotelsusers_id", hotelsusers_id);
+		param.put("hotel_id", hotel_id);
 		param.put("is_group", is_group);
 		param.put("check_in", check_in);
 		param.put("rate", rate);
@@ -250,16 +250,16 @@ public class ReserveUtil {
 	
 	public static BigDecimal getCheckOutCharge(ReservationDetail reserve, BigDecimal rate) {
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("hotelsusers_id", reserve.getHotelsusers_id());
+		param.put("hotel_id", reserve.getHotelsusers_id());
 		param.put("is_group", reserve.isIs_group());
 		param.put("check_out", reserve.getCheck_out());
 		param.put("rate", rate);
 		return (BigDecimal) new MyBatisHelper().selectOne("getCheckOutCharge", param);
 	}
 	
-	public static BigDecimal getCheckOutCharge(long hotelsusers_id, Date check_out, boolean is_group, BigDecimal rate) {
+	public static BigDecimal getCheckOutCharge(long hotel_id, Date check_out, boolean is_group, BigDecimal rate) {
 		HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-		param.put("hotelsusers_id", hotelsusers_id);
+		param.put("hotel_id", hotel_id);
 		param.put("is_group", is_group);
 		param.put("check_out", check_out);
 		param.put("rate", rate);
@@ -334,9 +334,9 @@ public class ReserveUtil {
 		return result;
 	}
 	
-	private static BigDecimal getMealAmount(long hotelsusers_id, byte meal_options){
+	private static BigDecimal getMealAmount(long hotel_id, byte meal_options){
 		HashMap<String, Object> param = new HashMap<String, Object>();
-		param.put("hotelsusers_id", hotelsusers_id);
+		param.put("hotel_id", hotel_id);
 		param.put("meal_type", meal_options);
 		BigDecimal result =  new MyBatisHelper().selectOne("selectReservationMealOption", param);
 		return CommonUtil.nvl(result);

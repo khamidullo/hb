@@ -55,14 +55,14 @@ public class ReservationRuleType implements IClusterable {
     private Float maximum_discount_age_value;
     private byte maximum_discount_age_type;
         
-    private long hotelsusers_id;
+    private long hotel_id;
     
     public ReservationRuleType() {
     	reservationcancellationpolicy = new ReservationCancellationPolicy();
 	}
     
-    public ReservationRuleType(long hotelsusers_id, boolean is_group) {
-    	this.hotelsusers_id = hotelsusers_id;
+    public ReservationRuleType(long hotel_id, boolean is_group) {
+    	this.hotel_id = hotel_id;
     	this.is_group = is_group;
     }
     
@@ -138,11 +138,11 @@ public class ReservationRuleType implements IClusterable {
 	}
 
 	public long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public Double getCheck_in_half_charge_service_charge() {

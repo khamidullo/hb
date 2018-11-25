@@ -52,7 +52,7 @@ public class SortableReportByReservationForAdminDataProvider extends SortableDat
 			param.put("city", filter.getCity());
 			param.put("reservation_type", filter.getReservation_type());
 			param.put("reservation_status", filter.getReservation_status());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 			param.put("user_type", filter.getUser_type());
 			param.put("payment_method", filter.getPayment_method());
 			param.put("offset", offset);
@@ -89,7 +89,7 @@ public class SortableReportByReservationForAdminDataProvider extends SortableDat
 			param.put("city", filter.getCity());
 			param.put("reservation_type", filter.getReservation_type());
 			param.put("reservation_status", filter.getReservation_status());
-			param.put("reservations_id", filter.getReservations_id());
+			param.put("reservation_id", filter.getReservations_id());
 			param.put("user_type", filter.getUser_type());
 			param.put("payment_method", filter.getPayment_method());
 			

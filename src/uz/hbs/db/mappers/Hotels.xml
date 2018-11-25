@@ -21,10 +21,10 @@
 		       u.status AS hotelstatus,
 		       COALESCE(hd.display_name_en, hd.display_name) AS display_name,
 		       h.self_payment_possibility,
-		       (SELECT COUNT(r.id) FROM reservations r WHERE r.hotelsusers_id = h.users_id) AS reservations_count
+		       (SELECT COUNT(r.id) FROM reservations r WHERE r.hotel_id = h.users_id) AS reservations_count
 		  FROM users u, 
 		       hotels h 
-		  LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+		  LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id
 		  LEFT JOIN addresses a ON hd.addresses_id = a.id
 		  LEFT JOIN countries c ON a.countries_id = c.id
 		  LEFT JOIN cities ct ON a.cities_id = ct.id
@@ -64,7 +64,7 @@
 	<select id="selectHotelsCount" parameterType="map" resultType="long">
 		SELECT COUNT(*) 
 		  FROM users u, hotels h 
-		  LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+		  LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id
 		  LEFT JOIN addresses a ON hd.addresses_id = a.id
 		  LEFT JOIN countries c ON a.countries_id = c.id
 		  LEFT JOIN cities ct ON a.cities_id = ct.id
@@ -165,13 +165,13 @@
        		   h.rooms,
        		   u.name AS legal_name,
        		   COALESCE(hd.display_name_en, hd.display_name) AS display_name
-          FROM hotels h LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id, users u
+          FROM hotels h LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id, users u
          WHERE u.id = h.users_id
            AND h.users_id = #{users_id} 
 	</select>
 	
 	<insert id="insertHotelDetails" parameterType="HotelDetail">
-		INSERT INTO hotelsdetails(hotelsusers_id,
+		INSERT INTO hotelsdetails(hotel_id,
 								  hotelstars_id,
 								  display_name,
 								  display_name_en,
@@ -188,7 +188,7 @@
 								  description_en,
 								  description_uz,
 								  recommended_sort)
-	    VALUES (#{hotelsusers_id},
+	    VALUES (#{hotel_id},
 	    		#{hotelStars.id},
 	    		#{display_name},
 	    		#{display_name_en},
@@ -204,7 +204,7 @@
 	    		#{description},
 	    		#{description_en},
 	    		#{description_uz},
-	    		#{hotelsusers_id})                          
+	    		#{hotel_id})                          
 	</insert>
 	
 	<update id="updateHotelDetails" parameterType="HotelDetail">
@@ -223,17 +223,17 @@
 	           description = #{description},
 	           description_en = #{description_en},
 	           description_uz = #{description_uz}
-	     WHERE hotelsusers_id = #{hotelsusers_id}
+	     WHERE hotel_id = #{hotel_id}
 	</update>
 	
 	<update id="updateHotelDetailsRecommendedSort" parameterType="map">
 		UPDATE hotelsdetails
 		   SET recommended_sort = #{recommended_sort} 
-	     WHERE hotelsusers_id = #{hotelsusers_id}
+	     WHERE hotel_id = #{hotel_id}
 	</update>
 	
 	<select id="selectHotelDetailRecommendedSort" parameterType="int" resultType="HotelDetail">
-	    SELECT hd.hotelsusers_id, COALESCE(hd.display_name_en, hd.display_name) AS display_name
+	    SELECT hd.hotel_id, COALESCE(hd.display_name_en, hd.display_name) AS display_name
 	      FROM hotelsdetails hd, addresses a
 	     WHERE hd.addresses_id = a.id
 	       AND a.regions_id = #{regions_id}
@@ -241,11 +241,11 @@
 	</select>
 	
 	<select id="selectSupportResidentRate" parameterType="long" resultType="boolean">
-	    SELECT support_resident_rate FROM hotelsdetails WHERE hotelsusers_id = #{value}  
+	    SELECT support_resident_rate FROM hotelsdetails WHERE hotel_id = #{value}  
 	</select>
 	
 	<select id="selectHotelDetailsByHotelId" parameterType="long" resultType="HotelDetail">
-	    SELECT hd.hotelsusers_id, 
+	    SELECT hd.hotel_id, 
 	    	   hd.hotelstars_id AS "hotelStars.id", 
 	    	   hd.display_name, 
 	    	   hd.display_name_en, 
@@ -265,24 +265,24 @@
        		   hc.name AS "hotelCategory.name"
           FROM hotels h, hotelscategories hc, hotelsdetails hd
 	     WHERE h.hotelscategories_id = hc.id
-	       AND h.users_id = hd.hotelsusers_id
-	       AND hd.hotelsusers_id = #{hotelsusers_id}
+	       AND h.users_id = hd.hotel_id
+	       AND hd.hotel_id = #{hotel_id}
 	</select>
 	
 	<insert id="insertHotelFacilities" parameterType="Facility">
-		INSERT INTO hotelsfacilities(hotelsusers_id, facilities_id, paid)
-	    VALUES (#{hotelsusers_id}, #{id}, #{paid})                          
+		INSERT INTO hotelsfacilities(hotel_id, facilities_id, paid)
+	    VALUES (#{hotel_id}, #{id}, #{paid})                          
 	</insert>
 	
 	<delete id="deleteHotelFacilities" parameterType="long">
-	    DELETE FROM hotelsfacilities WHERE hotelsusers_id = #{hotelsusers_id}
+	    DELETE FROM hotelsfacilities WHERE hotel_id = #{hotel_id}
 	</delete>
 	
 	<select id="selectHotelFacilities" parameterType="long" resultType="Facility">
 	    SELECT facilities_id AS id, 
 	    	   paid
           FROM hotelsfacilities
-         WHERE hotelsusers_id = #{hotelsusers_id} 
+         WHERE hotel_id = #{hotel_id} 
 	</select>
 	
 	<insert id="insertRoomType" parameterType="RoomType">
@@ -311,12 +311,12 @@
 	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
 	        SELECT NEXTVAL('hotelsnearbyplaces_id_seq')
 	    </selectKey>
-	    INSERT INTO hotelsnearbyplaces (id, name, type, value, hotelsusers_id, initiator_user_id)
-        VALUES (#{id}, #{name}, #{type}, #{value}, #{hotelsusers_id}, #{initiator_user_id})
+	    INSERT INTO hotelsnearbyplaces (id, name, type, value, hotel_id, initiator_user_id)
+        VALUES (#{id}, #{name}, #{type}, #{value}, #{hotel_id}, #{initiator_user_id})
 	</insert>
 	
 	<delete id="deleteHotelsNearByPlaces" parameterType="long">
-	    DELETE FROM hotelsnearbyplaces WHERE hotelsusers_id = #{hotelsusers_id}
+	    DELETE FROM hotelsnearbyplaces WHERE hotel_id = #{hotel_id}
 	</delete>
 	
 	<update id="updateHotelsNearByPlaces" parameterType="HotelNearByPlace">
@@ -338,8 +338,8 @@
 	    SELECT e.id, e.name
           FROM equipments e, roomsequipments re 
          WHERE e.id = re.equipments_id 
-           AND re.roomtypes_id = #{roomtypes_id}
-           AND re.hotelsusers_id = #{hotelsusers_id}
+           AND re.roomtype_id = #{roomtype_id}
+           AND re.hotel_id = #{hotel_id}
          <if test="filter != null">
            AND e.filter_flag = TRUE
          </if>
@@ -351,13 +351,13 @@
 	    SELECT c.id, 
 	    	   c.name
           FROM conditions c JOIN hotelsroomsconditions rc ON c.id = rc.conditions_id
-         WHERE rc.roomtypes_id = #{roomtypes_id}
-           AND rc.hotelsusers_id = #{hotelsusers_id} 
+         WHERE rc.roomtype_id = #{roomtype_id}
+           AND rc.hotel_id = #{hotel_id} 
 	</select>
 	
 	<insert id="insertReservationRules" parameterType="ReservationRuleType">
 	    INSERT INTO hotelsreservationrules(
-            hotelsusers_id,
+            hotel_id,
             check_in_from_time,
             check_in_to_time,
             check_in_half_charge_from_time,
@@ -381,7 +381,7 @@
             reservationcancellationpolicy_id, minimum_free_age, extra_bed_price_type_value, extra_bed_price_type,
             system_commission, city_tax, is_group, maximum_discount_age, maximum_discount_age_value, maximum_discount_age_type,
             exceed_type, exceed_type_value, guide_escort, guide_escort_type, guide_escort_type_value, guide_escort_price_type, guide_escort_price_type_value)
-    VALUES (#{hotelsusers_id},  
+    VALUES (#{hotel_id},  
             #{check_in_from_time}||':00', 
             #{check_in_to_time}||':59',
             #{check_in_half_charge_from_time}||':00', 
@@ -410,7 +410,7 @@
 	</insert>
 	
 	<select id="selectReservationRulesByHotelsId" parameterType="map" resultType="ReservationRuleType">
-	    SELECT hotelsusers_id, 
+	    SELECT hotel_id, 
 	    	   check_in_from_time, 
 	    	   check_in_to_time, 
 		       check_in_half_charge_from_time, 
@@ -446,7 +446,7 @@
 		       guide_escort_price_type, 
 		       guide_escort_price_type_value
  		  FROM hotelsreservationrules
- 		 WHERE hotelsusers_id = #{hotelsusers_id}
+ 		 WHERE hotel_id = #{hotel_id}
  		   AND is_group = #{is_group} 
 	</select>
 	
@@ -487,7 +487,7 @@
 		       guide_escort_type_value = #{guide_escort_type_value}, 
 		       guide_escort_price_type = #{guide_escort_price_type}, 
 		       guide_escort_price_type_value = #{guide_escort_price_type_value}
-         WHERE hotelsusers_id = #{hotelsusers_id}
+         WHERE hotel_id = #{hotel_id}
            AND is_group = #{is_group} 
 	</update>
 	
@@ -525,57 +525,57 @@
 	</update>
 	
 	<insert id="insertHotelServices" parameterType="Service">
-	    INSERT INTO hotelsservicesinrooms (hotelsusers_id, servicesinrooms_id)
-        VALUES (#{hotelsusers_id}, #{id})
+	    INSERT INTO hotelsservicesinrooms (hotel_id, servicesinrooms_id)
+        VALUES (#{hotel_id}, #{id})
 	</insert>
 	
 	<delete id="deleteHotelsServices" parameterType="long">
-	    DELETE FROM hotelsservicesinrooms WHERE hotelsusers_id = #{hotelsusers_id} 
+	    DELETE FROM hotelsservicesinrooms WHERE hotel_id = #{hotel_id} 
 	</delete>
 	
 	<select id="selectHotelRoomService" parameterType="long" resultType="Service">
 	    SELECT s.id, s.name
           FROM servicesinrooms s JOIN hotelsservicesinrooms hs ON s.id = servicesinrooms_id
-         WHERE hs.hotelsusers_id = #{hotelsusers_id}
+         WHERE hs.hotel_id = #{hotel_id}
          ORDER BY LENGTH(s.name)
 	</select>
 	
 	<select id="selectHotelNearByPlacesByHotelId" parameterType="long" resultType="HotelNearByPlace">
 	    SELECT h.id, h.name, h.type, h.value
           FROM hotelsnearbyplaces h
-         WHERE hotelsusers_id = #{hotelsusers_id} 
+         WHERE hotel_id = #{hotel_id} 
          ORDER BY type ASC
 	</select>
 	
 	<select id="selectSearchHotelNearByPlacesByHotelId" parameterType="long" resultType="HotelNearByPlace">
 	    SELECT h.id, h.name, h.type, h.value
           FROM hotelsnearbyplaces h
-         WHERE h.hotelsusers_id = #{hotelsusers_id}
+         WHERE h.hotel_id = #{hotel_id}
            AND h.type IN (1,2,3) 
          ORDER BY type ASC
 	</select>
 	
 	<insert id="insertMealOptions" parameterType="MealOption">
-	    INSERT INTO mealoptions(hotelsusers_id, meal_type, included_to_room_rate, cost_per_person_per_night)
-        VALUES (#{hotelsusers_id}, #{meal_type}, #{included_to_room_rate}, CASE WHEN #{included_to_room_rate} = FALSE THEN #{cost_per_person_per_night}::NUMERIC ELSE NULL::NUMERIC END)
+	    INSERT INTO mealoptions(hotel_id, meal_type, included_to_room_rate, cost_per_person_per_night)
+        VALUES (#{hotel_id}, #{meal_type}, #{included_to_room_rate}, CASE WHEN #{included_to_room_rate} = FALSE THEN #{cost_per_person_per_night}::NUMERIC ELSE NULL::NUMERIC END)
 	</insert>
 	
 	<update id="updateMealOptions" parameterType="MealOption">
 	    UPDATE mealoptions
 	       SET included_to_room_rate = #{included_to_room_rate},
 	       	   cost_per_person_per_night = CASE WHEN #{included_to_room_rate} = FALSE THEN #{cost_per_person_per_night}::NUMERIC ELSE NULL::NUMERIC END
-	     WHERE hotelsusers_id = #{hotelsusers_id}
+	     WHERE hotel_id = #{hotel_id}
 	       AND meal_type = #{meal_type}  	   	
 	</update>
 	
 	<delete id="deleteMealOptions" parameterType="MealOption">
-	    DELETE FROM mealoptions WHERE hotelsusers_id = #{hotelsusers_id} AND meal_type = #{meal_type}
+	    DELETE FROM mealoptions WHERE hotel_id = #{hotel_id} AND meal_type = #{meal_type}
 	</delete>
 	
 	<select id="selectMealOptions" parameterType="MealOption" resultType="MealOption">
 	    SELECT *
 	      FROM mealoptions
-	     WHERE hotelsusers_id = #{hotelsusers_id}
+	     WHERE hotel_id = #{hotel_id}
 	       AND meal_type = #{meal_type} 
 	</select>
 	
@@ -590,8 +590,8 @@
 	    <selectKey order="BEFORE" resultType="int" keyProperty="id">
 	        SELECT NEXTVAL('conditions_id_seq')
 	    </selectKey>
-	    INSERT INTO conditions(id, name, hotelsusers_id)
-        VALUES (#{id}, #{name}, #{hotelsusers_id})
+	    INSERT INTO conditions(id, name, hotel_id)
+        VALUES (#{id}, #{name}, #{hotel_id})
 	</insert>
 	
 	<update id="updateConditions" parameterType="Condition">
@@ -603,18 +603,18 @@
 	<select id="selectConditionsByHotelId" parameterType="long" resultType="Condition">
 	    SELECT id, name
 	      FROM conditions
-	     WHERE hotelsusers_id = #{hotelsusers_id} 
+	     WHERE hotel_id = #{hotel_id} 
 	</select>
 	
 	<insert id="insertHotelRoomTypes" parameterType="RoomType">
-	    INSERT INTO hotelsroomtypes(hotelsusers_id, roomtypes_id, number_of_rooms, additional_bed, holding_capacity, room_area)
-        VALUES (#{hotelsusers_id}, #{id}, #{number_of_rooms}, #{additional_bed.id}, #{holding_capacity.id}, #{room_area})
+	    INSERT INTO hotelsroomtypes(hotel_id, roomtype_id, number_of_rooms, additional_bed, holding_capacity, room_area)
+        VALUES (#{hotel_id}, #{id}, #{number_of_rooms}, #{additional_bed.id}, #{holding_capacity.id}, #{room_area})
 	</insert>
 	
 	<select id="selectExtraBedNeed" parameterType="int" resultType="boolean">
 	    SELECT h.additional_bed
 	      FROM hotelsroomtypes h
-	     WHERE h.roomtypes_id = #{value} 
+	     WHERE h.roomtype_id = #{value} 
 	</select>
 	
 	<update id="updateHotelRoomTypes" parameterType="RoomType">
@@ -623,7 +623,7 @@
 	           additional_bed = #{additional_bed.id}, 
 	           holding_capacity = #{holding_capacity.id}, 
 	           room_area = #{room_area}
-	     WHERE roomtypes_id = #{id}  
+	     WHERE roomtype_id = #{id}  
 	</update>
 	
 	<update id="updateRoomTypesDescription" parameterType="RoomType">
@@ -635,52 +635,52 @@
 	</update>
 	
 	<insert id="insertHotelsRoomsConditions" parameterType="Condition">
-	    INSERT INTO hotelsroomsconditions(hotelsusers_id, conditions_id, roomtypes_id)
-        VALUES (#{hotelsusers_id}, #{id}, #{roomtypes_id})
+	    INSERT INTO hotelsroomsconditions(hotel_id, conditions_id, roomtype_id)
+        VALUES (#{hotel_id}, #{id}, #{roomtype_id})
 	</insert>
 	
 	<delete id="deleteHotelsRoomsConditions" parameterType="RoomType">
 	    DELETE FROM hotelsroomsconditions
-	    WHERE hotelsusers_id = #{hotelsusers_id} 
-	      AND roomtypes_id = #{id}
+	    WHERE hotel_id = #{hotel_id} 
+	      AND roomtype_id = #{id}
 	</delete>
 	
 	<insert id="insertHotelRoomsEquipments" parameterType="Equipment">
-	    INSERT INTO roomsequipments(hotelsusers_id, roomtypes_id, equipments_id)
-        VALUES (#{hotelsusers_id}, #{roomtypes_id}, #{id})
+	    INSERT INTO roomsequipments(hotel_id, roomtype_id, equipments_id)
+        VALUES (#{hotel_id}, #{roomtype_id}, #{id})
 	</insert>
 	
 	<delete id="deleteHotelRoomsEquipments" parameterType="RoomType">
 	    DELETE FROM roomsequipments
-	     WHERE hotelsusers_id = #{hotelsusers_id}
-	       AND roomtypes_id = #{id}
+	     WHERE hotel_id = #{hotel_id}
+	       AND roomtype_id = #{id}
 	</delete>
 	
 	<select id="selectHotelRoomTypesRoomsByHotels" parameterType="map" resultType="Room">
 	    SELECT id, 
 	    	   initiator_user_id, 
-	    	   hotelsusers_id, 
-	    	   roomtypes_id, 
+	    	   hotel_id, 
+	    	   roomtype_id, 
 	    	   room_number, 
                room_floor AS "room_floor", 
                bed_type AS "bed_type.id"
           FROM rooms
-         WHERE hotelsusers_id = #{hotelsusers_id} 
-           AND roomtypes_id = #{roomtypes_id}
+         WHERE hotel_id = #{hotel_id} 
+           AND roomtype_id = #{roomtype_id}
            ORDER BY room_number ASC
 	</select>
 	
 	<select id="selectConditionsByHotel" parameterType="long" resultType="Condition">
 	    SELECT id, name
           FROM conditions
-         WHERE hotelsusers_id = #{hotelsusers_id} 
+         WHERE hotel_id = #{hotel_id} 
 	</select>
 	
 	<select id="selectNumberOfRoomsByHotel" parameterType="map" resultType="int">
 	    SELECT number_of_rooms
   		  FROM hotelsroomtypes
-  		 WHERE hotelsusers_id = #{hotelsusers_id}
-  		   AND roomtypes_id  = #{roomtypes_id}  
+  		 WHERE hotel_id = #{hotel_id}
+  		   AND roomtype_id  = #{roomtype_id}  
 	</select>
 	
 	<select id="selectRoomTypesByHotel" parameterType="long" resultType="RoomType">
@@ -692,8 +692,8 @@
 	    	   hrt.holding_capacity AS "holding_capacity.id",
 	    	   hrt.room_area
 	      FROM roomtypes rt 
-	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
-	     WHERE hrt.hotelsusers_id = #{hotelsusers_id}
+	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtype_id
+	     WHERE hrt.hotel_id = #{hotel_id}
 	     ORDER BY hrt.holding_capacity ASC 
 	</select>
 	
@@ -706,8 +706,8 @@
 	    	   hrt.holding_capacity AS "holding_capacity.id",
 	    	   hrt.room_area
 	      FROM roomtypes rt 
-	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtypes_id
-	     WHERE hrt.roomtypes_id = #{roomtypes_id}
+	           JOIN hotelsroomtypes hrt ON rt.id = hrt.roomtype_id
+	     WHERE hrt.roomtype_id = #{roomtype_id}
 	     ORDER BY hrt.holding_capacity ASC 
 	</select>
 	
@@ -717,15 +717,15 @@
 	    	   holding_capacity AS "holding_capacity.id", 
 	    	   additional_bed AS "additional_bed.id"
 	      FROM rooms
-	     WHERE hotelsusers_id = #{hotelsusers_id}
-	       AND roomtypes_id = #{roomtypes_id}   
+	     WHERE hotel_id = #{hotel_id}
+	       AND roomtype_id = #{roomtype_id}   
 	</select>
 	
 	<select id="selectMaxPersonRoomTypesByHotel" parameterType="map" resultType="short">
 	    SELECT MAX(holding_capacity) AS persons
           FROM hotelsroomtypes
-         WHERE hotelsusers_id = #{hotelsusers_id}
-           AND roomtypes_id = #{roomtypes_id}   
+         WHERE hotel_id = #{hotel_id}
+           AND roomtype_id = #{roomtype_id}   
 	</select>
 	
 	<select id="selectHotelsByRegion" parameterType="map" resultType="Hotel">
@@ -733,7 +733,7 @@
 	    	   COALESCE(hd.display_name_en, hd.display_name) AS name
 	      FROM users u, hotels h, hotelsdetails hd, addresses ad
 	     WHERE u.id = h.users_id
-	       AND h.users_id = hd.hotelsusers_id
+	       AND h.users_id = hd.hotel_id
 	       AND hd.addresses_id = ad.id
 	       AND ad.regions_id = #{regions_id}
 	       AND u.status = 1
@@ -756,7 +756,7 @@
 	<select id="selectHotelFacilitiesList" parameterType="long" resultType="Facility">
 	    SELECT hf.facilities_id AS id, hf.paid, f.name
           FROM hotelsfacilities hf, facilities f
-         WHERE hf.hotelsusers_id = #{hotelsusers_id}
+         WHERE hf.hotel_id = #{hotel_id}
            AND hf.facilities_id = f.id
          ORDER BY LENGTH(f.name)
 	</select>
@@ -772,7 +772,7 @@
                rp.late_cancel_penalty_first_night
           FROM reservationcancellationpolicy rp, hotelsreservationrules hr
          WHERE rp.id = hr.reservationcancellationpolicy_id
-		   AND hr.hotelsusers_id = #{hotelsusers_id}
+		   AND hr.hotel_id = #{hotel_id}
 		   AND hr.is_group = #{is_group}
 	</select>
 	
@@ -788,7 +788,7 @@
 	    	   hs.id AS hotelstars_id,
 	    	   hd.description AS "hotelsDetails.description"
 	      FROM users u, hotels h
-			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id
 			   LEFT JOIN hotelstars hs ON hd.hotelstars_id = hs.id
 			   LEFT JOIN addresses a ON hd.addresses_id = a.id
 			   LEFT JOIN regions r ON a.regions_id = r.id
@@ -799,19 +799,19 @@
 	</select>
 	
 	<insert id="insertHotelImages" parameterType="map">
-	    INSERT INTO hotelsuploadedfiles(hotelsusers_id, uploadedfiles_id)
+	    INSERT INTO hotelsuploadedfiles(hotel_id, uploadedfiles_id)
         VALUES (#{identify}, #{uploadedfiles_id})
 	</insert>
 	
 	<insert id="insertHotelRoomTypeImages" parameterType="map">
-	    INSERT INTO roomtypesuploadedfiles(roomtypes_id, uploadedfiles_id)
+	    INSERT INTO roomtypesuploadedfiles(roomtype_id, uploadedfiles_id)
         VALUES (#{identify}, #{uploadedfiles_id})
 	</insert>
 	
 	<select id="selectHotelImages" parameterType="map" resultType="UploadedFile">
 	    SELECT uf.*
-	      FROM uploadedfiles uf <if test="type == 0"> JOIN hotelsuploadedfiles huf    ON uf.id = huf.uploadedfiles_id AND huf.hotelsusers_id = #{id} </if>
-	                            <if test="type == 1"> JOIN roomtypesuploadedfiles ruf ON uf.id = ruf.uploadedfiles_id AND ruf.roomtypes_id = #{id} </if>  
+	      FROM uploadedfiles uf <if test="type == 0"> JOIN hotelsuploadedfiles huf    ON uf.id = huf.uploadedfiles_id AND huf.hotel_id = #{id} </if>
+	                            <if test="type == 1"> JOIN roomtypesuploadedfiles ruf ON uf.id = ruf.uploadedfiles_id AND ruf.roomtype_id = #{id} </if>  
 	</select>
 	
 	<delete id="deleteHotelImages" parameterType="map">
@@ -829,10 +829,10 @@
 		<if test="id != null">
 		 WHERE id IN (  
 		    <if test="type == 0">
-		        SELECT uploadedfiles_id FROM hotelsuploadedfiles huf WHERE huf.hotelsusers_id = #{id}
+		        SELECT uploadedfiles_id FROM hotelsuploadedfiles huf WHERE huf.hotel_id = #{id}
 		    </if>
 		    <if test="type == 1">
-		    	SELECT uploadedfiles_id FROM roomtypesuploadedfiles huf WHERE huf.roomtypes_id = #{id}
+		    	SELECT uploadedfiles_id FROM roomtypesuploadedfiles huf WHERE huf.roomtype_id = #{id}
 		    </if>
 		    )
 		</if>   
@@ -854,7 +854,7 @@
 	      FROM roomtypesuploadedfiles ru, 
 	           uploadedfiles uf
 	     WHERE ru.uploadedfiles_id = uf.id
-	       AND ru.roomtypes_id = #{roomtypes_id}
+	       AND ru.roomtype_id = #{roomtype_id}
 	     ORDER BY uf.create_date
 	    <if test="limit != null">
 	     LIMIT 1
@@ -880,7 +880,7 @@
 	<select id="selectRoomCountByRoomType" resultType="short" parameterType="int">
 	    SELECT COUNT(*)
 	      FROM rooms
-	     WHERE roomtypes_id = #{value} 
+	     WHERE roomtype_id = #{value} 
 	</select>
 	
 	<select id="selectRoomTypeById" parameterType="int" resultType="RoomType">
@@ -896,28 +896,28 @@
     </select>
     
     <select id="selectTAAvailableRoomCount" parameterType="map" resultType="short">
-        SELECT COALESCE(MAX(get_calc_busy_rooms_daily_ta(rt.roomtypes_id, ta.available_date)), 0) as cnt
-          FROM hotelsroomtypes rt LEFT JOIN touragentavailablerooms ta ON ta.roomtypes_id = rt.roomtypes_id AND ta.available_date BETWEEN #{date_from}::date AND #{date_to}::date
-         WHERE rt.roomtypes_id = #{roomtypes_id}
-         GROUP BY rt.number_of_rooms, rt.roomtypes_id
+        SELECT COALESCE(MAX(get_calc_busy_rooms_daily_ta(rt.roomtype_id, ta.available_date)), 0) as cnt
+          FROM hotelsroomtypes rt LEFT JOIN touragentavailablerooms ta ON ta.roomtype_id = rt.roomtype_id AND ta.available_date BETWEEN #{date_from}::date AND #{date_to}::date
+         WHERE rt.roomtype_id = #{roomtype_id}
+         GROUP BY rt.number_of_rooms, rt.roomtype_id
     </select>
     
     <select id="selectNumberOfRooms" parameterType="int" resultType="short">
         SELECT number_of_rooms
           FROM hotelsroomtypes
-         WHERE roomtypes_id = #{roomtypes_id} 
+         WHERE roomtype_id = #{roomtype_id} 
     </select>
     
     <select id="selectHotelDisplayName" parameterType="long" resultType="string">
         SELECT COALESCE(hd.display_name_en, hd.display_name)
           FROM hotelsdetails hd
-         WHERE hd.hotelsusers_id = #{value} 
+         WHERE hd.hotel_id = #{value} 
     </select>
     
     <select id="selectHotelCityName" parameterType="long" resultType="string">
         SELECT c.name
           FROM hotelsdetails hd, addresses ad, cities c
-         WHERE hd.hotelsusers_id = #{value}
+         WHERE hd.hotel_id = #{value}
            AND ad.id = hd.addresses_id
            AND c.id = ad.cities_id 
     </select>
@@ -925,7 +925,7 @@
     <select id="selectHotelAndCityName" parameterType="long" resultType="string">
         SELECT COALESCE(hd.display_name_en, hd.display_name) || ', ' || c.name
           FROM hotelsdetails hd, addresses ad, cities c
-         WHERE hd.hotelsusers_id = #{value}
+         WHERE hd.hotel_id = #{value}
            AND ad.id = hd.addresses_id
            AND c.id = ad.cities_id 
     </select>
@@ -933,7 +933,7 @@
     <select id="selectAdditionalServiceTashkent" parameterType="long" resultType="boolean">
         SELECT COUNT(*)
           FROM hotelsdetails hd, addresses ad, cities c
-         WHERE hd.hotelsusers_id = #{value}
+         WHERE hd.hotel_id = #{value}
            AND ad.id = hd.addresses_id
            AND c.id = ad.cities_id
            AND ad.cities_id = 90 
@@ -956,7 +956,7 @@
        		   r.name AS region_name,
        		   hd.contact_number AS "hotelsDetails.contact_number",
        		   hd.description AS "hotelsDetails.description"
-          FROM hotels h LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+          FROM hotels h LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id
                              JOIN addresses ad ON hd.addresses_id = ad.id
                              JOIN countries c ON ad.countries_id = c.id
                              JOIN regions r ON ad.regions_id = r.id,
@@ -968,14 +968,14 @@
     <select id="selectSearchResultViewCheckIn" parameterType="long" resultType="java.util.Date">
     	SELECT TO_TIMESTAMP(CURRENT_DATE||' '||r.check_in_from_time,'yyyy/mm/dd hh24:mi:ss')
     	  FROM hotelsreservationrules r
-         WHERE r.hotelsusers_id = #{hotelsusers_id}
+         WHERE r.hotel_id = #{hotel_id}
            AND r.is_group = false 
     </select>
     
     <select id="selectSearchResultViewCheckOut" parameterType="long" resultType="java.util.Date">
     	SELECT TO_TIMESTAMP((CURRENT_DATE + '1 day'::INTERVAL)::DATE||' '||r.check_out_to_time,'yyyy/mm/dd hh24:mi:ss')
     	  FROM hotelsreservationrules r
-         WHERE r.hotelsusers_id = #{hotelsusers_id}
+         WHERE r.hotel_id = #{hotel_id}
            AND r.is_group = false 
     </select>
 
@@ -989,10 +989,10 @@
 		       COALESCE(hp.group_price, 0) AS b2c_group_price,
 		       COALESCE(hp.is_enabled, false) AS b2c_is_enabled
 		  FROM users u, hotels h 
-			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id
 			   LEFT JOIN addresses a ON hd.addresses_id = a.id
 			   LEFT JOIN cities ct ON a.cities_id = ct.id
-			   LEFT JOIN hotelsb2cprices hp ON h.users_id = hp.hotelsusers_id
+			   LEFT JOIN hotelsb2cprices hp ON h.users_id = hp.hotel_id
 		 WHERE u.id = h.users_id
 		<if test="users_id != null">
 		   AND u.id = #{users_id} 
@@ -1032,10 +1032,10 @@
 	<select id="selectHotelsB2CCount" parameterType="map" resultType="long">
 		SELECT COUNT(*) 
 		  FROM users u, hotels h 
-			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotelsusers_id
+			   LEFT JOIN hotelsdetails hd ON h.users_id = hd.hotel_id
 			   LEFT JOIN addresses a ON hd.addresses_id = a.id
 			   LEFT JOIN cities ct ON a.cities_id = ct.id
-			   LEFT JOIN hotelsb2cprices hp ON h.users_id = hp.hotelsusers_id
+			   LEFT JOIN hotelsb2cprices hp ON h.users_id = hp.hotel_id
 		 WHERE u.id = h.users_id
 		<if test="users_id != null">
 		   AND u.id = #{users_id} 

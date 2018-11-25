@@ -244,7 +244,7 @@ public class NewBookingPanel extends MyBreadCrumbPanel {
 						// List<Hotel> hotelsList = new MyBatisHelper().selectList("selectHotelsByRegion", params);
 
 						// for (Hotel hotel : hotelsList) {
-						// params.put("hotelsusers_id", hotel.getUsers_id());
+						// params.put("hotel_id", hotel.getUsers_id());
 						// params.put("is_group", false);
 						// List<BookingSearchResult> searchResult = new MyBatisHelper().selectList("selectSearchHotels", params);
 						// if (searchResult != null) {

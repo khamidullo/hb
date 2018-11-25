@@ -2,28 +2,28 @@ package uz.hbs.beans;
 
 import org.apache.wicket.util.io.IClusterable;
 
+import uz.hbs.beans.types.BankType;
+
 public class Bank implements IClusterable {
 	private static final long serialVersionUID = 1L;
 
-	public static final int TYPE_PRIMARY = 1;
-	public static final int TYPE_SECONDARY = 2;
-
-	private Long users_id;
+	private Long user_id;
 	private String name;
 	private String address;
 	private String account_number;
 	private String correspondent_account;
 	private String identification_code;
-	private IdAndValue type;
+	private BankType type;
 
 	public Bank() {
 	}
 
-	@Override
-	public String toString() {
-		return "{users_id=" + users_id + ", name=" + name + ", address=" + address + ", account_number=" + account_number
-				+ ", correspondent_account=" + correspondent_account + ", identification_code=" + identification_code + ", type="
-				+ (type != null ? type.getId() : null) + "}";
+	public Long getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
 	}
 
 	public String getName() {
@@ -66,19 +66,18 @@ public class Bank implements IClusterable {
 		this.identification_code = identification_code;
 	}
 
-	public IdAndValue getType() {
+	public BankType getType() {
 		return type;
 	}
 
-	public void setType(IdAndValue type) {
+	public void setType(BankType type) {
 		this.type = type;
 	}
 
-	public Long getUsers_id() {
-		return users_id;
-	}
-
-	public void setUsers_id(Long users_id) {
-		this.users_id = users_id;
+	@Override
+	public String toString() {
+		return "Bank [user_id=" + user_id + ", name=" + name + ", address=" + address + ", account_number="
+				+ account_number + ", correspondent_account=" + correspondent_account + ", identification_code="
+				+ identification_code + ", type=" + type + "]";
 	}
 }

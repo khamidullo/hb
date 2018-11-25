@@ -56,8 +56,8 @@ public class SaleItemPanel extends Panel {
 			protected void onComponentTag(ComponentTag tag) {
 				super.onComponentTag(tag);
 				HashMap<String, Serializable> param = new HashMap<String, Serializable>();
-				param.put("hotelsusers_id", model.getObject().getHotelsusers_id());
-				param.put("roomtypes_id", model.getObject().getRoomtypes_id());
+				param.put("hotel_id", model.getObject().getHotelsusers_id());
+				param.put("roomtype_id", model.getObject().getRoomtypes_id());
 				param.put("sale_date", model.getObject().getSale_date());
 				param.put("is_group", Boolean.FALSE);
 				short indvl = new MyBatisHelper().selectOne("selectStatusIndicateSalePlane", param);

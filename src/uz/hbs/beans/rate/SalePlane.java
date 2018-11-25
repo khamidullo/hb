@@ -16,11 +16,11 @@ public class SalePlane implements IClusterable {
 	private BigDecimal sale_uz;
 	private Date update_date;
 	private long initiator_user_id;
-	private Long hotelsusers_id;
+	private Long hotel_id;
 	private boolean status;
 	private boolean checked;
 	
-	private Integer roomtypes_id;
+	private Integer roomtype_id;
 	private IdAndName roomtype;
 	private boolean is_group;
 	private boolean resident;
@@ -30,30 +30,30 @@ public class SalePlane implements IClusterable {
 	public SalePlane() {
 	}
 	
-	public SalePlane(long hotelsusers_id, int roomtypes_id, short person_number, boolean is_group) {
-		this.hotelsusers_id = hotelsusers_id;
-		this.roomtypes_id = roomtypes_id;
+	public SalePlane(long hotel_id, int roomtype_id, short person_number, boolean is_group) {
+		this.hotel_id = hotel_id;
+		this.roomtype_id = roomtype_id;
 		this.person_number = person_number;
 		this.is_group = is_group;
 	}
 	
-	public SalePlane(long hotelsusers_id, int roomtypes_id, short person_number, Date sale_date, boolean is_group) {
-		this.hotelsusers_id = hotelsusers_id;
-		this.roomtypes_id = roomtypes_id;
+	public SalePlane(long hotel_id, int roomtype_id, short person_number, Date sale_date, boolean is_group) {
+		this.hotel_id = hotel_id;
+		this.roomtype_id = roomtype_id;
 		this.person_number = person_number;
 		this.is_group = is_group;
 		this.sale_date = sale_date;
 	}
 	
-	public SalePlane(long hotelsusers_id, int roomtypes_id, boolean is_group) {
-		this.hotelsusers_id = hotelsusers_id;
-		this.roomtypes_id = roomtypes_id;
+	public SalePlane(long hotel_id, int roomtype_id, boolean is_group) {
+		this.hotel_id = hotel_id;
+		this.roomtype_id = roomtype_id;
 		this.is_group = is_group;
 	}
 	
 	public SalePlane(SalePlane plane, Date sale_date, long initiator_user_id) {
-		this.hotelsusers_id = plane.getHotelsusers_id();
-		this.roomtypes_id = plane.getRoomtypes_id();
+		this.hotel_id = plane.getHotelsusers_id();
+		this.roomtype_id = plane.getRoomtypes_id();
 		this.person_number = plane.getPerson_number();
 		this.is_group = plane.isIs_group();
 		this.sale = plane.getSale();
@@ -119,11 +119,11 @@ public class SalePlane implements IClusterable {
 	}
 
 	public Long getHotelsusers_id() {
-		return hotelsusers_id;
+		return hotel_id;
 	}
 
-	public void setHotelsusers_id(Long hotelsusers_id) {
-		this.hotelsusers_id = hotelsusers_id;
+	public void setHotelsusers_id(Long hotel_id) {
+		this.hotel_id = hotel_id;
 	}
 
 	public boolean isStatus() {
@@ -143,11 +143,11 @@ public class SalePlane implements IClusterable {
 	}
 
 	public Integer getRoomtypes_id() {
-		return roomtypes_id;
+		return roomtype_id;
 	}
 
-	public void setRoomtypes_id(Integer roomtypes_id) {
-		this.roomtypes_id = roomtypes_id;
+	public void setRoomtypes_id(Integer roomtype_id) {
+		this.roomtype_id = roomtype_id;
 	}
 
 	public IdAndName getRoomtype() {
